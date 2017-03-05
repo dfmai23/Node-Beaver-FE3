@@ -3,7 +3,7 @@
 
 volatile Time current_time;
 volatile uint8_t refresh_status = 1;
-
+volatile uint32_t milliseconds = 0;
 
 /* CY_ISR(time_refresh_vector)
 	Runs every 10 seconds and retreives the current time from the RTC and the
@@ -15,6 +15,10 @@ CY_ISR(time_refresh_vector) {
 	refresh_status = 1;
 } // CY_ISR(time_refresh_vector)
 
+//milliseconds since startup
+CY_ISR(ms_refresh_vector) {
+    milliseconds++;
+}
 
 /* time_init()
 	Takes and Returns nothing.
@@ -192,7 +196,7 @@ Time time_retreive(void) {
     tmp_time.year += 0x7D0;     // add year 2000;
 	rtc_i2c_MasterSendStop(); // End Receiving
 
-	tmp_time.millicounter = millis_timer_ReadCounter();
+	tmp_time.millicounter = milliseconds;
 
 	return tmp_time; 
 } // time_retreive()

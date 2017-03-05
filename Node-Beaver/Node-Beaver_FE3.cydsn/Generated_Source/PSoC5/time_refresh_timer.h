@@ -36,7 +36,7 @@ extern uint8 time_refresh_timer_initVar;
 *           Parameter Defaults
 **************************************/
 
-#define time_refresh_timer_Resolution                 16u
+#define time_refresh_timer_Resolution                 24u
 #define time_refresh_timer_UsingFixedFunction         0u
 #define time_refresh_timer_UsingHWCaptureCounter      0u
 #define time_refresh_timer_SoftwareCaptureMode        0u
@@ -69,7 +69,7 @@ typedef struct
     uint8 TimerEnableState;
     #if(!time_refresh_timer_UsingFixedFunction)
 
-        uint16 TimerUdb;
+        uint32 TimerUdb;
         uint8 InterruptMaskValue;
         #if (time_refresh_timer_UsingHWCaptureCounter)
             uint8 TimerCaptureCounter;
@@ -100,11 +100,11 @@ uint8   time_refresh_timer_ReadStatusRegister(void) ;
     void    time_refresh_timer_WriteControlRegister(uint8 control) ;
 #endif /* (!time_refresh_timer_UDB_CONTROL_REG_REMOVED) */
 
-uint16  time_refresh_timer_ReadPeriod(void) ;
-void    time_refresh_timer_WritePeriod(uint16 period) ;
-uint16  time_refresh_timer_ReadCounter(void) ;
-void    time_refresh_timer_WriteCounter(uint16 counter) ;
-uint16  time_refresh_timer_ReadCapture(void) ;
+uint32  time_refresh_timer_ReadPeriod(void) ;
+void    time_refresh_timer_WritePeriod(uint32 period) ;
+uint32  time_refresh_timer_ReadCounter(void) ;
+void    time_refresh_timer_WriteCounter(uint32 counter) ;
+uint32  time_refresh_timer_ReadCapture(void) ;
 void    time_refresh_timer_SoftwareCapture(void) ;
 
 #if(!time_refresh_timer_UsingFixedFunction) /* UDB Prototypes */
@@ -168,7 +168,7 @@ void time_refresh_timer_Wakeup(void)        ;
 *    Initialial Parameter Constants
 ***************************************/
 
-#define time_refresh_timer_INIT_PERIOD             9999u
+#define time_refresh_timer_INIT_PERIOD             49999u
 #define time_refresh_timer_INIT_CAPTURE_MODE       ((uint8)((uint8)0u << time_refresh_timer_CTRL_CAP_MODE_SHIFT))
 #define time_refresh_timer_INIT_TRIGGER_MODE       ((uint8)((uint8)0u << time_refresh_timer_CTRL_TRIG_MODE_SHIFT))
 #if (time_refresh_timer_UsingFixedFunction)
@@ -313,54 +313,54 @@ void time_refresh_timer_Wakeup(void)        ;
     #define time_refresh_timer_CONTROL             (* (reg8 *) time_refresh_timer_TimerUDB_sCTRLReg_SyncCtl_ctrlreg__CONTROL_REG )
     
     #if(time_refresh_timer_Resolution <= 8u) /* 8-bit Timer */
-        #define time_refresh_timer_CAPTURE_LSB         (* (reg8 *) time_refresh_timer_TimerUDB_sT16_timerdp_u0__F0_REG )
-        #define time_refresh_timer_CAPTURE_LSB_PTR       ((reg8 *) time_refresh_timer_TimerUDB_sT16_timerdp_u0__F0_REG )
-        #define time_refresh_timer_PERIOD_LSB          (* (reg8 *) time_refresh_timer_TimerUDB_sT16_timerdp_u0__D0_REG )
-        #define time_refresh_timer_PERIOD_LSB_PTR        ((reg8 *) time_refresh_timer_TimerUDB_sT16_timerdp_u0__D0_REG )
-        #define time_refresh_timer_COUNTER_LSB         (* (reg8 *) time_refresh_timer_TimerUDB_sT16_timerdp_u0__A0_REG )
-        #define time_refresh_timer_COUNTER_LSB_PTR       ((reg8 *) time_refresh_timer_TimerUDB_sT16_timerdp_u0__A0_REG )
+        #define time_refresh_timer_CAPTURE_LSB         (* (reg8 *) time_refresh_timer_TimerUDB_sT24_timerdp_u0__F0_REG )
+        #define time_refresh_timer_CAPTURE_LSB_PTR       ((reg8 *) time_refresh_timer_TimerUDB_sT24_timerdp_u0__F0_REG )
+        #define time_refresh_timer_PERIOD_LSB          (* (reg8 *) time_refresh_timer_TimerUDB_sT24_timerdp_u0__D0_REG )
+        #define time_refresh_timer_PERIOD_LSB_PTR        ((reg8 *) time_refresh_timer_TimerUDB_sT24_timerdp_u0__D0_REG )
+        #define time_refresh_timer_COUNTER_LSB         (* (reg8 *) time_refresh_timer_TimerUDB_sT24_timerdp_u0__A0_REG )
+        #define time_refresh_timer_COUNTER_LSB_PTR       ((reg8 *) time_refresh_timer_TimerUDB_sT24_timerdp_u0__A0_REG )
     #elif(time_refresh_timer_Resolution <= 16u) /* 8-bit Timer */
         #if(CY_PSOC3) /* 8-bit addres space */
-            #define time_refresh_timer_CAPTURE_LSB         (* (reg16 *) time_refresh_timer_TimerUDB_sT16_timerdp_u0__F0_REG )
-            #define time_refresh_timer_CAPTURE_LSB_PTR       ((reg16 *) time_refresh_timer_TimerUDB_sT16_timerdp_u0__F0_REG )
-            #define time_refresh_timer_PERIOD_LSB          (* (reg16 *) time_refresh_timer_TimerUDB_sT16_timerdp_u0__D0_REG )
-            #define time_refresh_timer_PERIOD_LSB_PTR        ((reg16 *) time_refresh_timer_TimerUDB_sT16_timerdp_u0__D0_REG )
-            #define time_refresh_timer_COUNTER_LSB         (* (reg16 *) time_refresh_timer_TimerUDB_sT16_timerdp_u0__A0_REG )
-            #define time_refresh_timer_COUNTER_LSB_PTR       ((reg16 *) time_refresh_timer_TimerUDB_sT16_timerdp_u0__A0_REG )
+            #define time_refresh_timer_CAPTURE_LSB         (* (reg16 *) time_refresh_timer_TimerUDB_sT24_timerdp_u0__F0_REG )
+            #define time_refresh_timer_CAPTURE_LSB_PTR       ((reg16 *) time_refresh_timer_TimerUDB_sT24_timerdp_u0__F0_REG )
+            #define time_refresh_timer_PERIOD_LSB          (* (reg16 *) time_refresh_timer_TimerUDB_sT24_timerdp_u0__D0_REG )
+            #define time_refresh_timer_PERIOD_LSB_PTR        ((reg16 *) time_refresh_timer_TimerUDB_sT24_timerdp_u0__D0_REG )
+            #define time_refresh_timer_COUNTER_LSB         (* (reg16 *) time_refresh_timer_TimerUDB_sT24_timerdp_u0__A0_REG )
+            #define time_refresh_timer_COUNTER_LSB_PTR       ((reg16 *) time_refresh_timer_TimerUDB_sT24_timerdp_u0__A0_REG )
         #else /* 16-bit address space */
-            #define time_refresh_timer_CAPTURE_LSB         (* (reg16 *) time_refresh_timer_TimerUDB_sT16_timerdp_u0__16BIT_F0_REG )
-            #define time_refresh_timer_CAPTURE_LSB_PTR       ((reg16 *) time_refresh_timer_TimerUDB_sT16_timerdp_u0__16BIT_F0_REG )
-            #define time_refresh_timer_PERIOD_LSB          (* (reg16 *) time_refresh_timer_TimerUDB_sT16_timerdp_u0__16BIT_D0_REG )
-            #define time_refresh_timer_PERIOD_LSB_PTR        ((reg16 *) time_refresh_timer_TimerUDB_sT16_timerdp_u0__16BIT_D0_REG )
-            #define time_refresh_timer_COUNTER_LSB         (* (reg16 *) time_refresh_timer_TimerUDB_sT16_timerdp_u0__16BIT_A0_REG )
-            #define time_refresh_timer_COUNTER_LSB_PTR       ((reg16 *) time_refresh_timer_TimerUDB_sT16_timerdp_u0__16BIT_A0_REG )
+            #define time_refresh_timer_CAPTURE_LSB         (* (reg16 *) time_refresh_timer_TimerUDB_sT24_timerdp_u0__16BIT_F0_REG )
+            #define time_refresh_timer_CAPTURE_LSB_PTR       ((reg16 *) time_refresh_timer_TimerUDB_sT24_timerdp_u0__16BIT_F0_REG )
+            #define time_refresh_timer_PERIOD_LSB          (* (reg16 *) time_refresh_timer_TimerUDB_sT24_timerdp_u0__16BIT_D0_REG )
+            #define time_refresh_timer_PERIOD_LSB_PTR        ((reg16 *) time_refresh_timer_TimerUDB_sT24_timerdp_u0__16BIT_D0_REG )
+            #define time_refresh_timer_COUNTER_LSB         (* (reg16 *) time_refresh_timer_TimerUDB_sT24_timerdp_u0__16BIT_A0_REG )
+            #define time_refresh_timer_COUNTER_LSB_PTR       ((reg16 *) time_refresh_timer_TimerUDB_sT24_timerdp_u0__16BIT_A0_REG )
         #endif /* CY_PSOC3 */
     #elif(time_refresh_timer_Resolution <= 24u)/* 24-bit Timer */
-        #define time_refresh_timer_CAPTURE_LSB         (* (reg32 *) time_refresh_timer_TimerUDB_sT16_timerdp_u0__F0_REG )
-        #define time_refresh_timer_CAPTURE_LSB_PTR       ((reg32 *) time_refresh_timer_TimerUDB_sT16_timerdp_u0__F0_REG )
-        #define time_refresh_timer_PERIOD_LSB          (* (reg32 *) time_refresh_timer_TimerUDB_sT16_timerdp_u0__D0_REG )
-        #define time_refresh_timer_PERIOD_LSB_PTR        ((reg32 *) time_refresh_timer_TimerUDB_sT16_timerdp_u0__D0_REG )
-        #define time_refresh_timer_COUNTER_LSB         (* (reg32 *) time_refresh_timer_TimerUDB_sT16_timerdp_u0__A0_REG )
-        #define time_refresh_timer_COUNTER_LSB_PTR       ((reg32 *) time_refresh_timer_TimerUDB_sT16_timerdp_u0__A0_REG )
+        #define time_refresh_timer_CAPTURE_LSB         (* (reg32 *) time_refresh_timer_TimerUDB_sT24_timerdp_u0__F0_REG )
+        #define time_refresh_timer_CAPTURE_LSB_PTR       ((reg32 *) time_refresh_timer_TimerUDB_sT24_timerdp_u0__F0_REG )
+        #define time_refresh_timer_PERIOD_LSB          (* (reg32 *) time_refresh_timer_TimerUDB_sT24_timerdp_u0__D0_REG )
+        #define time_refresh_timer_PERIOD_LSB_PTR        ((reg32 *) time_refresh_timer_TimerUDB_sT24_timerdp_u0__D0_REG )
+        #define time_refresh_timer_COUNTER_LSB         (* (reg32 *) time_refresh_timer_TimerUDB_sT24_timerdp_u0__A0_REG )
+        #define time_refresh_timer_COUNTER_LSB_PTR       ((reg32 *) time_refresh_timer_TimerUDB_sT24_timerdp_u0__A0_REG )
     #else /* 32-bit Timer */
         #if(CY_PSOC3 || CY_PSOC5) /* 8-bit address space */
-            #define time_refresh_timer_CAPTURE_LSB         (* (reg32 *) time_refresh_timer_TimerUDB_sT16_timerdp_u0__F0_REG )
-            #define time_refresh_timer_CAPTURE_LSB_PTR       ((reg32 *) time_refresh_timer_TimerUDB_sT16_timerdp_u0__F0_REG )
-            #define time_refresh_timer_PERIOD_LSB          (* (reg32 *) time_refresh_timer_TimerUDB_sT16_timerdp_u0__D0_REG )
-            #define time_refresh_timer_PERIOD_LSB_PTR        ((reg32 *) time_refresh_timer_TimerUDB_sT16_timerdp_u0__D0_REG )
-            #define time_refresh_timer_COUNTER_LSB         (* (reg32 *) time_refresh_timer_TimerUDB_sT16_timerdp_u0__A0_REG )
-            #define time_refresh_timer_COUNTER_LSB_PTR       ((reg32 *) time_refresh_timer_TimerUDB_sT16_timerdp_u0__A0_REG )
+            #define time_refresh_timer_CAPTURE_LSB         (* (reg32 *) time_refresh_timer_TimerUDB_sT24_timerdp_u0__F0_REG )
+            #define time_refresh_timer_CAPTURE_LSB_PTR       ((reg32 *) time_refresh_timer_TimerUDB_sT24_timerdp_u0__F0_REG )
+            #define time_refresh_timer_PERIOD_LSB          (* (reg32 *) time_refresh_timer_TimerUDB_sT24_timerdp_u0__D0_REG )
+            #define time_refresh_timer_PERIOD_LSB_PTR        ((reg32 *) time_refresh_timer_TimerUDB_sT24_timerdp_u0__D0_REG )
+            #define time_refresh_timer_COUNTER_LSB         (* (reg32 *) time_refresh_timer_TimerUDB_sT24_timerdp_u0__A0_REG )
+            #define time_refresh_timer_COUNTER_LSB_PTR       ((reg32 *) time_refresh_timer_TimerUDB_sT24_timerdp_u0__A0_REG )
         #else /* 32-bit address space */
-            #define time_refresh_timer_CAPTURE_LSB         (* (reg32 *) time_refresh_timer_TimerUDB_sT16_timerdp_u0__32BIT_F0_REG )
-            #define time_refresh_timer_CAPTURE_LSB_PTR       ((reg32 *) time_refresh_timer_TimerUDB_sT16_timerdp_u0__32BIT_F0_REG )
-            #define time_refresh_timer_PERIOD_LSB          (* (reg32 *) time_refresh_timer_TimerUDB_sT16_timerdp_u0__32BIT_D0_REG )
-            #define time_refresh_timer_PERIOD_LSB_PTR        ((reg32 *) time_refresh_timer_TimerUDB_sT16_timerdp_u0__32BIT_D0_REG )
-            #define time_refresh_timer_COUNTER_LSB         (* (reg32 *) time_refresh_timer_TimerUDB_sT16_timerdp_u0__32BIT_A0_REG )
-            #define time_refresh_timer_COUNTER_LSB_PTR       ((reg32 *) time_refresh_timer_TimerUDB_sT16_timerdp_u0__32BIT_A0_REG )
+            #define time_refresh_timer_CAPTURE_LSB         (* (reg32 *) time_refresh_timer_TimerUDB_sT24_timerdp_u0__32BIT_F0_REG )
+            #define time_refresh_timer_CAPTURE_LSB_PTR       ((reg32 *) time_refresh_timer_TimerUDB_sT24_timerdp_u0__32BIT_F0_REG )
+            #define time_refresh_timer_PERIOD_LSB          (* (reg32 *) time_refresh_timer_TimerUDB_sT24_timerdp_u0__32BIT_D0_REG )
+            #define time_refresh_timer_PERIOD_LSB_PTR        ((reg32 *) time_refresh_timer_TimerUDB_sT24_timerdp_u0__32BIT_D0_REG )
+            #define time_refresh_timer_COUNTER_LSB         (* (reg32 *) time_refresh_timer_TimerUDB_sT24_timerdp_u0__32BIT_A0_REG )
+            #define time_refresh_timer_COUNTER_LSB_PTR       ((reg32 *) time_refresh_timer_TimerUDB_sT24_timerdp_u0__32BIT_A0_REG )
         #endif /* CY_PSOC3 || CY_PSOC5 */ 
     #endif
 
-    #define time_refresh_timer_COUNTER_LSB_PTR_8BIT       ((reg8 *) time_refresh_timer_TimerUDB_sT16_timerdp_u0__A0_REG )
+    #define time_refresh_timer_COUNTER_LSB_PTR_8BIT       ((reg8 *) time_refresh_timer_TimerUDB_sT24_timerdp_u0__A0_REG )
     
     #if (time_refresh_timer_UsingHWCaptureCounter)
         #define time_refresh_timer_CAP_COUNT              (*(reg8 *) time_refresh_timer_TimerUDB_sCapCount_counter__PERIOD_REG )

@@ -36,7 +36,7 @@ extern uint8 millis_timer_initVar;
 *           Parameter Defaults
 **************************************/
 
-#define millis_timer_Resolution                 24u
+#define millis_timer_Resolution                 8u
 #define millis_timer_UsingFixedFunction         0u
 #define millis_timer_UsingHWCaptureCounter      0u
 #define millis_timer_SoftwareCaptureMode        0u
@@ -69,7 +69,7 @@ typedef struct
     uint8 TimerEnableState;
     #if(!millis_timer_UsingFixedFunction)
 
-        uint32 TimerUdb;
+        uint8 TimerUdb;
         uint8 InterruptMaskValue;
         #if (millis_timer_UsingHWCaptureCounter)
             uint8 TimerCaptureCounter;
@@ -100,11 +100,11 @@ uint8   millis_timer_ReadStatusRegister(void) ;
     void    millis_timer_WriteControlRegister(uint8 control) ;
 #endif /* (!millis_timer_UDB_CONTROL_REG_REMOVED) */
 
-uint32  millis_timer_ReadPeriod(void) ;
-void    millis_timer_WritePeriod(uint32 period) ;
-uint32  millis_timer_ReadCounter(void) ;
-void    millis_timer_WriteCounter(uint32 counter) ;
-uint32  millis_timer_ReadCapture(void) ;
+uint8  millis_timer_ReadPeriod(void) ;
+void    millis_timer_WritePeriod(uint8 period) ;
+uint8  millis_timer_ReadCounter(void) ;
+void    millis_timer_WriteCounter(uint8 counter) ;
+uint8  millis_timer_ReadCapture(void) ;
 void    millis_timer_SoftwareCapture(void) ;
 
 #if(!millis_timer_UsingFixedFunction) /* UDB Prototypes */
@@ -168,7 +168,7 @@ void millis_timer_Wakeup(void)        ;
 *    Initialial Parameter Constants
 ***************************************/
 
-#define millis_timer_INIT_PERIOD             16777215u
+#define millis_timer_INIT_PERIOD             9u
 #define millis_timer_INIT_CAPTURE_MODE       ((uint8)((uint8)0u << millis_timer_CTRL_CAP_MODE_SHIFT))
 #define millis_timer_INIT_TRIGGER_MODE       ((uint8)((uint8)0u << millis_timer_CTRL_TRIG_MODE_SHIFT))
 #if (millis_timer_UsingFixedFunction)
@@ -313,54 +313,54 @@ void millis_timer_Wakeup(void)        ;
     #define millis_timer_CONTROL             (* (reg8 *) millis_timer_TimerUDB_sCTRLReg_SyncCtl_ctrlreg__CONTROL_REG )
     
     #if(millis_timer_Resolution <= 8u) /* 8-bit Timer */
-        #define millis_timer_CAPTURE_LSB         (* (reg8 *) millis_timer_TimerUDB_sT24_timerdp_u0__F0_REG )
-        #define millis_timer_CAPTURE_LSB_PTR       ((reg8 *) millis_timer_TimerUDB_sT24_timerdp_u0__F0_REG )
-        #define millis_timer_PERIOD_LSB          (* (reg8 *) millis_timer_TimerUDB_sT24_timerdp_u0__D0_REG )
-        #define millis_timer_PERIOD_LSB_PTR        ((reg8 *) millis_timer_TimerUDB_sT24_timerdp_u0__D0_REG )
-        #define millis_timer_COUNTER_LSB         (* (reg8 *) millis_timer_TimerUDB_sT24_timerdp_u0__A0_REG )
-        #define millis_timer_COUNTER_LSB_PTR       ((reg8 *) millis_timer_TimerUDB_sT24_timerdp_u0__A0_REG )
+        #define millis_timer_CAPTURE_LSB         (* (reg8 *) millis_timer_TimerUDB_sT8_timerdp_u0__F0_REG )
+        #define millis_timer_CAPTURE_LSB_PTR       ((reg8 *) millis_timer_TimerUDB_sT8_timerdp_u0__F0_REG )
+        #define millis_timer_PERIOD_LSB          (* (reg8 *) millis_timer_TimerUDB_sT8_timerdp_u0__D0_REG )
+        #define millis_timer_PERIOD_LSB_PTR        ((reg8 *) millis_timer_TimerUDB_sT8_timerdp_u0__D0_REG )
+        #define millis_timer_COUNTER_LSB         (* (reg8 *) millis_timer_TimerUDB_sT8_timerdp_u0__A0_REG )
+        #define millis_timer_COUNTER_LSB_PTR       ((reg8 *) millis_timer_TimerUDB_sT8_timerdp_u0__A0_REG )
     #elif(millis_timer_Resolution <= 16u) /* 8-bit Timer */
         #if(CY_PSOC3) /* 8-bit addres space */
-            #define millis_timer_CAPTURE_LSB         (* (reg16 *) millis_timer_TimerUDB_sT24_timerdp_u0__F0_REG )
-            #define millis_timer_CAPTURE_LSB_PTR       ((reg16 *) millis_timer_TimerUDB_sT24_timerdp_u0__F0_REG )
-            #define millis_timer_PERIOD_LSB          (* (reg16 *) millis_timer_TimerUDB_sT24_timerdp_u0__D0_REG )
-            #define millis_timer_PERIOD_LSB_PTR        ((reg16 *) millis_timer_TimerUDB_sT24_timerdp_u0__D0_REG )
-            #define millis_timer_COUNTER_LSB         (* (reg16 *) millis_timer_TimerUDB_sT24_timerdp_u0__A0_REG )
-            #define millis_timer_COUNTER_LSB_PTR       ((reg16 *) millis_timer_TimerUDB_sT24_timerdp_u0__A0_REG )
+            #define millis_timer_CAPTURE_LSB         (* (reg16 *) millis_timer_TimerUDB_sT8_timerdp_u0__F0_REG )
+            #define millis_timer_CAPTURE_LSB_PTR       ((reg16 *) millis_timer_TimerUDB_sT8_timerdp_u0__F0_REG )
+            #define millis_timer_PERIOD_LSB          (* (reg16 *) millis_timer_TimerUDB_sT8_timerdp_u0__D0_REG )
+            #define millis_timer_PERIOD_LSB_PTR        ((reg16 *) millis_timer_TimerUDB_sT8_timerdp_u0__D0_REG )
+            #define millis_timer_COUNTER_LSB         (* (reg16 *) millis_timer_TimerUDB_sT8_timerdp_u0__A0_REG )
+            #define millis_timer_COUNTER_LSB_PTR       ((reg16 *) millis_timer_TimerUDB_sT8_timerdp_u0__A0_REG )
         #else /* 16-bit address space */
-            #define millis_timer_CAPTURE_LSB         (* (reg16 *) millis_timer_TimerUDB_sT24_timerdp_u0__16BIT_F0_REG )
-            #define millis_timer_CAPTURE_LSB_PTR       ((reg16 *) millis_timer_TimerUDB_sT24_timerdp_u0__16BIT_F0_REG )
-            #define millis_timer_PERIOD_LSB          (* (reg16 *) millis_timer_TimerUDB_sT24_timerdp_u0__16BIT_D0_REG )
-            #define millis_timer_PERIOD_LSB_PTR        ((reg16 *) millis_timer_TimerUDB_sT24_timerdp_u0__16BIT_D0_REG )
-            #define millis_timer_COUNTER_LSB         (* (reg16 *) millis_timer_TimerUDB_sT24_timerdp_u0__16BIT_A0_REG )
-            #define millis_timer_COUNTER_LSB_PTR       ((reg16 *) millis_timer_TimerUDB_sT24_timerdp_u0__16BIT_A0_REG )
+            #define millis_timer_CAPTURE_LSB         (* (reg16 *) millis_timer_TimerUDB_sT8_timerdp_u0__16BIT_F0_REG )
+            #define millis_timer_CAPTURE_LSB_PTR       ((reg16 *) millis_timer_TimerUDB_sT8_timerdp_u0__16BIT_F0_REG )
+            #define millis_timer_PERIOD_LSB          (* (reg16 *) millis_timer_TimerUDB_sT8_timerdp_u0__16BIT_D0_REG )
+            #define millis_timer_PERIOD_LSB_PTR        ((reg16 *) millis_timer_TimerUDB_sT8_timerdp_u0__16BIT_D0_REG )
+            #define millis_timer_COUNTER_LSB         (* (reg16 *) millis_timer_TimerUDB_sT8_timerdp_u0__16BIT_A0_REG )
+            #define millis_timer_COUNTER_LSB_PTR       ((reg16 *) millis_timer_TimerUDB_sT8_timerdp_u0__16BIT_A0_REG )
         #endif /* CY_PSOC3 */
     #elif(millis_timer_Resolution <= 24u)/* 24-bit Timer */
-        #define millis_timer_CAPTURE_LSB         (* (reg32 *) millis_timer_TimerUDB_sT24_timerdp_u0__F0_REG )
-        #define millis_timer_CAPTURE_LSB_PTR       ((reg32 *) millis_timer_TimerUDB_sT24_timerdp_u0__F0_REG )
-        #define millis_timer_PERIOD_LSB          (* (reg32 *) millis_timer_TimerUDB_sT24_timerdp_u0__D0_REG )
-        #define millis_timer_PERIOD_LSB_PTR        ((reg32 *) millis_timer_TimerUDB_sT24_timerdp_u0__D0_REG )
-        #define millis_timer_COUNTER_LSB         (* (reg32 *) millis_timer_TimerUDB_sT24_timerdp_u0__A0_REG )
-        #define millis_timer_COUNTER_LSB_PTR       ((reg32 *) millis_timer_TimerUDB_sT24_timerdp_u0__A0_REG )
+        #define millis_timer_CAPTURE_LSB         (* (reg32 *) millis_timer_TimerUDB_sT8_timerdp_u0__F0_REG )
+        #define millis_timer_CAPTURE_LSB_PTR       ((reg32 *) millis_timer_TimerUDB_sT8_timerdp_u0__F0_REG )
+        #define millis_timer_PERIOD_LSB          (* (reg32 *) millis_timer_TimerUDB_sT8_timerdp_u0__D0_REG )
+        #define millis_timer_PERIOD_LSB_PTR        ((reg32 *) millis_timer_TimerUDB_sT8_timerdp_u0__D0_REG )
+        #define millis_timer_COUNTER_LSB         (* (reg32 *) millis_timer_TimerUDB_sT8_timerdp_u0__A0_REG )
+        #define millis_timer_COUNTER_LSB_PTR       ((reg32 *) millis_timer_TimerUDB_sT8_timerdp_u0__A0_REG )
     #else /* 32-bit Timer */
         #if(CY_PSOC3 || CY_PSOC5) /* 8-bit address space */
-            #define millis_timer_CAPTURE_LSB         (* (reg32 *) millis_timer_TimerUDB_sT24_timerdp_u0__F0_REG )
-            #define millis_timer_CAPTURE_LSB_PTR       ((reg32 *) millis_timer_TimerUDB_sT24_timerdp_u0__F0_REG )
-            #define millis_timer_PERIOD_LSB          (* (reg32 *) millis_timer_TimerUDB_sT24_timerdp_u0__D0_REG )
-            #define millis_timer_PERIOD_LSB_PTR        ((reg32 *) millis_timer_TimerUDB_sT24_timerdp_u0__D0_REG )
-            #define millis_timer_COUNTER_LSB         (* (reg32 *) millis_timer_TimerUDB_sT24_timerdp_u0__A0_REG )
-            #define millis_timer_COUNTER_LSB_PTR       ((reg32 *) millis_timer_TimerUDB_sT24_timerdp_u0__A0_REG )
+            #define millis_timer_CAPTURE_LSB         (* (reg32 *) millis_timer_TimerUDB_sT8_timerdp_u0__F0_REG )
+            #define millis_timer_CAPTURE_LSB_PTR       ((reg32 *) millis_timer_TimerUDB_sT8_timerdp_u0__F0_REG )
+            #define millis_timer_PERIOD_LSB          (* (reg32 *) millis_timer_TimerUDB_sT8_timerdp_u0__D0_REG )
+            #define millis_timer_PERIOD_LSB_PTR        ((reg32 *) millis_timer_TimerUDB_sT8_timerdp_u0__D0_REG )
+            #define millis_timer_COUNTER_LSB         (* (reg32 *) millis_timer_TimerUDB_sT8_timerdp_u0__A0_REG )
+            #define millis_timer_COUNTER_LSB_PTR       ((reg32 *) millis_timer_TimerUDB_sT8_timerdp_u0__A0_REG )
         #else /* 32-bit address space */
-            #define millis_timer_CAPTURE_LSB         (* (reg32 *) millis_timer_TimerUDB_sT24_timerdp_u0__32BIT_F0_REG )
-            #define millis_timer_CAPTURE_LSB_PTR       ((reg32 *) millis_timer_TimerUDB_sT24_timerdp_u0__32BIT_F0_REG )
-            #define millis_timer_PERIOD_LSB          (* (reg32 *) millis_timer_TimerUDB_sT24_timerdp_u0__32BIT_D0_REG )
-            #define millis_timer_PERIOD_LSB_PTR        ((reg32 *) millis_timer_TimerUDB_sT24_timerdp_u0__32BIT_D0_REG )
-            #define millis_timer_COUNTER_LSB         (* (reg32 *) millis_timer_TimerUDB_sT24_timerdp_u0__32BIT_A0_REG )
-            #define millis_timer_COUNTER_LSB_PTR       ((reg32 *) millis_timer_TimerUDB_sT24_timerdp_u0__32BIT_A0_REG )
+            #define millis_timer_CAPTURE_LSB         (* (reg32 *) millis_timer_TimerUDB_sT8_timerdp_u0__32BIT_F0_REG )
+            #define millis_timer_CAPTURE_LSB_PTR       ((reg32 *) millis_timer_TimerUDB_sT8_timerdp_u0__32BIT_F0_REG )
+            #define millis_timer_PERIOD_LSB          (* (reg32 *) millis_timer_TimerUDB_sT8_timerdp_u0__32BIT_D0_REG )
+            #define millis_timer_PERIOD_LSB_PTR        ((reg32 *) millis_timer_TimerUDB_sT8_timerdp_u0__32BIT_D0_REG )
+            #define millis_timer_COUNTER_LSB         (* (reg32 *) millis_timer_TimerUDB_sT8_timerdp_u0__32BIT_A0_REG )
+            #define millis_timer_COUNTER_LSB_PTR       ((reg32 *) millis_timer_TimerUDB_sT8_timerdp_u0__32BIT_A0_REG )
         #endif /* CY_PSOC3 || CY_PSOC5 */ 
     #endif
 
-    #define millis_timer_COUNTER_LSB_PTR_8BIT       ((reg8 *) millis_timer_TimerUDB_sT24_timerdp_u0__A0_REG )
+    #define millis_timer_COUNTER_LSB_PTR_8BIT       ((reg8 *) millis_timer_TimerUDB_sT8_timerdp_u0__A0_REG )
     
     #if (millis_timer_UsingHWCaptureCounter)
         #define millis_timer_CAP_COUNT              (*(reg8 *) millis_timer_TimerUDB_sCapCount_counter__PERIOD_REG )
