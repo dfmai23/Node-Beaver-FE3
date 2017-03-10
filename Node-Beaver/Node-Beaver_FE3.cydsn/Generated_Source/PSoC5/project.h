@@ -60,7 +60,6 @@
 #include "power_comp.h"
 #include "power_aliases.h"
 #include "power.h"
-#include "ms_isr.h"
 #include "emFile_1_SPI0.h"
 #include "emFile_1_SPI0_PVT.h"
 #include "emFile_1_mosi0_aliases.h"

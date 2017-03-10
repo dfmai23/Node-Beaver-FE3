@@ -168,7 +168,7 @@ void time_refresh_timer_Wakeup(void)        ;
 *    Initialial Parameter Constants
 ***************************************/
 
-#define time_refresh_timer_INIT_PERIOD             49999u
+#define time_refresh_timer_INIT_PERIOD             4999u
 #define time_refresh_timer_INIT_CAPTURE_MODE       ((uint8)((uint8)0u << time_refresh_timer_CTRL_CAP_MODE_SHIFT))
 #define time_refresh_timer_INIT_TRIGGER_MODE       ((uint8)((uint8)0u << time_refresh_timer_CTRL_TRIG_MODE_SHIFT))
 #if (time_refresh_timer_UsingFixedFunction)

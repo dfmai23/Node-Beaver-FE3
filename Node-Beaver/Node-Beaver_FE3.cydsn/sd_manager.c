@@ -180,7 +180,7 @@ void sd_push(const DataPacket* data_queue, uint16_t data_head, uint16_t data_tai
 	{
 		length = sprintf(buffer, "%X,%u,%X,%X,%X,%X,%X,%X,%X,%X\n",
 			(unsigned)data_queue[pos].id,
-			(unsigned)data_queue[pos].millicounter,
+			MILLI_PERIOD - (unsigned)data_queue[pos].millicounter,
 			(unsigned)data_queue[pos].data[0],
 			(unsigned)data_queue[pos].data[1],
 			(unsigned)data_queue[pos].data[2],

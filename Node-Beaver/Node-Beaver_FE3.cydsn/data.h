@@ -6,7 +6,8 @@
 #define CAN_QUEUE_LENGTH 1024
 #define DATA_QUEUE_LENGTH 1024    //can have up to 1024 data packets stored in buffer
 #define USB_QUEUE_LENGTH 256
-
+#define MILLI_PERIOD 3600000      //timer decrements starting from this val
+    
 typedef struct
 {
 	uint32_t millicounter;      //timestamp

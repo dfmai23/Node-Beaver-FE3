@@ -37,7 +37,7 @@ int main(void) {
         //usb_get();
        
         time_announce(data_queue, &data_head, &data_tail);  //time of current message interval
-        can_test_receive(data_queue, &data_tail, &data_head);
+        //can_test_receive(data_queue, &data_tail, &data_head);
 		can_get(data_queue, &data_head, &data_tail);        //gets received messages from the CAN network,
 	
         //save messages to external devices
