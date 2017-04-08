@@ -3,17 +3,18 @@
 
 #include <project.h>
 
-#define CAN_QUEUE_LENGTH 1024
-#define DATA_QUEUE_LENGTH 1024    //can have up to 1024 data packets stored in buffer
-#define USB_QUEUE_LENGTH 256
-#define MILLI_PERIOD 3600000      //timer decrements starting from this val
+#define SD_QUEUE_LENGTH		1024
+#define USB_QUEUE_LENGTH	256
+#define MILLI_PERIOD 		43200000	//decrementing timer starting from this val, check top design
     
-typedef struct
-{
+typedef struct {
 	uint32_t millicounter;      //timestamp
 	uint16_t id;                //id is for tracking CAN ID
-	uint8_t length;         
-	uint8_t data[8];            //8bytes for each data packet
+	uint8_t length;         	//data length
+	uint8_t data[8];            //8bytes for each message
 } DataPacket;
+
+
+void msg_recieve(DataPacket * msg);
 
 #endif

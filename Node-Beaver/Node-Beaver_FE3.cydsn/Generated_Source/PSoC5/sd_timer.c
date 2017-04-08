@@ -1,5 +1,5 @@
 /*******************************************************************************
-* File Name: millis_timer.c
+* File Name: sd_timer.c
 * Version 2.70
 *
 * Description:
@@ -21,13 +21,13 @@
 * the software package with which this file was provided.
 ********************************************************************************/
 
-#include "millis_timer.h"
+#include "sd_timer.h"
 
-uint8 millis_timer_initVar = 0u;
+uint8 sd_timer_initVar = 0u;
 
 
 /*******************************************************************************
-* Function Name: millis_timer_Init
+* Function Name: sd_timer_Init
 ********************************************************************************
 *
 * Summary:
@@ -40,131 +40,131 @@ uint8 millis_timer_initVar = 0u;
 *  void
 *
 *******************************************************************************/
-void millis_timer_Init(void) 
+void sd_timer_Init(void) 
 {
-    #if(!millis_timer_UsingFixedFunction)
+    #if(!sd_timer_UsingFixedFunction)
             /* Interrupt State Backup for Critical Region*/
-            uint8 millis_timer_interruptState;
+            uint8 sd_timer_interruptState;
     #endif /* Interrupt state back up for Fixed Function only */
 
-    #if (millis_timer_UsingFixedFunction)
+    #if (sd_timer_UsingFixedFunction)
         /* Clear all bits but the enable bit (if it's already set) for Timer operation */
-        millis_timer_CONTROL &= millis_timer_CTRL_ENABLE;
+        sd_timer_CONTROL &= sd_timer_CTRL_ENABLE;
 
         /* Clear the mode bits for continuous run mode */
         #if (CY_PSOC5A)
-            millis_timer_CONTROL2 &= ((uint8)(~millis_timer_CTRL_MODE_MASK));
+            sd_timer_CONTROL2 &= ((uint8)(~sd_timer_CTRL_MODE_MASK));
         #endif /* Clear bits in CONTROL2 only in PSOC5A */
 
         #if (CY_PSOC3 || CY_PSOC5LP)
-            millis_timer_CONTROL3 &= ((uint8)(~millis_timer_CTRL_MODE_MASK));
+            sd_timer_CONTROL3 &= ((uint8)(~sd_timer_CTRL_MODE_MASK));
         #endif /* CONTROL3 register exists only in PSoC3 OR PSoC5LP */
 
         /* Check if One Shot mode is enabled i.e. RunMode !=0*/
-        #if (millis_timer_RunModeUsed != 0x0u)
+        #if (sd_timer_RunModeUsed != 0x0u)
             /* Set 3rd bit of Control register to enable one shot mode */
-            millis_timer_CONTROL |= 0x04u;
+            sd_timer_CONTROL |= 0x04u;
         #endif /* One Shot enabled only when RunModeUsed is not Continuous*/
 
-        #if (millis_timer_RunModeUsed == 2)
+        #if (sd_timer_RunModeUsed == 2)
             #if (CY_PSOC5A)
                 /* Set last 2 bits of control2 register if one shot(halt on
                 interrupt) is enabled*/
-                millis_timer_CONTROL2 |= 0x03u;
+                sd_timer_CONTROL2 |= 0x03u;
             #endif /* Set One-Shot Halt on Interrupt bit in CONTROL2 for PSoC5A */
 
             #if (CY_PSOC3 || CY_PSOC5LP)
                 /* Set last 2 bits of control3 register if one shot(halt on
                 interrupt) is enabled*/
-                millis_timer_CONTROL3 |= 0x03u;
+                sd_timer_CONTROL3 |= 0x03u;
             #endif /* Set One-Shot Halt on Interrupt bit in CONTROL3 for PSoC3 or PSoC5LP */
 
         #endif /* Remove section if One Shot Halt on Interrupt is not enabled */
 
-        #if (millis_timer_UsingHWEnable != 0)
+        #if (sd_timer_UsingHWEnable != 0)
             #if (CY_PSOC5A)
                 /* Set the default Run Mode of the Timer to Continuous */
-                millis_timer_CONTROL2 |= millis_timer_CTRL_MODE_PULSEWIDTH;
+                sd_timer_CONTROL2 |= sd_timer_CTRL_MODE_PULSEWIDTH;
             #endif /* Set Continuous Run Mode in CONTROL2 for PSoC5A */
 
             #if (CY_PSOC3 || CY_PSOC5LP)
                 /* Clear and Set ROD and COD bits of CFG2 register */
-                millis_timer_CONTROL3 &= ((uint8)(~millis_timer_CTRL_RCOD_MASK));
-                millis_timer_CONTROL3 |= millis_timer_CTRL_RCOD;
+                sd_timer_CONTROL3 &= ((uint8)(~sd_timer_CTRL_RCOD_MASK));
+                sd_timer_CONTROL3 |= sd_timer_CTRL_RCOD;
 
                 /* Clear and Enable the HW enable bit in CFG2 register */
-                millis_timer_CONTROL3 &= ((uint8)(~millis_timer_CTRL_ENBL_MASK));
-                millis_timer_CONTROL3 |= millis_timer_CTRL_ENBL;
+                sd_timer_CONTROL3 &= ((uint8)(~sd_timer_CTRL_ENBL_MASK));
+                sd_timer_CONTROL3 |= sd_timer_CTRL_ENBL;
 
                 /* Set the default Run Mode of the Timer to Continuous */
-                millis_timer_CONTROL3 |= millis_timer_CTRL_MODE_CONTINUOUS;
+                sd_timer_CONTROL3 |= sd_timer_CTRL_MODE_CONTINUOUS;
             #endif /* Set Continuous Run Mode in CONTROL3 for PSoC3ES3 or PSoC5A */
 
         #endif /* Configure Run Mode with hardware enable */
 
         /* Clear and Set SYNCTC and SYNCCMP bits of RT1 register */
-        millis_timer_RT1 &= ((uint8)(~millis_timer_RT1_MASK));
-        millis_timer_RT1 |= millis_timer_SYNC;
+        sd_timer_RT1 &= ((uint8)(~sd_timer_RT1_MASK));
+        sd_timer_RT1 |= sd_timer_SYNC;
 
         /*Enable DSI Sync all all inputs of the Timer*/
-        millis_timer_RT1 &= ((uint8)(~millis_timer_SYNCDSI_MASK));
-        millis_timer_RT1 |= millis_timer_SYNCDSI_EN;
+        sd_timer_RT1 &= ((uint8)(~sd_timer_SYNCDSI_MASK));
+        sd_timer_RT1 |= sd_timer_SYNCDSI_EN;
 
         /* Set the IRQ to use the status register interrupts */
-        millis_timer_CONTROL2 |= millis_timer_CTRL2_IRQ_SEL;
+        sd_timer_CONTROL2 |= sd_timer_CTRL2_IRQ_SEL;
     #endif /* Configuring registers of fixed function implementation */
 
     /* Set Initial values from Configuration */
-    millis_timer_WritePeriod(millis_timer_INIT_PERIOD);
-    millis_timer_WriteCounter(millis_timer_INIT_PERIOD);
+    sd_timer_WritePeriod(sd_timer_INIT_PERIOD);
+    sd_timer_WriteCounter(sd_timer_INIT_PERIOD);
 
-    #if (millis_timer_UsingHWCaptureCounter)/* Capture counter is enabled */
-        millis_timer_CAPTURE_COUNT_CTRL |= millis_timer_CNTR_ENABLE;
-        millis_timer_SetCaptureCount(millis_timer_INIT_CAPTURE_COUNT);
+    #if (sd_timer_UsingHWCaptureCounter)/* Capture counter is enabled */
+        sd_timer_CAPTURE_COUNT_CTRL |= sd_timer_CNTR_ENABLE;
+        sd_timer_SetCaptureCount(sd_timer_INIT_CAPTURE_COUNT);
     #endif /* Configure capture counter value */
 
-    #if (!millis_timer_UsingFixedFunction)
-        #if (millis_timer_SoftwareCaptureMode)
-            millis_timer_SetCaptureMode(millis_timer_INIT_CAPTURE_MODE);
+    #if (!sd_timer_UsingFixedFunction)
+        #if (sd_timer_SoftwareCaptureMode)
+            sd_timer_SetCaptureMode(sd_timer_INIT_CAPTURE_MODE);
         #endif /* Set Capture Mode for UDB implementation if capture mode is software controlled */
 
-        #if (millis_timer_SoftwareTriggerMode)
-            #if (!millis_timer_UDB_CONTROL_REG_REMOVED)
-                if (0u == (millis_timer_CONTROL & millis_timer__B_TIMER__TM_SOFTWARE))
+        #if (sd_timer_SoftwareTriggerMode)
+            #if (!sd_timer_UDB_CONTROL_REG_REMOVED)
+                if (0u == (sd_timer_CONTROL & sd_timer__B_TIMER__TM_SOFTWARE))
                 {
-                    millis_timer_SetTriggerMode(millis_timer_INIT_TRIGGER_MODE);
+                    sd_timer_SetTriggerMode(sd_timer_INIT_TRIGGER_MODE);
                 }
-            #endif /* (!millis_timer_UDB_CONTROL_REG_REMOVED) */
+            #endif /* (!sd_timer_UDB_CONTROL_REG_REMOVED) */
         #endif /* Set trigger mode for UDB Implementation if trigger mode is software controlled */
 
         /* CyEnterCriticalRegion and CyExitCriticalRegion are used to mark following region critical*/
         /* Enter Critical Region*/
-        millis_timer_interruptState = CyEnterCriticalSection();
+        sd_timer_interruptState = CyEnterCriticalSection();
 
         /* Use the interrupt output of the status register for IRQ output */
-        millis_timer_STATUS_AUX_CTRL |= millis_timer_STATUS_ACTL_INT_EN_MASK;
+        sd_timer_STATUS_AUX_CTRL |= sd_timer_STATUS_ACTL_INT_EN_MASK;
 
         /* Exit Critical Region*/
-        CyExitCriticalSection(millis_timer_interruptState);
+        CyExitCriticalSection(sd_timer_interruptState);
 
-        #if (millis_timer_EnableTriggerMode)
-            millis_timer_EnableTrigger();
+        #if (sd_timer_EnableTriggerMode)
+            sd_timer_EnableTrigger();
         #endif /* Set Trigger enable bit for UDB implementation in the control register*/
 		
 		
-        #if (millis_timer_InterruptOnCaptureCount && !millis_timer_UDB_CONTROL_REG_REMOVED)
-            millis_timer_SetInterruptCount(millis_timer_INIT_INT_CAPTURE_COUNT);
+        #if (sd_timer_InterruptOnCaptureCount && !sd_timer_UDB_CONTROL_REG_REMOVED)
+            sd_timer_SetInterruptCount(sd_timer_INIT_INT_CAPTURE_COUNT);
         #endif /* Set interrupt count in UDB implementation if interrupt count feature is checked.*/
 
-        millis_timer_ClearFIFO();
+        sd_timer_ClearFIFO();
     #endif /* Configure additional features of UDB implementation */
 
-    millis_timer_SetInterruptMode(millis_timer_INIT_INTERRUPT_MODE);
+    sd_timer_SetInterruptMode(sd_timer_INIT_INTERRUPT_MODE);
 }
 
 
 /*******************************************************************************
-* Function Name: millis_timer_Enable
+* Function Name: sd_timer_Enable
 ********************************************************************************
 *
 * Summary:
@@ -177,23 +177,23 @@ void millis_timer_Init(void)
 *  void
 *
 *******************************************************************************/
-void millis_timer_Enable(void) 
+void sd_timer_Enable(void) 
 {
     /* Globally Enable the Fixed Function Block chosen */
-    #if (millis_timer_UsingFixedFunction)
-        millis_timer_GLOBAL_ENABLE |= millis_timer_BLOCK_EN_MASK;
-        millis_timer_GLOBAL_STBY_ENABLE |= millis_timer_BLOCK_STBY_EN_MASK;
+    #if (sd_timer_UsingFixedFunction)
+        sd_timer_GLOBAL_ENABLE |= sd_timer_BLOCK_EN_MASK;
+        sd_timer_GLOBAL_STBY_ENABLE |= sd_timer_BLOCK_STBY_EN_MASK;
     #endif /* Set Enable bit for enabling Fixed function timer*/
 
     /* Remove assignment if control register is removed */
-    #if (!millis_timer_UDB_CONTROL_REG_REMOVED || millis_timer_UsingFixedFunction)
-        millis_timer_CONTROL |= millis_timer_CTRL_ENABLE;
+    #if (!sd_timer_UDB_CONTROL_REG_REMOVED || sd_timer_UsingFixedFunction)
+        sd_timer_CONTROL |= sd_timer_CTRL_ENABLE;
     #endif /* Remove assignment if control register is removed */
 }
 
 
 /*******************************************************************************
-* Function Name: millis_timer_Start
+* Function Name: sd_timer_Start
 ********************************************************************************
 *
 * Summary:
@@ -208,26 +208,26 @@ void millis_timer_Enable(void)
 *  void
 *
 * Global variables:
-*  millis_timer_initVar: Is modified when this function is called for the
+*  sd_timer_initVar: Is modified when this function is called for the
 *   first time. Is used to ensure that initialization happens only once.
 *
 *******************************************************************************/
-void millis_timer_Start(void) 
+void sd_timer_Start(void) 
 {
-    if(millis_timer_initVar == 0u)
+    if(sd_timer_initVar == 0u)
     {
-        millis_timer_Init();
+        sd_timer_Init();
 
-        millis_timer_initVar = 1u;   /* Clear this bit for Initialization */
+        sd_timer_initVar = 1u;   /* Clear this bit for Initialization */
     }
 
     /* Enable the Timer */
-    millis_timer_Enable();
+    sd_timer_Enable();
 }
 
 
 /*******************************************************************************
-* Function Name: millis_timer_Stop
+* Function Name: sd_timer_Stop
 ********************************************************************************
 *
 * Summary:
@@ -244,23 +244,23 @@ void millis_timer_Start(void)
 *               has no effect on the operation of the timer.
 *
 *******************************************************************************/
-void millis_timer_Stop(void) 
+void sd_timer_Stop(void) 
 {
     /* Disable Timer */
-    #if(!millis_timer_UDB_CONTROL_REG_REMOVED || millis_timer_UsingFixedFunction)
-        millis_timer_CONTROL &= ((uint8)(~millis_timer_CTRL_ENABLE));
+    #if(!sd_timer_UDB_CONTROL_REG_REMOVED || sd_timer_UsingFixedFunction)
+        sd_timer_CONTROL &= ((uint8)(~sd_timer_CTRL_ENABLE));
     #endif /* Remove assignment if control register is removed */
 
     /* Globally disable the Fixed Function Block chosen */
-    #if (millis_timer_UsingFixedFunction)
-        millis_timer_GLOBAL_ENABLE &= ((uint8)(~millis_timer_BLOCK_EN_MASK));
-        millis_timer_GLOBAL_STBY_ENABLE &= ((uint8)(~millis_timer_BLOCK_STBY_EN_MASK));
+    #if (sd_timer_UsingFixedFunction)
+        sd_timer_GLOBAL_ENABLE &= ((uint8)(~sd_timer_BLOCK_EN_MASK));
+        sd_timer_GLOBAL_STBY_ENABLE &= ((uint8)(~sd_timer_BLOCK_STBY_EN_MASK));
     #endif /* Disable global enable for the Timer Fixed function block to stop the Timer*/
 }
 
 
 /*******************************************************************************
-* Function Name: millis_timer_SetInterruptMode
+* Function Name: sd_timer_SetInterruptMode
 ********************************************************************************
 *
 * Summary:
@@ -276,14 +276,14 @@ void millis_timer_Stop(void)
 *  void
 *
 *******************************************************************************/
-void millis_timer_SetInterruptMode(uint8 interruptMode) 
+void sd_timer_SetInterruptMode(uint8 interruptMode) 
 {
-    millis_timer_STATUS_MASK = interruptMode;
+    sd_timer_STATUS_MASK = interruptMode;
 }
 
 
 /*******************************************************************************
-* Function Name: millis_timer_SoftwareCapture
+* Function Name: sd_timer_SoftwareCapture
 ********************************************************************************
 *
 * Summary:
@@ -299,20 +299,20 @@ void millis_timer_SetInterruptMode(uint8 interruptMode)
 *  An existing hardware capture could be overwritten.
 *
 *******************************************************************************/
-void millis_timer_SoftwareCapture(void) 
+void sd_timer_SoftwareCapture(void) 
 {
     /* Generate a software capture by reading the counter register */
-    #if(millis_timer_UsingFixedFunction)
-        (void)CY_GET_REG16(millis_timer_COUNTER_LSB_PTR);
+    #if(sd_timer_UsingFixedFunction)
+        (void)CY_GET_REG16(sd_timer_COUNTER_LSB_PTR);
     #else
-        (void)CY_GET_REG8(millis_timer_COUNTER_LSB_PTR_8BIT);
-    #endif/* (millis_timer_UsingFixedFunction) */
+        (void)CY_GET_REG8(sd_timer_COUNTER_LSB_PTR_8BIT);
+    #endif/* (sd_timer_UsingFixedFunction) */
     /* Capture Data is now in the FIFO */
 }
 
 
 /*******************************************************************************
-* Function Name: millis_timer_ReadStatusRegister
+* Function Name: sd_timer_ReadStatusRegister
 ********************************************************************************
 *
 * Summary:
@@ -330,17 +330,17 @@ void millis_timer_SoftwareCapture(void)
 *  Status register bits may be clear on read.
 *
 *******************************************************************************/
-uint8   millis_timer_ReadStatusRegister(void) 
+uint8   sd_timer_ReadStatusRegister(void) 
 {
-    return (millis_timer_STATUS);
+    return (sd_timer_STATUS);
 }
 
 
-#if (!millis_timer_UDB_CONTROL_REG_REMOVED) /* Remove API if control register is unused */
+#if (!sd_timer_UDB_CONTROL_REG_REMOVED) /* Remove API if control register is unused */
 
 
 /*******************************************************************************
-* Function Name: millis_timer_ReadControlRegister
+* Function Name: sd_timer_ReadControlRegister
 ********************************************************************************
 *
 * Summary:
@@ -353,18 +353,18 @@ uint8   millis_timer_ReadStatusRegister(void)
 *  The contents of the control register
 *
 *******************************************************************************/
-uint8 millis_timer_ReadControlRegister(void) 
+uint8 sd_timer_ReadControlRegister(void) 
 {
-    #if (!millis_timer_UDB_CONTROL_REG_REMOVED) 
-        return ((uint8)millis_timer_CONTROL);
+    #if (!sd_timer_UDB_CONTROL_REG_REMOVED) 
+        return ((uint8)sd_timer_CONTROL);
     #else
         return (0);
-    #endif /* (!millis_timer_UDB_CONTROL_REG_REMOVED) */
+    #endif /* (!sd_timer_UDB_CONTROL_REG_REMOVED) */
 }
 
 
 /*******************************************************************************
-* Function Name: millis_timer_WriteControlRegister
+* Function Name: sd_timer_WriteControlRegister
 ********************************************************************************
 *
 * Summary:
@@ -376,20 +376,20 @@ uint8 millis_timer_ReadControlRegister(void)
 * Return:
 *
 *******************************************************************************/
-void millis_timer_WriteControlRegister(uint8 control) 
+void sd_timer_WriteControlRegister(uint8 control) 
 {
-    #if (!millis_timer_UDB_CONTROL_REG_REMOVED) 
-        millis_timer_CONTROL = control;
+    #if (!sd_timer_UDB_CONTROL_REG_REMOVED) 
+        sd_timer_CONTROL = control;
     #else
         control = 0u;
-    #endif /* (!millis_timer_UDB_CONTROL_REG_REMOVED) */
+    #endif /* (!sd_timer_UDB_CONTROL_REG_REMOVED) */
 }
 
 #endif /* Remove API if control register is unused */
 
 
 /*******************************************************************************
-* Function Name: millis_timer_ReadPeriod
+* Function Name: sd_timer_ReadPeriod
 ********************************************************************************
 *
 * Summary:
@@ -402,18 +402,18 @@ void millis_timer_WriteControlRegister(uint8 control)
 *  The present value of the counter.
 *
 *******************************************************************************/
-uint32 millis_timer_ReadPeriod(void) 
+uint32 sd_timer_ReadPeriod(void) 
 {
-   #if(millis_timer_UsingFixedFunction)
-       return ((uint32)CY_GET_REG16(millis_timer_PERIOD_LSB_PTR));
+   #if(sd_timer_UsingFixedFunction)
+       return ((uint32)CY_GET_REG16(sd_timer_PERIOD_LSB_PTR));
    #else
-       return (CY_GET_REG32(millis_timer_PERIOD_LSB_PTR));
-   #endif /* (millis_timer_UsingFixedFunction) */
+       return (CY_GET_REG24(sd_timer_PERIOD_LSB_PTR));
+   #endif /* (sd_timer_UsingFixedFunction) */
 }
 
 
 /*******************************************************************************
-* Function Name: millis_timer_WritePeriod
+* Function Name: sd_timer_WritePeriod
 ********************************************************************************
 *
 * Summary:
@@ -428,19 +428,19 @@ uint32 millis_timer_ReadPeriod(void)
 *  void
 *
 *******************************************************************************/
-void millis_timer_WritePeriod(uint32 period) 
+void sd_timer_WritePeriod(uint32 period) 
 {
-    #if(millis_timer_UsingFixedFunction)
+    #if(sd_timer_UsingFixedFunction)
         uint16 period_temp = (uint16)period;
-        CY_SET_REG16(millis_timer_PERIOD_LSB_PTR, period_temp);
+        CY_SET_REG16(sd_timer_PERIOD_LSB_PTR, period_temp);
     #else
-        CY_SET_REG32(millis_timer_PERIOD_LSB_PTR, period);
+        CY_SET_REG24(sd_timer_PERIOD_LSB_PTR, period);
     #endif /*Write Period value with appropriate resolution suffix depending on UDB or fixed function implementation */
 }
 
 
 /*******************************************************************************
-* Function Name: millis_timer_ReadCapture
+* Function Name: sd_timer_ReadCapture
 ********************************************************************************
 *
 * Summary:
@@ -453,18 +453,18 @@ void millis_timer_WritePeriod(uint32 period)
 *  Present Capture value.
 *
 *******************************************************************************/
-uint32 millis_timer_ReadCapture(void) 
+uint32 sd_timer_ReadCapture(void) 
 {
-   #if(millis_timer_UsingFixedFunction)
-       return ((uint32)CY_GET_REG16(millis_timer_CAPTURE_LSB_PTR));
+   #if(sd_timer_UsingFixedFunction)
+       return ((uint32)CY_GET_REG16(sd_timer_CAPTURE_LSB_PTR));
    #else
-       return (CY_GET_REG32(millis_timer_CAPTURE_LSB_PTR));
-   #endif /* (millis_timer_UsingFixedFunction) */
+       return (CY_GET_REG24(sd_timer_CAPTURE_LSB_PTR));
+   #endif /* (sd_timer_UsingFixedFunction) */
 }
 
 
 /*******************************************************************************
-* Function Name: millis_timer_WriteCounter
+* Function Name: sd_timer_WriteCounter
 ********************************************************************************
 *
 * Summary:
@@ -477,22 +477,22 @@ uint32 millis_timer_ReadCapture(void)
 *  void
 *
 *******************************************************************************/
-void millis_timer_WriteCounter(uint32 counter) 
+void sd_timer_WriteCounter(uint32 counter) 
 {
-   #if(millis_timer_UsingFixedFunction)
+   #if(sd_timer_UsingFixedFunction)
         /* This functionality is removed until a FixedFunction HW update to
          * allow this register to be written
          */
-        CY_SET_REG16(millis_timer_COUNTER_LSB_PTR, (uint16)counter);
+        CY_SET_REG16(sd_timer_COUNTER_LSB_PTR, (uint16)counter);
         
     #else
-        CY_SET_REG32(millis_timer_COUNTER_LSB_PTR, counter);
+        CY_SET_REG24(sd_timer_COUNTER_LSB_PTR, counter);
     #endif /* Set Write Counter only for the UDB implementation (Write Counter not available in fixed function Timer */
 }
 
 
 /*******************************************************************************
-* Function Name: millis_timer_ReadCounter
+* Function Name: sd_timer_ReadCounter
 ********************************************************************************
 *
 * Summary:
@@ -505,27 +505,27 @@ void millis_timer_WriteCounter(uint32 counter)
 *  Present compare value.
 *
 *******************************************************************************/
-uint32 millis_timer_ReadCounter(void) 
+uint32 sd_timer_ReadCounter(void) 
 {
     /* Force capture by reading Accumulator */
     /* Must first do a software capture to be able to read the counter */
     /* It is up to the user code to make sure there isn't already captured data in the FIFO */
-    #if(millis_timer_UsingFixedFunction)
-        (void)CY_GET_REG16(millis_timer_COUNTER_LSB_PTR);
+    #if(sd_timer_UsingFixedFunction)
+        (void)CY_GET_REG16(sd_timer_COUNTER_LSB_PTR);
     #else
-        (void)CY_GET_REG8(millis_timer_COUNTER_LSB_PTR_8BIT);
-    #endif/* (millis_timer_UsingFixedFunction) */
+        (void)CY_GET_REG8(sd_timer_COUNTER_LSB_PTR_8BIT);
+    #endif/* (sd_timer_UsingFixedFunction) */
 
     /* Read the data from the FIFO (or capture register for Fixed Function)*/
-    #if(millis_timer_UsingFixedFunction)
-        return ((uint32)CY_GET_REG16(millis_timer_CAPTURE_LSB_PTR));
+    #if(sd_timer_UsingFixedFunction)
+        return ((uint32)CY_GET_REG16(sd_timer_CAPTURE_LSB_PTR));
     #else
-        return (CY_GET_REG32(millis_timer_CAPTURE_LSB_PTR));
-    #endif /* (millis_timer_UsingFixedFunction) */
+        return (CY_GET_REG24(sd_timer_CAPTURE_LSB_PTR));
+    #endif /* (sd_timer_UsingFixedFunction) */
 }
 
 
-#if(!millis_timer_UsingFixedFunction) /* UDB Specific Functions */
+#if(!sd_timer_UsingFixedFunction) /* UDB Specific Functions */
 
     
 /*******************************************************************************
@@ -534,11 +534,11 @@ uint32 millis_timer_ReadCounter(void)
  ******************************************************************************/
 
 
-#if (millis_timer_SoftwareCaptureMode)
+#if (sd_timer_SoftwareCaptureMode)
 
 
 /*******************************************************************************
-* Function Name: millis_timer_SetCaptureMode
+* Function Name: sd_timer_SetCaptureMode
 ********************************************************************************
 *
 * Summary:
@@ -547,44 +547,44 @@ uint32 millis_timer_ReadCounter(void)
 * Parameters:
 *  captureMode: This parameter sets the capture mode of the UDB capture feature
 *  The parameter values are defined using the
-*  #define millis_timer__B_TIMER__CM_NONE 0
-#define millis_timer__B_TIMER__CM_RISINGEDGE 1
-#define millis_timer__B_TIMER__CM_FALLINGEDGE 2
-#define millis_timer__B_TIMER__CM_EITHEREDGE 3
-#define millis_timer__B_TIMER__CM_SOFTWARE 4
+*  #define sd_timer__B_TIMER__CM_NONE 0
+#define sd_timer__B_TIMER__CM_RISINGEDGE 1
+#define sd_timer__B_TIMER__CM_FALLINGEDGE 2
+#define sd_timer__B_TIMER__CM_EITHEREDGE 3
+#define sd_timer__B_TIMER__CM_SOFTWARE 4
  identifiers
 *  The following are the possible values of the parameter
-*  millis_timer__B_TIMER__CM_NONE        - Set Capture mode to None
-*  millis_timer__B_TIMER__CM_RISINGEDGE  - Rising edge of Capture input
-*  millis_timer__B_TIMER__CM_FALLINGEDGE - Falling edge of Capture input
-*  millis_timer__B_TIMER__CM_EITHEREDGE  - Either edge of Capture input
+*  sd_timer__B_TIMER__CM_NONE        - Set Capture mode to None
+*  sd_timer__B_TIMER__CM_RISINGEDGE  - Rising edge of Capture input
+*  sd_timer__B_TIMER__CM_FALLINGEDGE - Falling edge of Capture input
+*  sd_timer__B_TIMER__CM_EITHEREDGE  - Either edge of Capture input
 *
 * Return:
 *  void
 *
 *******************************************************************************/
-void millis_timer_SetCaptureMode(uint8 captureMode) 
+void sd_timer_SetCaptureMode(uint8 captureMode) 
 {
     /* This must only set to two bits of the control register associated */
-    captureMode = ((uint8)((uint8)captureMode << millis_timer_CTRL_CAP_MODE_SHIFT));
-    captureMode &= (millis_timer_CTRL_CAP_MODE_MASK);
+    captureMode = ((uint8)((uint8)captureMode << sd_timer_CTRL_CAP_MODE_SHIFT));
+    captureMode &= (sd_timer_CTRL_CAP_MODE_MASK);
 
-    #if (!millis_timer_UDB_CONTROL_REG_REMOVED)
+    #if (!sd_timer_UDB_CONTROL_REG_REMOVED)
         /* Clear the Current Setting */
-        millis_timer_CONTROL &= ((uint8)(~millis_timer_CTRL_CAP_MODE_MASK));
+        sd_timer_CONTROL &= ((uint8)(~sd_timer_CTRL_CAP_MODE_MASK));
 
         /* Write The New Setting */
-        millis_timer_CONTROL |= captureMode;
-    #endif /* (!millis_timer_UDB_CONTROL_REG_REMOVED) */
+        sd_timer_CONTROL |= captureMode;
+    #endif /* (!sd_timer_UDB_CONTROL_REG_REMOVED) */
 }
 #endif /* Remove API if Capture Mode is not Software Controlled */
 
 
-#if (millis_timer_SoftwareTriggerMode)
+#if (sd_timer_SoftwareTriggerMode)
 
 
 /*******************************************************************************
-* Function Name: millis_timer_SetTriggerMode
+* Function Name: sd_timer_SetTriggerMode
 ********************************************************************************
 *
 * Summary:
@@ -592,37 +592,37 @@ void millis_timer_SetCaptureMode(uint8 captureMode)
 *
 * Parameters:
 *  triggerMode: Pass one of the pre-defined Trigger Modes (except Software)
-    #define millis_timer__B_TIMER__TM_NONE 0x00u
-    #define millis_timer__B_TIMER__TM_RISINGEDGE 0x04u
-    #define millis_timer__B_TIMER__TM_FALLINGEDGE 0x08u
-    #define millis_timer__B_TIMER__TM_EITHEREDGE 0x0Cu
-    #define millis_timer__B_TIMER__TM_SOFTWARE 0x10u
+    #define sd_timer__B_TIMER__TM_NONE 0x00u
+    #define sd_timer__B_TIMER__TM_RISINGEDGE 0x04u
+    #define sd_timer__B_TIMER__TM_FALLINGEDGE 0x08u
+    #define sd_timer__B_TIMER__TM_EITHEREDGE 0x0Cu
+    #define sd_timer__B_TIMER__TM_SOFTWARE 0x10u
 *
 * Return:
 *  void
 *
 *******************************************************************************/
-void millis_timer_SetTriggerMode(uint8 triggerMode) 
+void sd_timer_SetTriggerMode(uint8 triggerMode) 
 {
     /* This must only set to two bits of the control register associated */
-    triggerMode &= millis_timer_CTRL_TRIG_MODE_MASK;
+    triggerMode &= sd_timer_CTRL_TRIG_MODE_MASK;
 
-    #if (!millis_timer_UDB_CONTROL_REG_REMOVED)   /* Remove assignment if control register is removed */
+    #if (!sd_timer_UDB_CONTROL_REG_REMOVED)   /* Remove assignment if control register is removed */
     
         /* Clear the Current Setting */
-        millis_timer_CONTROL &= ((uint8)(~millis_timer_CTRL_TRIG_MODE_MASK));
+        sd_timer_CONTROL &= ((uint8)(~sd_timer_CTRL_TRIG_MODE_MASK));
 
         /* Write The New Setting */
-        millis_timer_CONTROL |= (triggerMode | millis_timer__B_TIMER__TM_SOFTWARE);
+        sd_timer_CONTROL |= (triggerMode | sd_timer__B_TIMER__TM_SOFTWARE);
     #endif /* Remove code section if control register is not used */
 }
 #endif /* Remove API if Trigger Mode is not Software Controlled */
 
-#if (millis_timer_EnableTriggerMode)
+#if (sd_timer_EnableTriggerMode)
 
 
 /*******************************************************************************
-* Function Name: millis_timer_EnableTrigger
+* Function Name: sd_timer_EnableTrigger
 ********************************************************************************
 *
 * Summary:
@@ -635,16 +635,16 @@ void millis_timer_SetTriggerMode(uint8 triggerMode)
 *  void
 *
 *******************************************************************************/
-void millis_timer_EnableTrigger(void) 
+void sd_timer_EnableTrigger(void) 
 {
-    #if (!millis_timer_UDB_CONTROL_REG_REMOVED)   /* Remove assignment if control register is removed */
-        millis_timer_CONTROL |= millis_timer_CTRL_TRIG_EN;
+    #if (!sd_timer_UDB_CONTROL_REG_REMOVED)   /* Remove assignment if control register is removed */
+        sd_timer_CONTROL |= sd_timer_CTRL_TRIG_EN;
     #endif /* Remove code section if control register is not used */
 }
 
 
 /*******************************************************************************
-* Function Name: millis_timer_DisableTrigger
+* Function Name: sd_timer_DisableTrigger
 ********************************************************************************
 *
 * Summary:
@@ -657,19 +657,19 @@ void millis_timer_EnableTrigger(void)
 *  void
 *
 *******************************************************************************/
-void millis_timer_DisableTrigger(void) 
+void sd_timer_DisableTrigger(void) 
 {
-    #if (!millis_timer_UDB_CONTROL_REG_REMOVED )   /* Remove assignment if control register is removed */
-        millis_timer_CONTROL &= ((uint8)(~millis_timer_CTRL_TRIG_EN));
+    #if (!sd_timer_UDB_CONTROL_REG_REMOVED )   /* Remove assignment if control register is removed */
+        sd_timer_CONTROL &= ((uint8)(~sd_timer_CTRL_TRIG_EN));
     #endif /* Remove code section if control register is not used */
 }
 #endif /* Remove API is Trigger Mode is set to None */
 
-#if(millis_timer_InterruptOnCaptureCount)
+#if(sd_timer_InterruptOnCaptureCount)
 
 
 /*******************************************************************************
-* Function Name: millis_timer_SetInterruptCount
+* Function Name: sd_timer_SetInterruptCount
 ********************************************************************************
 *
 * Summary:
@@ -685,26 +685,26 @@ void millis_timer_DisableTrigger(void)
 *  void
 *
 *******************************************************************************/
-void millis_timer_SetInterruptCount(uint8 interruptCount) 
+void sd_timer_SetInterruptCount(uint8 interruptCount) 
 {
     /* This must only set to two bits of the control register associated */
-    interruptCount &= millis_timer_CTRL_INTCNT_MASK;
+    interruptCount &= sd_timer_CTRL_INTCNT_MASK;
 
-    #if (!millis_timer_UDB_CONTROL_REG_REMOVED)
+    #if (!sd_timer_UDB_CONTROL_REG_REMOVED)
         /* Clear the Current Setting */
-        millis_timer_CONTROL &= ((uint8)(~millis_timer_CTRL_INTCNT_MASK));
+        sd_timer_CONTROL &= ((uint8)(~sd_timer_CTRL_INTCNT_MASK));
         /* Write The New Setting */
-        millis_timer_CONTROL |= interruptCount;
-    #endif /* (!millis_timer_UDB_CONTROL_REG_REMOVED) */
+        sd_timer_CONTROL |= interruptCount;
+    #endif /* (!sd_timer_UDB_CONTROL_REG_REMOVED) */
 }
-#endif /* millis_timer_InterruptOnCaptureCount */
+#endif /* sd_timer_InterruptOnCaptureCount */
 
 
-#if (millis_timer_UsingHWCaptureCounter)
+#if (sd_timer_UsingHWCaptureCounter)
 
 
 /*******************************************************************************
-* Function Name: millis_timer_SetCaptureCount
+* Function Name: sd_timer_SetCaptureCount
 ********************************************************************************
 *
 * Summary:
@@ -719,14 +719,14 @@ void millis_timer_SetInterruptCount(uint8 interruptCount)
 *  void
 *
 *******************************************************************************/
-void millis_timer_SetCaptureCount(uint8 captureCount) 
+void sd_timer_SetCaptureCount(uint8 captureCount) 
 {
-    millis_timer_CAP_COUNT = captureCount;
+    sd_timer_CAP_COUNT = captureCount;
 }
 
 
 /*******************************************************************************
-* Function Name: millis_timer_ReadCaptureCount
+* Function Name: sd_timer_ReadCaptureCount
 ********************************************************************************
 *
 * Summary:
@@ -739,15 +739,15 @@ void millis_timer_SetCaptureCount(uint8 captureCount)
 *  Returns the Capture Count Setting
 *
 *******************************************************************************/
-uint8 millis_timer_ReadCaptureCount(void) 
+uint8 sd_timer_ReadCaptureCount(void) 
 {
-    return ((uint8)millis_timer_CAP_COUNT);
+    return ((uint8)sd_timer_CAP_COUNT);
 }
-#endif /* millis_timer_UsingHWCaptureCounter */
+#endif /* sd_timer_UsingHWCaptureCounter */
 
 
 /*******************************************************************************
-* Function Name: millis_timer_ClearFIFO
+* Function Name: sd_timer_ClearFIFO
 ********************************************************************************
 *
 * Summary:
@@ -760,11 +760,11 @@ uint8 millis_timer_ReadCaptureCount(void)
 *  void
 *
 *******************************************************************************/
-void millis_timer_ClearFIFO(void) 
+void sd_timer_ClearFIFO(void) 
 {
-    while(0u != (millis_timer_ReadStatusRegister() & millis_timer_STATUS_FIFONEMP))
+    while(0u != (sd_timer_ReadStatusRegister() & sd_timer_STATUS_FIFONEMP))
     {
-        (void)millis_timer_ReadCapture();
+        (void)sd_timer_ReadCapture();
     }
 }
 

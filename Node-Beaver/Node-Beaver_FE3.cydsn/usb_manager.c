@@ -22,7 +22,8 @@ void usb_init() {
 	all packets in the DataPacket queue. Each byte is checked and escaped by
 	usb_escape.
 
-	TODO: Function description out of date */
+	TODO: OBSOLETE, need to update */
+/*
 void usb_put(const DataPacket* data_queue, uint16_t data_head, uint16_t data_tail) {
 	uint16_t pos;
 	uint32_t num_char;
@@ -34,34 +35,6 @@ void usb_put(const DataPacket* data_queue, uint16_t data_head, uint16_t data_tai
 		USBUART_1_CDC_Init(); // USB Initialization
 
 		for(pos=data_head; pos!=data_tail; pos=(pos+1)%DATA_QUEUE_LENGTH) {
-			/*
-			switch(data_queue[pos].type)
-			{
-				case TYPE_THROTTLE_1:
-					num_char = sprintf(buffer,
-						"Type: Throttle 1\tID: %X\tValue: %d\r\n",
-						data_queue[pos].id,
-						(short)data_queue[pos].value);
-					break;
-				case TYPE_UNKNOWN:
-					num_char = sprintf(buffer,
-						"Type: Unknown\tID: %X\t"
-						"Value: %02X %02X %02X %02X  %02X %02X %02X %02X \r\n",
-						data_queue[pos].id,
-						(unsigned)((data_queue[pos].value & 0xFF00000000000000) >> 56),
-						(unsigned)((data_queue[pos].value & 0x00FF000000000000) >> 48),
-						(unsigned)((data_queue[pos].value & 0x0000FF0000000000) >> 40),
-						(unsigned)((data_queue[pos].value & 0x000000FF00000000) >> 32),
-						(unsigned)((data_queue[pos].value & 0x00000000FF000000) >> 24),
-						(unsigned)((data_queue[pos].value & 0x0000000000FF0000) >> 16),
-						(unsigned)((data_queue[pos].value & 0x000000000000FF00) >> 8),
-						(unsigned)(data_queue[pos].value & 0x00000000000000FF));
-					break;
-				default:
-					num_char = sprintf(buffer, "ERROR: Invalid data in queue!\r\n");
-			}; // switch data ID
-			*/
-
 			num_char = sprintf(buffer,
 				"%ums\t0x%03X\t"
 				"Value %02X %02X %02X %02X  %02X %02X %02X %02X \r\n",
@@ -101,7 +74,7 @@ void usb_put(const DataPacket* data_queue, uint16_t data_head, uint16_t data_tai
 	}	// if configuration successful
   
   
-	/*
+	// open multiline comment here
 	uint16_t pos;
 	uint16_t buff_end = 0; // points to next empty space
 	uint8_t buffer[UART_BUFF_LENGTH];
@@ -129,10 +102,12 @@ void usb_put(const DataPacket* data_queue, uint16_t data_head, uint16_t data_tai
 			USBUART_1_PutData(buffer, buff_end);
 		} // for all messages in data queue
 	}	// if configuration successful
-	*/
+	// close multiline comment here
 } // usb_send()
+*/
 
-
+void usb_write(DataPacket * msg) {
+}
 
 /* usb_escape()
 	Takes a character buffer (buffer) with a pointer pointing to the end of it

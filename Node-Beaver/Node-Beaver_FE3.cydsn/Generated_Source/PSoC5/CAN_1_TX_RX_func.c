@@ -25,10 +25,7 @@
 
 
 /* `#START TX_RX_FUNCTION` */
-#include "can_manager.h"
-
-extern DataPacket can_queue[];
-extern uint16_t can_head, can_tail;
+#include "data.h"
 // ReceiveMsg() at around line 533
 
 /* `#END` */
@@ -635,21 +632,16 @@ void CAN_1_ReceiveMsg(uint8 rxMailbox)
     #endif /* CY_PSOC3 || CY_PSOC5 */
         {
             /* `#START MESSAGE_BASIC_RECEIVED` */
-		uint8_t Rx_length, index;
-
-		Rx_length = CAN_1_GET_DLC(rxMailbox);   // gets length of message 
-    
-        can_queue[can_tail].id = CAN_1_GET_RX_ID(rxMailbox);
-		can_queue[can_tail].length = Rx_length;
-		can_queue[can_tail].millicounter = millis_timer_ReadCounter();
-
-		for(index = 0; index < Rx_length; index++) {    // copy data to can_queue
-			can_queue[can_tail].data[index] = CAN_1_RX_DATA_BYTE(rxMailbox, index);
-		} 
-
-		can_tail = (can_tail + 1) % CAN_QUEUE_LENGTH;
-		if(can_tail == can_head) // if need to roll queue
-			can_head = (can_head + 1) % CAN_QUEUE_LENGTH;
+		uint8_t i;
+		DataPacket can_msg;
+        can_msg.id = CAN_1_GET_RX_ID(rxMailbox);
+        can_msg.length = CAN_1_GET_DLC(rxMailbox); //gets length of message, 8 bytes
+        can_msg.millicounter = millis_timer_ReadCounter();
+        for (i = 0; i < can_msg.length; i++)
+            can_msg.data[i] = CAN_1_RX[rxMailbox].rxdata.byte[i];
+				
+		DataPacket* can_msg_ptr = &can_msg;	  
+		msg_recieve(can_msg_ptr);
             /* `#END` */
 
             #ifdef CAN_1_RECEIVE_MSG_CALLBACK

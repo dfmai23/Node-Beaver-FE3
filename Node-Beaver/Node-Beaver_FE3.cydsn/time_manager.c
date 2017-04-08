@@ -2,17 +2,17 @@
 
 
 volatile Time current_time;
-volatile uint8_t refresh_status = 1;
+
 
 /* CY_ISR(time_refresh_vector)
-	Runs every 10 seconds and retreives the current time from the RTC and the
-	millisecond counter from millis_timer.
+	Runs every X seconds and retreives the current time from the RTC
 	Sets the refresh_status flag, which will trigger time_announce() to inject a
 	message containing the current time to the data_queue.  */
 CY_ISR(time_refresh_vector) {
 	current_time = time_retreive(); // get time from rtc
-	refresh_status = 1;
+	time_announce();
 } // CY_ISR(time_refresh_vector)
+
 
 /* time_init()
 	Takes and Returns nothing.
@@ -30,59 +30,52 @@ void time_init(void) {
 
 	// Set 24 hour
 	uint8_t byte;
-	rtc_i2c_MasterSendStart(RTC_ADDR, 0); // Move to hours register.
+	rtc_i2c_MasterSendStart(RTC_ADDR, 0);	// Move to hours register.
 	rtc_i2c_MasterWriteByte(RTC_HOURS);     //set register pointer
 	rtc_i2c_MasterSendStop();
 
-	rtc_i2c_MasterSendStart(RTC_ADDR, 1); // save hours register
-	byte = rtc_i2c_MasterReadByte(0);     // Zero, response with NACK
+	rtc_i2c_MasterSendStart(RTC_ADDR, 1); 	// save hours register
+	byte = rtc_i2c_MasterReadByte(0);		// Zero, response with NACK
 	rtc_i2c_MasterSendStop();
 
-	rtc_i2c_MasterSendStart(RTC_ADDR, 0); // Set 24 hour bit
+	rtc_i2c_MasterSendStart(RTC_ADDR, 0); 	// Set 24 hour bit
 	rtc_i2c_MasterWriteByte(RTC_HOURS);
 	rtc_i2c_MasterWriteByte(0x40 | byte);   //bit number 6 defines 12/24 hours
 	rtc_i2c_MasterSendStop();
 
-	//time_one_sec_isr_StartEx(time_one_sec_vector); // enable rtc isr
-	//while(!init_status); // wait for second synchronization
-
-	time_refresh_isr_StartEx(time_refresh_vector); // enable 10 second isr
-
+	time_refresh_isr_StartEx(time_refresh_vector);  // enable 1 second isr
+    
 	// Start timers
 	millis_timer_Start();
 	time_refresh_timer_Start();
+	current_time = time_retreive(); // get time from rtc
+	time_announce();
 } // time_init()
 
 
 
 /* time_announce()
-	Takes time and puts into a DataPacket queue.
 	Returns nothing.
-    The actual time and millisecond counter is set by the time_refresh_vector interrupt.
+    The actual time is set by the refresh_vector interrupts.
 */
-void time_announce(DataPacket* data_queue, uint16_t* data_head, uint16_t* data_tail) {
+void time_announce() {
+	DataPacket msg_time;
 	/* Time Frame for serial data
 		START COUNTER zero year_upper, year_lower, month, date, hour, minutes, seconds	*/
     uint8_t atomic_state = CyEnterCriticalSection(); // BEGIN ATOMIC
-	if(refresh_status)  { //if refresh_status = 1 (set by time_refresh isr every 10secs), will insert time into queue
-        data_queue[*data_tail].id = ID_TIME;
-		data_queue[*data_tail].length = 8;
-		data_queue[*data_tail].millicounter = current_time.millicounter;
-		data_queue[*data_tail].data[0] = 0;
-		data_queue[*data_tail].data[1] = current_time.year >> 8;
-		data_queue[*data_tail].data[2] = current_time.year;
-		data_queue[*data_tail].data[3] = current_time.month;
-		data_queue[*data_tail].data[4] = current_time.day;
-		data_queue[*data_tail].data[5] = current_time.hour;
-		data_queue[*data_tail].data[6] = current_time.minute;
-		data_queue[*data_tail].data[7] = current_time.second;
-	
-		*data_tail = (*data_tail + 1) % DATA_QUEUE_LENGTH; // increment data tail
-		if(*data_tail == *data_head) // if need to roll data queue
-			*data_head = (*data_head + 1) % DATA_QUEUE_LENGTH;
+    msg_time.id = ID_TIME;
+	msg_time.length = 8;
+	msg_time.millicounter = current_time.millicounter;
+	msg_time.data[0] = 0;
+	msg_time.data[1] = current_time.year >> 8;
+	msg_time.data[2] = current_time.year;
+	msg_time.data[3] = current_time.month;
+	msg_time.data[4] = current_time.day;
+	msg_time.data[5] = current_time.hour;
+	msg_time.data[6] = current_time.minute;
+	msg_time.data[7] = current_time.second;
 
-		refresh_status = 0;
-	} //if
+	msg_recieve(&msg_time);
     CyExitCriticalSection(atomic_state); // END ATOMIC
 } // time_announce()
 
@@ -190,7 +183,7 @@ Time time_retreive(void) {
     tmp_time.year += 0x7D0;     // add year 2000;
 	rtc_i2c_MasterSendStop(); // End Receiving
 
-	tmp_time.millicounter = millis_timer_ReadCounter();
+    tmp_time.millicounter = millis_timer_ReadCounter();
 
 	return tmp_time; 
 } // time_retreive()

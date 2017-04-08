@@ -6,20 +6,26 @@ uint8_t sd_ok = 0;
 
 const char set_time_file[] = "\\logs\\set_time.txt";
 
+DataPacket sd_queue[SD_QUEUE_LENGTH];
+uint16_t sd_head = 0, sd_tail = 0;
 
+	
 CY_ISR(power_interrupt) {
     LED_Write(1);
 	sd_stop();
 	power_isr_ClearPending();
-    CyDelay(5000);
+    CyDelay(3000);
     CySoftwareReset();
     for(;;); // halt program
 } // CY_ISR(power_interrupt)
 
 
+CY_ISR(sd_interrupt) {	//triggers every second
+	sd_write();
+}
+
 /* sd_init()
 	Takes Time struct (time). Returns nothing.
-
 	Initializes SD card filesystem.
 	The following events will cause the sd_ok flag to be reset, which aborts all
 	SD functions:
@@ -27,24 +33,21 @@ CY_ISR(power_interrupt) {
 		- unable to create the "LOGS" directory
 		- unable to create a directory named after the date
 		- unable to create and open file for writing
-
-	sd_ok is set when the SD card is functional
-*/
+	sd_ok is set when the SD card is functional */
 void sd_init(Time time) {
 	/* power_isr note:
 		Triggers unexpectedly due to floating pin/environmental voltages and
-		capacitance. power isr is disabled for prototyping only.
-	*/
-    //probe_Write(0);
+		capacitance. power isr is disabled for prototyping only.	*/
 	power_comp_Start();
 	power_isr_ClearPending();
 	power_isr_StartEx(power_interrupt);
-    //power_isr_Start();
+	sd_timer_Start();
+	sd_isr_StartEx(sd_interrupt);
     
 	FS_Init();
     FS_FAT_SupportLFN();            //enable long file name: filenames>8bytes
 	sd_ok = 1;
-	char date_str[32], run_str[64];
+	char date_str[32], file_str[64];
 
 	if(FS_GetNumVolumes() == 1) {
 		FS_SetFileWriteMode(FS_WRITEMODE_FAST);
@@ -69,9 +72,9 @@ void sd_init(Time time) {
         }
         
         // create log file
-        sprintf(run_str, "%s\\(%04u-%02u-%02u)_%02u.%02u.csv",
-            date_str, time.year, time.month, time.day, time.hour, time.minute);
-		pfile = FS_FOpen(run_str, "w"); //create and open new file for writing
+        sprintf(file_str, "%s\\(%04u-%02u-%02u)_%02u.%02u.%02u.csv",
+            date_str, time.year, time.month, time.day, time.hour, time.minute, time.second);
+		pfile = FS_FOpen(file_str, "w"); //create and open new file for writing
 		if(pfile == NULL) {
 			sd_ok = 0;
 			return;
@@ -79,35 +82,22 @@ void sd_init(Time time) {
 
 		// Set file time here
 		FS_FILETIME file_time;
-		unsigned long file_time_string;
+		unsigned long file_timestamp;
 		
-		file_time.Year = 2000 + (uint16_t)time.year;
+		file_time.Year = time.year;
 		file_time.Month = time.month;
 		file_time.Day = time.day;
 		file_time.Hour = time.hour;
 		file_time.Minute = time.minute;
 		file_time.Second = time.second;
 
-		FS_FileTimeToTimeStamp(&file_time, &file_time_string);
-		FS_SetFileTime(run_str, file_time_string);
+		FS_FileTimeToTimeStamp(&file_time, &file_timestamp);
+		FS_SetFileTime(file_str, file_timestamp);
+		/*FS_SetFileTimeEx(file_str, file_timestamp, FS_FILETIME_CREATE);	//doesnt work
+		FS_SetFileTimeEx(file_str, file_timestamp, FS_FILETIME_ACCESS);
+		FS_SetFileTimeEx(file_str, file_timestamp, FS_FILETIME_MODIFY);*/
 	} // if a single file volume exists
-  
     FS_Sync("");
-/*
-	FS_Write(pfile, "Type,Time,Value,ID\n", 19);
-
-	// test data writing
-	char buffer[128];
-	short length = 0;
-
-	// test write
-	length = sprintf(buffer, "%u,%u,%llu,%u\n", 1,
-			0xFFFFFFFF, 0xFFFFFFFFFFFFFFFF, 517);
-	FS_Write(pfile, buffer, length);
-
-	sd_stop(); // for testing
-	sd_ok = 0; // for testing
-	*/
 } // sd_init()
 
 
@@ -117,8 +107,8 @@ void sd_init(Time time) {
 	the /LOGS folder to set the time. The line breaks can consist of \r or
 	\n characters.
 	
-	[month]/[day]/[year]
-	[24-hour]:[minute]:[second] */
+	month/day/year
+	24-hour:minute:second */
 void sd_time_set(Time time) {
 	if((pfile = FS_FOpen(set_time_file, "r"))) {
 		char buffer[64];
@@ -160,51 +150,78 @@ void sd_time_set(Time time) {
 		
 		FS_Remove(set_time_file); // delete file
 	} // try to find file and set time
-}
+} //sd_time_set()
 
 
-/* sd_push()
-	Takes DataPacket queue (data_queue) with its head and tail indices.
-	Returns nothing.
-
-	Writes all messages in data_queue to the SD card. Synchronizes the filesystem
-	after all messages are written. */
-void sd_push(const DataPacket* data_queue, uint16_t data_head, uint16_t data_tail) {
+/* sd_write()
+	Writes all messages in buffer to the SD card. 
+	Synchronizes the filesystem after it is written. */
+void sd_write() {
 	if(!sd_ok) return;
 
-	char buffer[128];
+	char buffer[64];
 	short length = 0;
-	uint16_t pos;
-
-	for(pos=data_head; pos!=data_tail; pos=(pos+1)%DATA_QUEUE_LENGTH)
-	{
+	
+    uint8_t atomic_state = CyEnterCriticalSection(); // BEGIN ATOMIC
+	for(sd_head=0; sd_head<sd_tail; sd_head++) {
 		length = sprintf(buffer, "%X,%u,%X,%X,%X,%X,%X,%X,%X,%X\n",
-			(unsigned)data_queue[pos].id,
-			MILLI_PERIOD - (unsigned)data_queue[pos].millicounter,
-			(unsigned)data_queue[pos].data[0],
-			(unsigned)data_queue[pos].data[1],
-			(unsigned)data_queue[pos].data[2],
-			(unsigned)data_queue[pos].data[3],
-			(unsigned)data_queue[pos].data[4],
-			(unsigned)data_queue[pos].data[5],
-			(unsigned)data_queue[pos].data[6],
-			(unsigned)data_queue[pos].data[7]);
+			(unsigned)sd_queue[sd_head].id,
+			MILLI_PERIOD - (unsigned)sd_queue[sd_head].millicounter,
+			(unsigned)sd_queue[sd_head].data[0],
+			(unsigned)sd_queue[sd_head].data[1],
+			(unsigned)sd_queue[sd_head].data[2],
+			(unsigned)sd_queue[sd_head].data[3],
+			(unsigned)sd_queue[sd_head].data[4],
+			(unsigned)sd_queue[sd_head].data[5],
+			(unsigned)sd_queue[sd_head].data[6],
+			(unsigned)sd_queue[sd_head].data[7]);
 
 		FS_Write(pfile, buffer, length); // write to SD
-	} // for all messages in data queue
-
+	}
 	FS_Sync(""); // sync to SD
-} // sd_push()
+	sd_head=0; sd_tail=0;
+    CyExitCriticalSection(atomic_state);               // END ATOMICs
+} // sd_write()
 
 
+void sd_read() {
+	if((pfile = FS_FOpen("filenamehere", "r"))) {	//open file for reading
+		char buffer[64];
+		//Time time;
+		//DataPacket msg;
+		FS_Read(pfile, buffer, 64); // read entire file
+		FS_FClose(pfile);
+	}
+}
 
+void sd_buffer(DataPacket * msg) {
+	sd_queue[sd_tail] = *msg;
+	sd_tail++;
+	//sd_tail = sd_tail == SD_QUEUE_LENGTH ? sd_tail:sd_tail++;
+}
 /* sd_stop()
 	Takes and returns nothing.
 	Closes the file, synchronizes, and unmounts SD card to prevent corruption.
 */
 void sd_stop(void) {
+	sd_write();
 	FS_FClose(pfile);
 	FS_Sync("");
 	FS_Unmount("");
 } // sd_stop()
 
+
+void sd_writetest() {
+	// test data writing
+	char buffer[128];
+	short length = 0;
+
+	// test write
+	FS_Write(pfile, "Type,Time,Value,ID\n", 19);
+	length = sprintf(buffer, "%u,%u,%llu,%u\n",
+		1,0xFFFFFFFF, 0xFFFFFFFFFFFFFFFF, 517);
+	FS_Write(pfile, buffer, length);
+
+	sd_stop(); // for testing
+	sd_ok = 0; // for testing
+}//test_push

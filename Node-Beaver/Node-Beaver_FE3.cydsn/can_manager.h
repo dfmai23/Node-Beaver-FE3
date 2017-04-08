@@ -3,13 +3,14 @@
 
     
 #include <project.h>
-#include <stdio.h>
 #include "data.h"
 
     
 void can_init();
-void can_get(DataPacket* data_queue, uint16_t* data_head, uint16_t* data_tail);
+void can_msg_init(DataPacket* can_msg, uint16_t id);
+int  can_process(DataPacket* can_msg);
+int  can_compare(DataPacket* prev_msg, DataPacket* new_msg);
 void can_test_send();
-void can_test_receive(DataPacket* data_queue, uint16_t* data_tail, uint16_t* data_head);
+void can_test_receive();
 
 #endif

@@ -15,39 +15,31 @@
 int main(void) {
 	CYGlobalIntEnable;      //Uncomment this line to enable global interrupts
     
-	DataPacket data_queue[DATA_QUEUE_LENGTH];
-	uint16_t data_head, data_tail;
-	data_head = data_tail = 0;
-    uint8 i;
-    
     //LED_Write(1);             //hook up test LED
 	time_init();                //init everything
 	can_init();
 	usb_init();
 	sd_init(time_get());
     radio_init_SPI();           //xbee SPI    FE3
-    /*
-    CyDelay(3000);
-    LED_Write(0);
-    CyDelay(1000);
-    */
     
 	for(;;)	{
         //can_test_send();
-        //usb_get();
-       
-        time_announce(data_queue, &data_head, &data_tail);  //time of current message interval
-        //can_test_receive(data_queue, &data_tail, &data_head);
-		can_get(data_queue, &data_head, &data_tail);        //gets received messages from the CAN network,
-	
-        //save messages to external devices
-		usb_put(data_queue, data_head, data_tail);  		//send message over usb
-		sd_push(data_queue, data_head, data_tail);          //inject message into sd card
-        radio_put(data_queue, data_head, data_tail);        //send message over xbee SPI
-		data_head = data_tail = 0;                          //clear buffer       
-        
+        can_test_receive();
+        //xbee_Tx_req_test();
 		CyDelay(1000);                 //refresh intervaal
 	} // main loop
 
 	return 0;
 } // main()
+
+/* when a can message is recieved will immediately save messages to external devices
+	- transmit over xbee
+	- write to sd
+	- write to usb	*/
+void msg_recieve(DataPacket * msg) {
+	if(can_process(msg)) {	//if message is new data value
+		xbee_send(msg);
+		sd_buffer(msg);
+		//usb_write(msg);
+	}
+}
