@@ -51,7 +51,7 @@ void xbee_send(DataPacket * msg) {
 
 
 void xbee_Tx_req(DataPacket* msg) {
-    uint8_t API_frame[32];
+    uint8_t API_frame[34];
     
     API_frame[0]=STARTER_DELIMITER;  //starter   
     API_frame[1]=0x00;           //MSB L 
@@ -94,9 +94,12 @@ void xbee_Tx_req(DataPacket* msg) {
     API_frame[29]=msg->data[6];  
     API_frame[30]=msg->data[7];  
     
-    API_frame[31]=checksum_calc(API_frame,31);
+	API_frame[31]=0xFF;
+	API_frame[32]=0x0A;
+	
+    API_frame[33]=checksum_calc(API_frame,33);
 
-	xbee_spi_PutArray(API_frame, 32);
+	xbee_spi_PutArray(API_frame, 34);
 }
 
 
@@ -104,11 +107,11 @@ void xbee_Tx_req_test(){
 	int i;
 	for(i=100; i<101; i++) {
 		//uint8_t test_msg[33] = {0x7E, 0x00, 0x1D, 0x10, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFE, 0x00, 0x00, 0x09, 0x99, 0x08, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x2D};
-	    uint8_t msg[32];
+	    uint8_t msg[34];
 	    
 	    msg[0] = STARTER_DELIMITER; //starter
 	    msg[1] = 0x00;      //MSB len
-	    msg[2] = 0x1C;      //LSB len                    
+	    msg[2] = 0x1E;      //LSB len                    
 	    
 	    msg[3] = 0x10;      //frame type
 	    msg[4] = 0x00;      //frame id
@@ -167,10 +170,13 @@ void xbee_Tx_req_test(){
 	    msg[29]=7;  
 	    msg[30]=8;  
 	    
-	    msg[31]=checksum_calc(msg,31);
+		msg[31]=0xFF;
+		msg[32]=0x0A;
+		
+	    msg[33]=checksum_calc(msg,33);
 	  
 	    LED_Write(1);
-	    xbee_spi_PutArray(msg, 32);
+	    xbee_spi_PutArray(msg, 34);
 	    LED_Write(0);
 	}
     return;

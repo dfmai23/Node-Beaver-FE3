@@ -24,7 +24,7 @@ int main(void) {
     
 	for(;;)	{
         //can_test_send();
-        can_test_receive();
+        //can_test_receive();
         //xbee_Tx_req_test();
 		CyDelay(1000);                 //refresh intervaal
 	} // main loop
