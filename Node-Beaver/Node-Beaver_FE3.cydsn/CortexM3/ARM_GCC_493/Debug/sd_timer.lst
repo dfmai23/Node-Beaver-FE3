@@ -1,0 +1,2411 @@
+ARM GAS  D:\Windows\AppData\Local\Temp\ccGmd2BW.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"sd_timer.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.global	sd_timer_initVar
+  19              		.bss
+  20              		.type	sd_timer_initVar, %object
+  21              		.size	sd_timer_initVar, 1
+  22              	sd_timer_initVar:
+  23 0000 00       		.space	1
+  24              		.section	.text.sd_timer_Init,"ax",%progbits
+  25              		.align	2
+  26              		.global	sd_timer_Init
+  27              		.thumb
+  28              		.thumb_func
+  29              		.type	sd_timer_Init, %function
+  30              	sd_timer_Init:
+  31              	.LFB0:
+  32              		.file 1 "Generated_Source\\PSoC5\\sd_timer.c"
+   1:Generated_Source\PSoC5/sd_timer.c **** /*******************************************************************************
+   2:Generated_Source\PSoC5/sd_timer.c **** * File Name: sd_timer.c
+   3:Generated_Source\PSoC5/sd_timer.c **** * Version 2.70
+   4:Generated_Source\PSoC5/sd_timer.c **** *
+   5:Generated_Source\PSoC5/sd_timer.c **** * Description:
+   6:Generated_Source\PSoC5/sd_timer.c **** *  The Timer component consists of a 8, 16, 24 or 32-bit timer with
+   7:Generated_Source\PSoC5/sd_timer.c **** *  a selectable period between 2 and 2^Width - 1.  The timer may free run
+   8:Generated_Source\PSoC5/sd_timer.c **** *  or be used as a capture timer as well.  The capture can be initiated
+   9:Generated_Source\PSoC5/sd_timer.c **** *  by a positive or negative edge signal as well as via software.
+  10:Generated_Source\PSoC5/sd_timer.c **** *  A trigger input can be programmed to enable the timer on rising edge
+  11:Generated_Source\PSoC5/sd_timer.c **** *  falling edge, either edge or continous run.
+  12:Generated_Source\PSoC5/sd_timer.c **** *  Interrupts may be generated due to a terminal count condition
+  13:Generated_Source\PSoC5/sd_timer.c **** *  or a capture event.
+  14:Generated_Source\PSoC5/sd_timer.c **** *
+  15:Generated_Source\PSoC5/sd_timer.c **** * Note:
+  16:Generated_Source\PSoC5/sd_timer.c **** *
+  17:Generated_Source\PSoC5/sd_timer.c **** ********************************************************************************
+  18:Generated_Source\PSoC5/sd_timer.c **** * Copyright 2008-2014, Cypress Semiconductor Corporation.  All rights reserved.
+  19:Generated_Source\PSoC5/sd_timer.c **** * You may use this file only in accordance with the license, terms, conditions,
+  20:Generated_Source\PSoC5/sd_timer.c **** * disclaimers, and limitations in the end user license agreement accompanying
+  21:Generated_Source\PSoC5/sd_timer.c **** * the software package with which this file was provided.
+  22:Generated_Source\PSoC5/sd_timer.c **** ********************************************************************************/
+  23:Generated_Source\PSoC5/sd_timer.c **** 
+  24:Generated_Source\PSoC5/sd_timer.c **** #include "sd_timer.h"
+  25:Generated_Source\PSoC5/sd_timer.c **** 
+ARM GAS  D:\Windows\AppData\Local\Temp\ccGmd2BW.s 			page 2
+
+
+  26:Generated_Source\PSoC5/sd_timer.c **** uint8 sd_timer_initVar = 0u;
+  27:Generated_Source\PSoC5/sd_timer.c **** 
+  28:Generated_Source\PSoC5/sd_timer.c **** 
+  29:Generated_Source\PSoC5/sd_timer.c **** /*******************************************************************************
+  30:Generated_Source\PSoC5/sd_timer.c **** * Function Name: sd_timer_Init
+  31:Generated_Source\PSoC5/sd_timer.c **** ********************************************************************************
+  32:Generated_Source\PSoC5/sd_timer.c **** *
+  33:Generated_Source\PSoC5/sd_timer.c **** * Summary:
+  34:Generated_Source\PSoC5/sd_timer.c **** *  Initialize to the schematic state
+  35:Generated_Source\PSoC5/sd_timer.c **** *
+  36:Generated_Source\PSoC5/sd_timer.c **** * Parameters:
+  37:Generated_Source\PSoC5/sd_timer.c **** *  void
+  38:Generated_Source\PSoC5/sd_timer.c **** *
+  39:Generated_Source\PSoC5/sd_timer.c **** * Return:
+  40:Generated_Source\PSoC5/sd_timer.c **** *  void
+  41:Generated_Source\PSoC5/sd_timer.c **** *
+  42:Generated_Source\PSoC5/sd_timer.c **** *******************************************************************************/
+  43:Generated_Source\PSoC5/sd_timer.c **** void sd_timer_Init(void) 
+  44:Generated_Source\PSoC5/sd_timer.c **** {
+  33              		.loc 1 44 0
+  34              		.cfi_startproc
+  35              		@ args = 0, pretend = 0, frame = 8
+  36              		@ frame_needed = 1, uses_anonymous_args = 0
+  37 0000 80B5     		push	{r7, lr}
+  38              		.cfi_def_cfa_offset 8
+  39              		.cfi_offset 7, -8
+  40              		.cfi_offset 14, -4
+  41 0002 82B0     		sub	sp, sp, #8
+  42              		.cfi_def_cfa_offset 16
+  43 0004 00AF     		add	r7, sp, #0
+  44              		.cfi_def_cfa_register 7
+  45:Generated_Source\PSoC5/sd_timer.c ****     #if(!sd_timer_UsingFixedFunction)
+  46:Generated_Source\PSoC5/sd_timer.c ****             /* Interrupt State Backup for Critical Region*/
+  47:Generated_Source\PSoC5/sd_timer.c ****             uint8 sd_timer_interruptState;
+  48:Generated_Source\PSoC5/sd_timer.c ****     #endif /* Interrupt state back up for Fixed Function only */
+  49:Generated_Source\PSoC5/sd_timer.c **** 
+  50:Generated_Source\PSoC5/sd_timer.c ****     #if (sd_timer_UsingFixedFunction)
+  51:Generated_Source\PSoC5/sd_timer.c ****         /* Clear all bits but the enable bit (if it's already set) for Timer operation */
+  52:Generated_Source\PSoC5/sd_timer.c ****         sd_timer_CONTROL &= sd_timer_CTRL_ENABLE;
+  53:Generated_Source\PSoC5/sd_timer.c **** 
+  54:Generated_Source\PSoC5/sd_timer.c ****         /* Clear the mode bits for continuous run mode */
+  55:Generated_Source\PSoC5/sd_timer.c ****         #if (CY_PSOC5A)
+  56:Generated_Source\PSoC5/sd_timer.c ****             sd_timer_CONTROL2 &= ((uint8)(~sd_timer_CTRL_MODE_MASK));
+  57:Generated_Source\PSoC5/sd_timer.c ****         #endif /* Clear bits in CONTROL2 only in PSOC5A */
+  58:Generated_Source\PSoC5/sd_timer.c **** 
+  59:Generated_Source\PSoC5/sd_timer.c ****         #if (CY_PSOC3 || CY_PSOC5LP)
+  60:Generated_Source\PSoC5/sd_timer.c ****             sd_timer_CONTROL3 &= ((uint8)(~sd_timer_CTRL_MODE_MASK));
+  61:Generated_Source\PSoC5/sd_timer.c ****         #endif /* CONTROL3 register exists only in PSoC3 OR PSoC5LP */
+  62:Generated_Source\PSoC5/sd_timer.c **** 
+  63:Generated_Source\PSoC5/sd_timer.c ****         /* Check if One Shot mode is enabled i.e. RunMode !=0*/
+  64:Generated_Source\PSoC5/sd_timer.c ****         #if (sd_timer_RunModeUsed != 0x0u)
+  65:Generated_Source\PSoC5/sd_timer.c ****             /* Set 3rd bit of Control register to enable one shot mode */
+  66:Generated_Source\PSoC5/sd_timer.c ****             sd_timer_CONTROL |= 0x04u;
+  67:Generated_Source\PSoC5/sd_timer.c ****         #endif /* One Shot enabled only when RunModeUsed is not Continuous*/
+  68:Generated_Source\PSoC5/sd_timer.c **** 
+  69:Generated_Source\PSoC5/sd_timer.c ****         #if (sd_timer_RunModeUsed == 2)
+  70:Generated_Source\PSoC5/sd_timer.c ****             #if (CY_PSOC5A)
+ARM GAS  D:\Windows\AppData\Local\Temp\ccGmd2BW.s 			page 3
+
+
+  71:Generated_Source\PSoC5/sd_timer.c ****                 /* Set last 2 bits of control2 register if one shot(halt on
+  72:Generated_Source\PSoC5/sd_timer.c ****                 interrupt) is enabled*/
+  73:Generated_Source\PSoC5/sd_timer.c ****                 sd_timer_CONTROL2 |= 0x03u;
+  74:Generated_Source\PSoC5/sd_timer.c ****             #endif /* Set One-Shot Halt on Interrupt bit in CONTROL2 for PSoC5A */
+  75:Generated_Source\PSoC5/sd_timer.c **** 
+  76:Generated_Source\PSoC5/sd_timer.c ****             #if (CY_PSOC3 || CY_PSOC5LP)
+  77:Generated_Source\PSoC5/sd_timer.c ****                 /* Set last 2 bits of control3 register if one shot(halt on
+  78:Generated_Source\PSoC5/sd_timer.c ****                 interrupt) is enabled*/
+  79:Generated_Source\PSoC5/sd_timer.c ****                 sd_timer_CONTROL3 |= 0x03u;
+  80:Generated_Source\PSoC5/sd_timer.c ****             #endif /* Set One-Shot Halt on Interrupt bit in CONTROL3 for PSoC3 or PSoC5LP */
+  81:Generated_Source\PSoC5/sd_timer.c **** 
+  82:Generated_Source\PSoC5/sd_timer.c ****         #endif /* Remove section if One Shot Halt on Interrupt is not enabled */
+  83:Generated_Source\PSoC5/sd_timer.c **** 
+  84:Generated_Source\PSoC5/sd_timer.c ****         #if (sd_timer_UsingHWEnable != 0)
+  85:Generated_Source\PSoC5/sd_timer.c ****             #if (CY_PSOC5A)
+  86:Generated_Source\PSoC5/sd_timer.c ****                 /* Set the default Run Mode of the Timer to Continuous */
+  87:Generated_Source\PSoC5/sd_timer.c ****                 sd_timer_CONTROL2 |= sd_timer_CTRL_MODE_PULSEWIDTH;
+  88:Generated_Source\PSoC5/sd_timer.c ****             #endif /* Set Continuous Run Mode in CONTROL2 for PSoC5A */
+  89:Generated_Source\PSoC5/sd_timer.c **** 
+  90:Generated_Source\PSoC5/sd_timer.c ****             #if (CY_PSOC3 || CY_PSOC5LP)
+  91:Generated_Source\PSoC5/sd_timer.c ****                 /* Clear and Set ROD and COD bits of CFG2 register */
+  92:Generated_Source\PSoC5/sd_timer.c ****                 sd_timer_CONTROL3 &= ((uint8)(~sd_timer_CTRL_RCOD_MASK));
+  93:Generated_Source\PSoC5/sd_timer.c ****                 sd_timer_CONTROL3 |= sd_timer_CTRL_RCOD;
+  94:Generated_Source\PSoC5/sd_timer.c **** 
+  95:Generated_Source\PSoC5/sd_timer.c ****                 /* Clear and Enable the HW enable bit in CFG2 register */
+  96:Generated_Source\PSoC5/sd_timer.c ****                 sd_timer_CONTROL3 &= ((uint8)(~sd_timer_CTRL_ENBL_MASK));
+  97:Generated_Source\PSoC5/sd_timer.c ****                 sd_timer_CONTROL3 |= sd_timer_CTRL_ENBL;
+  98:Generated_Source\PSoC5/sd_timer.c **** 
+  99:Generated_Source\PSoC5/sd_timer.c ****                 /* Set the default Run Mode of the Timer to Continuous */
+ 100:Generated_Source\PSoC5/sd_timer.c ****                 sd_timer_CONTROL3 |= sd_timer_CTRL_MODE_CONTINUOUS;
+ 101:Generated_Source\PSoC5/sd_timer.c ****             #endif /* Set Continuous Run Mode in CONTROL3 for PSoC3ES3 or PSoC5A */
+ 102:Generated_Source\PSoC5/sd_timer.c **** 
+ 103:Generated_Source\PSoC5/sd_timer.c ****         #endif /* Configure Run Mode with hardware enable */
+ 104:Generated_Source\PSoC5/sd_timer.c **** 
+ 105:Generated_Source\PSoC5/sd_timer.c ****         /* Clear and Set SYNCTC and SYNCCMP bits of RT1 register */
+ 106:Generated_Source\PSoC5/sd_timer.c ****         sd_timer_RT1 &= ((uint8)(~sd_timer_RT1_MASK));
+ 107:Generated_Source\PSoC5/sd_timer.c ****         sd_timer_RT1 |= sd_timer_SYNC;
+ 108:Generated_Source\PSoC5/sd_timer.c **** 
+ 109:Generated_Source\PSoC5/sd_timer.c ****         /*Enable DSI Sync all all inputs of the Timer*/
+ 110:Generated_Source\PSoC5/sd_timer.c ****         sd_timer_RT1 &= ((uint8)(~sd_timer_SYNCDSI_MASK));
+ 111:Generated_Source\PSoC5/sd_timer.c ****         sd_timer_RT1 |= sd_timer_SYNCDSI_EN;
+ 112:Generated_Source\PSoC5/sd_timer.c **** 
+ 113:Generated_Source\PSoC5/sd_timer.c ****         /* Set the IRQ to use the status register interrupts */
+ 114:Generated_Source\PSoC5/sd_timer.c ****         sd_timer_CONTROL2 |= sd_timer_CTRL2_IRQ_SEL;
+ 115:Generated_Source\PSoC5/sd_timer.c ****     #endif /* Configuring registers of fixed function implementation */
+ 116:Generated_Source\PSoC5/sd_timer.c **** 
+ 117:Generated_Source\PSoC5/sd_timer.c ****     /* Set Initial values from Configuration */
+ 118:Generated_Source\PSoC5/sd_timer.c ****     sd_timer_WritePeriod(sd_timer_INIT_PERIOD);
+  45              		.loc 1 118 0
+  46 0006 40F2E730 		movw	r0, #999
+  47 000a FFF7FEFF 		bl	sd_timer_WritePeriod
+ 119:Generated_Source\PSoC5/sd_timer.c ****     sd_timer_WriteCounter(sd_timer_INIT_PERIOD);
+  48              		.loc 1 119 0
+  49 000e 40F2E730 		movw	r0, #999
+  50 0012 FFF7FEFF 		bl	sd_timer_WriteCounter
+ 120:Generated_Source\PSoC5/sd_timer.c **** 
+ 121:Generated_Source\PSoC5/sd_timer.c ****     #if (sd_timer_UsingHWCaptureCounter)/* Capture counter is enabled */
+ARM GAS  D:\Windows\AppData\Local\Temp\ccGmd2BW.s 			page 4
+
+
+ 122:Generated_Source\PSoC5/sd_timer.c ****         sd_timer_CAPTURE_COUNT_CTRL |= sd_timer_CNTR_ENABLE;
+ 123:Generated_Source\PSoC5/sd_timer.c ****         sd_timer_SetCaptureCount(sd_timer_INIT_CAPTURE_COUNT);
+ 124:Generated_Source\PSoC5/sd_timer.c ****     #endif /* Configure capture counter value */
+ 125:Generated_Source\PSoC5/sd_timer.c **** 
+ 126:Generated_Source\PSoC5/sd_timer.c ****     #if (!sd_timer_UsingFixedFunction)
+ 127:Generated_Source\PSoC5/sd_timer.c ****         #if (sd_timer_SoftwareCaptureMode)
+ 128:Generated_Source\PSoC5/sd_timer.c ****             sd_timer_SetCaptureMode(sd_timer_INIT_CAPTURE_MODE);
+ 129:Generated_Source\PSoC5/sd_timer.c ****         #endif /* Set Capture Mode for UDB implementation if capture mode is software controlled */
+ 130:Generated_Source\PSoC5/sd_timer.c **** 
+ 131:Generated_Source\PSoC5/sd_timer.c ****         #if (sd_timer_SoftwareTriggerMode)
+ 132:Generated_Source\PSoC5/sd_timer.c ****             #if (!sd_timer_UDB_CONTROL_REG_REMOVED)
+ 133:Generated_Source\PSoC5/sd_timer.c ****                 if (0u == (sd_timer_CONTROL & sd_timer__B_TIMER__TM_SOFTWARE))
+ 134:Generated_Source\PSoC5/sd_timer.c ****                 {
+ 135:Generated_Source\PSoC5/sd_timer.c ****                     sd_timer_SetTriggerMode(sd_timer_INIT_TRIGGER_MODE);
+ 136:Generated_Source\PSoC5/sd_timer.c ****                 }
+ 137:Generated_Source\PSoC5/sd_timer.c ****             #endif /* (!sd_timer_UDB_CONTROL_REG_REMOVED) */
+ 138:Generated_Source\PSoC5/sd_timer.c ****         #endif /* Set trigger mode for UDB Implementation if trigger mode is software controlled */
+ 139:Generated_Source\PSoC5/sd_timer.c **** 
+ 140:Generated_Source\PSoC5/sd_timer.c ****         /* CyEnterCriticalRegion and CyExitCriticalRegion are used to mark following region critica
+ 141:Generated_Source\PSoC5/sd_timer.c ****         /* Enter Critical Region*/
+ 142:Generated_Source\PSoC5/sd_timer.c ****         sd_timer_interruptState = CyEnterCriticalSection();
+  51              		.loc 1 142 0
+  52 0016 FFF7FEFF 		bl	CyEnterCriticalSection
+  53 001a 0346     		mov	r3, r0
+  54 001c FB71     		strb	r3, [r7, #7]
+ 143:Generated_Source\PSoC5/sd_timer.c **** 
+ 144:Generated_Source\PSoC5/sd_timer.c ****         /* Use the interrupt output of the status register for IRQ output */
+ 145:Generated_Source\PSoC5/sd_timer.c ****         sd_timer_STATUS_AUX_CTRL |= sd_timer_STATUS_ACTL_INT_EN_MASK;
+  55              		.loc 1 145 0
+  56 001e 0A4A     		ldr	r2, .L2
+  57 0020 094B     		ldr	r3, .L2
+  58 0022 1B78     		ldrb	r3, [r3]
+  59 0024 DBB2     		uxtb	r3, r3
+  60 0026 43F01003 		orr	r3, r3, #16
+  61 002a DBB2     		uxtb	r3, r3
+  62 002c 1370     		strb	r3, [r2]
+ 146:Generated_Source\PSoC5/sd_timer.c **** 
+ 147:Generated_Source\PSoC5/sd_timer.c ****         /* Exit Critical Region*/
+ 148:Generated_Source\PSoC5/sd_timer.c ****         CyExitCriticalSection(sd_timer_interruptState);
+  63              		.loc 1 148 0
+  64 002e FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+  65 0030 1846     		mov	r0, r3
+  66 0032 FFF7FEFF 		bl	CyExitCriticalSection
+ 149:Generated_Source\PSoC5/sd_timer.c **** 
+ 150:Generated_Source\PSoC5/sd_timer.c ****         #if (sd_timer_EnableTriggerMode)
+ 151:Generated_Source\PSoC5/sd_timer.c ****             sd_timer_EnableTrigger();
+ 152:Generated_Source\PSoC5/sd_timer.c ****         #endif /* Set Trigger enable bit for UDB implementation in the control register*/
+ 153:Generated_Source\PSoC5/sd_timer.c **** 		
+ 154:Generated_Source\PSoC5/sd_timer.c **** 		
+ 155:Generated_Source\PSoC5/sd_timer.c ****         #if (sd_timer_InterruptOnCaptureCount && !sd_timer_UDB_CONTROL_REG_REMOVED)
+ 156:Generated_Source\PSoC5/sd_timer.c ****             sd_timer_SetInterruptCount(sd_timer_INIT_INT_CAPTURE_COUNT);
+ 157:Generated_Source\PSoC5/sd_timer.c ****         #endif /* Set interrupt count in UDB implementation if interrupt count feature is checked.*
+ 158:Generated_Source\PSoC5/sd_timer.c **** 
+ 159:Generated_Source\PSoC5/sd_timer.c ****         sd_timer_ClearFIFO();
+  67              		.loc 1 159 0
+  68 0036 FFF7FEFF 		bl	sd_timer_ClearFIFO
+ 160:Generated_Source\PSoC5/sd_timer.c ****     #endif /* Configure additional features of UDB implementation */
+ARM GAS  D:\Windows\AppData\Local\Temp\ccGmd2BW.s 			page 5
+
+
+ 161:Generated_Source\PSoC5/sd_timer.c **** 
+ 162:Generated_Source\PSoC5/sd_timer.c ****     sd_timer_SetInterruptMode(sd_timer_INIT_INTERRUPT_MODE);
+  69              		.loc 1 162 0
+  70 003a 0020     		movs	r0, #0
+  71 003c FFF7FEFF 		bl	sd_timer_SetInterruptMode
+ 163:Generated_Source\PSoC5/sd_timer.c **** }
+  72              		.loc 1 163 0
+  73 0040 0837     		adds	r7, r7, #8
+  74              		.cfi_def_cfa_offset 8
+  75 0042 BD46     		mov	sp, r7
+  76              		.cfi_def_cfa_register 13
+  77              		@ sp needed
+  78 0044 80BD     		pop	{r7, pc}
+  79              	.L3:
+  80 0046 00BF     		.align	2
+  81              	.L2:
+  82 0048 99650040 		.word	1073767833
+  83              		.cfi_endproc
+  84              	.LFE0:
+  85              		.size	sd_timer_Init, .-sd_timer_Init
+  86              		.section	.text.sd_timer_Enable,"ax",%progbits
+  87              		.align	2
+  88              		.global	sd_timer_Enable
+  89              		.thumb
+  90              		.thumb_func
+  91              		.type	sd_timer_Enable, %function
+  92              	sd_timer_Enable:
+  93              	.LFB1:
+ 164:Generated_Source\PSoC5/sd_timer.c **** 
+ 165:Generated_Source\PSoC5/sd_timer.c **** 
+ 166:Generated_Source\PSoC5/sd_timer.c **** /*******************************************************************************
+ 167:Generated_Source\PSoC5/sd_timer.c **** * Function Name: sd_timer_Enable
+ 168:Generated_Source\PSoC5/sd_timer.c **** ********************************************************************************
+ 169:Generated_Source\PSoC5/sd_timer.c **** *
+ 170:Generated_Source\PSoC5/sd_timer.c **** * Summary:
+ 171:Generated_Source\PSoC5/sd_timer.c **** *  Enable the Timer
+ 172:Generated_Source\PSoC5/sd_timer.c **** *
+ 173:Generated_Source\PSoC5/sd_timer.c **** * Parameters:
+ 174:Generated_Source\PSoC5/sd_timer.c **** *  void
+ 175:Generated_Source\PSoC5/sd_timer.c **** *
+ 176:Generated_Source\PSoC5/sd_timer.c **** * Return:
+ 177:Generated_Source\PSoC5/sd_timer.c **** *  void
+ 178:Generated_Source\PSoC5/sd_timer.c **** *
+ 179:Generated_Source\PSoC5/sd_timer.c **** *******************************************************************************/
+ 180:Generated_Source\PSoC5/sd_timer.c **** void sd_timer_Enable(void) 
+ 181:Generated_Source\PSoC5/sd_timer.c **** {
+  94              		.loc 1 181 0
+  95              		.cfi_startproc
+  96              		@ args = 0, pretend = 0, frame = 0
+  97              		@ frame_needed = 1, uses_anonymous_args = 0
+  98              		@ link register save eliminated.
+  99 0000 80B4     		push	{r7}
+ 100              		.cfi_def_cfa_offset 4
+ 101              		.cfi_offset 7, -4
+ 102 0002 00AF     		add	r7, sp, #0
+ 103              		.cfi_def_cfa_register 7
+ 182:Generated_Source\PSoC5/sd_timer.c ****     /* Globally Enable the Fixed Function Block chosen */
+ARM GAS  D:\Windows\AppData\Local\Temp\ccGmd2BW.s 			page 6
+
+
+ 183:Generated_Source\PSoC5/sd_timer.c ****     #if (sd_timer_UsingFixedFunction)
+ 184:Generated_Source\PSoC5/sd_timer.c ****         sd_timer_GLOBAL_ENABLE |= sd_timer_BLOCK_EN_MASK;
+ 185:Generated_Source\PSoC5/sd_timer.c ****         sd_timer_GLOBAL_STBY_ENABLE |= sd_timer_BLOCK_STBY_EN_MASK;
+ 186:Generated_Source\PSoC5/sd_timer.c ****     #endif /* Set Enable bit for enabling Fixed function timer*/
+ 187:Generated_Source\PSoC5/sd_timer.c **** 
+ 188:Generated_Source\PSoC5/sd_timer.c ****     /* Remove assignment if control register is removed */
+ 189:Generated_Source\PSoC5/sd_timer.c ****     #if (!sd_timer_UDB_CONTROL_REG_REMOVED || sd_timer_UsingFixedFunction)
+ 190:Generated_Source\PSoC5/sd_timer.c ****         sd_timer_CONTROL |= sd_timer_CTRL_ENABLE;
+ 104              		.loc 1 190 0
+ 105 0004 054A     		ldr	r2, .L5
+ 106 0006 054B     		ldr	r3, .L5
+ 107 0008 1B78     		ldrb	r3, [r3]
+ 108 000a DBB2     		uxtb	r3, r3
+ 109 000c 63F07F03 		orn	r3, r3, #127
+ 110 0010 DBB2     		uxtb	r3, r3
+ 111 0012 1370     		strb	r3, [r2]
+ 191:Generated_Source\PSoC5/sd_timer.c ****     #endif /* Remove assignment if control register is removed */
+ 192:Generated_Source\PSoC5/sd_timer.c **** }
+ 112              		.loc 1 192 0
+ 113 0014 BD46     		mov	sp, r7
+ 114              		.cfi_def_cfa_register 13
+ 115              		@ sp needed
+ 116 0016 5DF8047B 		ldr	r7, [sp], #4
+ 117              		.cfi_restore 7
+ 118              		.cfi_def_cfa_offset 0
+ 119 001a 7047     		bx	lr
+ 120              	.L6:
+ 121              		.align	2
+ 122              	.L5:
+ 123 001c 7C640040 		.word	1073767548
+ 124              		.cfi_endproc
+ 125              	.LFE1:
+ 126              		.size	sd_timer_Enable, .-sd_timer_Enable
+ 127              		.section	.text.sd_timer_Start,"ax",%progbits
+ 128              		.align	2
+ 129              		.global	sd_timer_Start
+ 130              		.thumb
+ 131              		.thumb_func
+ 132              		.type	sd_timer_Start, %function
+ 133              	sd_timer_Start:
+ 134              	.LFB2:
+ 193:Generated_Source\PSoC5/sd_timer.c **** 
+ 194:Generated_Source\PSoC5/sd_timer.c **** 
+ 195:Generated_Source\PSoC5/sd_timer.c **** /*******************************************************************************
+ 196:Generated_Source\PSoC5/sd_timer.c **** * Function Name: sd_timer_Start
+ 197:Generated_Source\PSoC5/sd_timer.c **** ********************************************************************************
+ 198:Generated_Source\PSoC5/sd_timer.c **** *
+ 199:Generated_Source\PSoC5/sd_timer.c **** * Summary:
+ 200:Generated_Source\PSoC5/sd_timer.c **** *  The start function initializes the timer with the default values, the
+ 201:Generated_Source\PSoC5/sd_timer.c **** *  enables the timerto begin counting.  It does not enable interrupts,
+ 202:Generated_Source\PSoC5/sd_timer.c **** *  the EnableInt command should be called if interrupt generation is required.
+ 203:Generated_Source\PSoC5/sd_timer.c **** *
+ 204:Generated_Source\PSoC5/sd_timer.c **** * Parameters:
+ 205:Generated_Source\PSoC5/sd_timer.c **** *  void
+ 206:Generated_Source\PSoC5/sd_timer.c **** *
+ 207:Generated_Source\PSoC5/sd_timer.c **** * Return:
+ 208:Generated_Source\PSoC5/sd_timer.c **** *  void
+ARM GAS  D:\Windows\AppData\Local\Temp\ccGmd2BW.s 			page 7
+
+
+ 209:Generated_Source\PSoC5/sd_timer.c **** *
+ 210:Generated_Source\PSoC5/sd_timer.c **** * Global variables:
+ 211:Generated_Source\PSoC5/sd_timer.c **** *  sd_timer_initVar: Is modified when this function is called for the
+ 212:Generated_Source\PSoC5/sd_timer.c **** *   first time. Is used to ensure that initialization happens only once.
+ 213:Generated_Source\PSoC5/sd_timer.c **** *
+ 214:Generated_Source\PSoC5/sd_timer.c **** *******************************************************************************/
+ 215:Generated_Source\PSoC5/sd_timer.c **** void sd_timer_Start(void) 
+ 216:Generated_Source\PSoC5/sd_timer.c **** {
+ 135              		.loc 1 216 0
+ 136              		.cfi_startproc
+ 137              		@ args = 0, pretend = 0, frame = 0
+ 138              		@ frame_needed = 1, uses_anonymous_args = 0
+ 139 0000 80B5     		push	{r7, lr}
+ 140              		.cfi_def_cfa_offset 8
+ 141              		.cfi_offset 7, -8
+ 142              		.cfi_offset 14, -4
+ 143 0002 00AF     		add	r7, sp, #0
+ 144              		.cfi_def_cfa_register 7
+ 217:Generated_Source\PSoC5/sd_timer.c ****     if(sd_timer_initVar == 0u)
+ 145              		.loc 1 217 0
+ 146 0004 054B     		ldr	r3, .L9
+ 147 0006 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 148 0008 002B     		cmp	r3, #0
+ 149 000a 04D1     		bne	.L8
+ 218:Generated_Source\PSoC5/sd_timer.c ****     {
+ 219:Generated_Source\PSoC5/sd_timer.c ****         sd_timer_Init();
+ 150              		.loc 1 219 0
+ 151 000c FFF7FEFF 		bl	sd_timer_Init
+ 220:Generated_Source\PSoC5/sd_timer.c **** 
+ 221:Generated_Source\PSoC5/sd_timer.c ****         sd_timer_initVar = 1u;   /* Clear this bit for Initialization */
+ 152              		.loc 1 221 0
+ 153 0010 024B     		ldr	r3, .L9
+ 154 0012 0122     		movs	r2, #1
+ 155 0014 1A70     		strb	r2, [r3]
+ 156              	.L8:
+ 222:Generated_Source\PSoC5/sd_timer.c ****     }
+ 223:Generated_Source\PSoC5/sd_timer.c **** 
+ 224:Generated_Source\PSoC5/sd_timer.c ****     /* Enable the Timer */
+ 225:Generated_Source\PSoC5/sd_timer.c ****     sd_timer_Enable();
+ 157              		.loc 1 225 0
+ 158 0016 FFF7FEFF 		bl	sd_timer_Enable
+ 226:Generated_Source\PSoC5/sd_timer.c **** }
+ 159              		.loc 1 226 0
+ 160 001a 80BD     		pop	{r7, pc}
+ 161              	.L10:
+ 162              		.align	2
+ 163              	.L9:
+ 164 001c 00000000 		.word	sd_timer_initVar
+ 165              		.cfi_endproc
+ 166              	.LFE2:
+ 167              		.size	sd_timer_Start, .-sd_timer_Start
+ 168              		.section	.text.sd_timer_Stop,"ax",%progbits
+ 169              		.align	2
+ 170              		.global	sd_timer_Stop
+ 171              		.thumb
+ 172              		.thumb_func
+ 173              		.type	sd_timer_Stop, %function
+ARM GAS  D:\Windows\AppData\Local\Temp\ccGmd2BW.s 			page 8
+
+
+ 174              	sd_timer_Stop:
+ 175              	.LFB3:
+ 227:Generated_Source\PSoC5/sd_timer.c **** 
+ 228:Generated_Source\PSoC5/sd_timer.c **** 
+ 229:Generated_Source\PSoC5/sd_timer.c **** /*******************************************************************************
+ 230:Generated_Source\PSoC5/sd_timer.c **** * Function Name: sd_timer_Stop
+ 231:Generated_Source\PSoC5/sd_timer.c **** ********************************************************************************
+ 232:Generated_Source\PSoC5/sd_timer.c **** *
+ 233:Generated_Source\PSoC5/sd_timer.c **** * Summary:
+ 234:Generated_Source\PSoC5/sd_timer.c **** *  The stop function halts the timer, but does not change any modes or disable
+ 235:Generated_Source\PSoC5/sd_timer.c **** *  interrupts.
+ 236:Generated_Source\PSoC5/sd_timer.c **** *
+ 237:Generated_Source\PSoC5/sd_timer.c **** * Parameters:
+ 238:Generated_Source\PSoC5/sd_timer.c **** *  void
+ 239:Generated_Source\PSoC5/sd_timer.c **** *
+ 240:Generated_Source\PSoC5/sd_timer.c **** * Return:
+ 241:Generated_Source\PSoC5/sd_timer.c **** *  void
+ 242:Generated_Source\PSoC5/sd_timer.c **** *
+ 243:Generated_Source\PSoC5/sd_timer.c **** * Side Effects: If the Enable mode is set to Hardware only then this function
+ 244:Generated_Source\PSoC5/sd_timer.c **** *               has no effect on the operation of the timer.
+ 245:Generated_Source\PSoC5/sd_timer.c **** *
+ 246:Generated_Source\PSoC5/sd_timer.c **** *******************************************************************************/
+ 247:Generated_Source\PSoC5/sd_timer.c **** void sd_timer_Stop(void) 
+ 248:Generated_Source\PSoC5/sd_timer.c **** {
+ 176              		.loc 1 248 0
+ 177              		.cfi_startproc
+ 178              		@ args = 0, pretend = 0, frame = 0
+ 179              		@ frame_needed = 1, uses_anonymous_args = 0
+ 180              		@ link register save eliminated.
+ 181 0000 80B4     		push	{r7}
+ 182              		.cfi_def_cfa_offset 4
+ 183              		.cfi_offset 7, -4
+ 184 0002 00AF     		add	r7, sp, #0
+ 185              		.cfi_def_cfa_register 7
+ 249:Generated_Source\PSoC5/sd_timer.c ****     /* Disable Timer */
+ 250:Generated_Source\PSoC5/sd_timer.c ****     #if(!sd_timer_UDB_CONTROL_REG_REMOVED || sd_timer_UsingFixedFunction)
+ 251:Generated_Source\PSoC5/sd_timer.c ****         sd_timer_CONTROL &= ((uint8)(~sd_timer_CTRL_ENABLE));
+ 186              		.loc 1 251 0
+ 187 0004 054A     		ldr	r2, .L12
+ 188 0006 054B     		ldr	r3, .L12
+ 189 0008 1B78     		ldrb	r3, [r3]
+ 190 000a DBB2     		uxtb	r3, r3
+ 191 000c 03F07F03 		and	r3, r3, #127
+ 192 0010 DBB2     		uxtb	r3, r3
+ 193 0012 1370     		strb	r3, [r2]
+ 252:Generated_Source\PSoC5/sd_timer.c ****     #endif /* Remove assignment if control register is removed */
+ 253:Generated_Source\PSoC5/sd_timer.c **** 
+ 254:Generated_Source\PSoC5/sd_timer.c ****     /* Globally disable the Fixed Function Block chosen */
+ 255:Generated_Source\PSoC5/sd_timer.c ****     #if (sd_timer_UsingFixedFunction)
+ 256:Generated_Source\PSoC5/sd_timer.c ****         sd_timer_GLOBAL_ENABLE &= ((uint8)(~sd_timer_BLOCK_EN_MASK));
+ 257:Generated_Source\PSoC5/sd_timer.c ****         sd_timer_GLOBAL_STBY_ENABLE &= ((uint8)(~sd_timer_BLOCK_STBY_EN_MASK));
+ 258:Generated_Source\PSoC5/sd_timer.c ****     #endif /* Disable global enable for the Timer Fixed function block to stop the Timer*/
+ 259:Generated_Source\PSoC5/sd_timer.c **** }
+ 194              		.loc 1 259 0
+ 195 0014 BD46     		mov	sp, r7
+ 196              		.cfi_def_cfa_register 13
+ 197              		@ sp needed
+ARM GAS  D:\Windows\AppData\Local\Temp\ccGmd2BW.s 			page 9
+
+
+ 198 0016 5DF8047B 		ldr	r7, [sp], #4
+ 199              		.cfi_restore 7
+ 200              		.cfi_def_cfa_offset 0
+ 201 001a 7047     		bx	lr
+ 202              	.L13:
+ 203              		.align	2
+ 204              	.L12:
+ 205 001c 7C640040 		.word	1073767548
+ 206              		.cfi_endproc
+ 207              	.LFE3:
+ 208              		.size	sd_timer_Stop, .-sd_timer_Stop
+ 209              		.section	.text.sd_timer_SetInterruptMode,"ax",%progbits
+ 210              		.align	2
+ 211              		.global	sd_timer_SetInterruptMode
+ 212              		.thumb
+ 213              		.thumb_func
+ 214              		.type	sd_timer_SetInterruptMode, %function
+ 215              	sd_timer_SetInterruptMode:
+ 216              	.LFB4:
+ 260:Generated_Source\PSoC5/sd_timer.c **** 
+ 261:Generated_Source\PSoC5/sd_timer.c **** 
+ 262:Generated_Source\PSoC5/sd_timer.c **** /*******************************************************************************
+ 263:Generated_Source\PSoC5/sd_timer.c **** * Function Name: sd_timer_SetInterruptMode
+ 264:Generated_Source\PSoC5/sd_timer.c **** ********************************************************************************
+ 265:Generated_Source\PSoC5/sd_timer.c **** *
+ 266:Generated_Source\PSoC5/sd_timer.c **** * Summary:
+ 267:Generated_Source\PSoC5/sd_timer.c **** *  This function selects which of the interrupt inputs may cause an interrupt.
+ 268:Generated_Source\PSoC5/sd_timer.c **** *  The twosources are caputure and terminal.  One, both or neither may
+ 269:Generated_Source\PSoC5/sd_timer.c **** *  be selected.
+ 270:Generated_Source\PSoC5/sd_timer.c **** *
+ 271:Generated_Source\PSoC5/sd_timer.c **** * Parameters:
+ 272:Generated_Source\PSoC5/sd_timer.c **** *  interruptMode:   This parameter is used to enable interrups on either/or
+ 273:Generated_Source\PSoC5/sd_timer.c **** *                   terminal count or capture.
+ 274:Generated_Source\PSoC5/sd_timer.c **** *
+ 275:Generated_Source\PSoC5/sd_timer.c **** * Return:
+ 276:Generated_Source\PSoC5/sd_timer.c **** *  void
+ 277:Generated_Source\PSoC5/sd_timer.c **** *
+ 278:Generated_Source\PSoC5/sd_timer.c **** *******************************************************************************/
+ 279:Generated_Source\PSoC5/sd_timer.c **** void sd_timer_SetInterruptMode(uint8 interruptMode) 
+ 280:Generated_Source\PSoC5/sd_timer.c **** {
+ 217              		.loc 1 280 0
+ 218              		.cfi_startproc
+ 219              		@ args = 0, pretend = 0, frame = 8
+ 220              		@ frame_needed = 1, uses_anonymous_args = 0
+ 221              		@ link register save eliminated.
+ 222 0000 80B4     		push	{r7}
+ 223              		.cfi_def_cfa_offset 4
+ 224              		.cfi_offset 7, -4
+ 225 0002 83B0     		sub	sp, sp, #12
+ 226              		.cfi_def_cfa_offset 16
+ 227 0004 00AF     		add	r7, sp, #0
+ 228              		.cfi_def_cfa_register 7
+ 229 0006 0346     		mov	r3, r0
+ 230 0008 FB71     		strb	r3, [r7, #7]
+ 281:Generated_Source\PSoC5/sd_timer.c ****     sd_timer_STATUS_MASK = interruptMode;
+ 231              		.loc 1 281 0
+ 232 000a 044A     		ldr	r2, .L15
+ARM GAS  D:\Windows\AppData\Local\Temp\ccGmd2BW.s 			page 10
+
+
+ 233 000c FB79     		ldrb	r3, [r7, #7]
+ 234 000e 1370     		strb	r3, [r2]
+ 282:Generated_Source\PSoC5/sd_timer.c **** }
+ 235              		.loc 1 282 0
+ 236 0010 0C37     		adds	r7, r7, #12
+ 237              		.cfi_def_cfa_offset 4
+ 238 0012 BD46     		mov	sp, r7
+ 239              		.cfi_def_cfa_register 13
+ 240              		@ sp needed
+ 241 0014 5DF8047B 		ldr	r7, [sp], #4
+ 242              		.cfi_restore 7
+ 243              		.cfi_def_cfa_offset 0
+ 244 0018 7047     		bx	lr
+ 245              	.L16:
+ 246 001a 00BF     		.align	2
+ 247              	.L15:
+ 248 001c 89650040 		.word	1073767817
+ 249              		.cfi_endproc
+ 250              	.LFE4:
+ 251              		.size	sd_timer_SetInterruptMode, .-sd_timer_SetInterruptMode
+ 252              		.section	.text.sd_timer_SoftwareCapture,"ax",%progbits
+ 253              		.align	2
+ 254              		.global	sd_timer_SoftwareCapture
+ 255              		.thumb
+ 256              		.thumb_func
+ 257              		.type	sd_timer_SoftwareCapture, %function
+ 258              	sd_timer_SoftwareCapture:
+ 259              	.LFB5:
+ 283:Generated_Source\PSoC5/sd_timer.c **** 
+ 284:Generated_Source\PSoC5/sd_timer.c **** 
+ 285:Generated_Source\PSoC5/sd_timer.c **** /*******************************************************************************
+ 286:Generated_Source\PSoC5/sd_timer.c **** * Function Name: sd_timer_SoftwareCapture
+ 287:Generated_Source\PSoC5/sd_timer.c **** ********************************************************************************
+ 288:Generated_Source\PSoC5/sd_timer.c **** *
+ 289:Generated_Source\PSoC5/sd_timer.c **** * Summary:
+ 290:Generated_Source\PSoC5/sd_timer.c **** *  This function forces a capture independent of the capture signal.
+ 291:Generated_Source\PSoC5/sd_timer.c **** *
+ 292:Generated_Source\PSoC5/sd_timer.c **** * Parameters:
+ 293:Generated_Source\PSoC5/sd_timer.c **** *  void
+ 294:Generated_Source\PSoC5/sd_timer.c **** *
+ 295:Generated_Source\PSoC5/sd_timer.c **** * Return:
+ 296:Generated_Source\PSoC5/sd_timer.c **** *  void
+ 297:Generated_Source\PSoC5/sd_timer.c **** *
+ 298:Generated_Source\PSoC5/sd_timer.c **** * Side Effects:
+ 299:Generated_Source\PSoC5/sd_timer.c **** *  An existing hardware capture could be overwritten.
+ 300:Generated_Source\PSoC5/sd_timer.c **** *
+ 301:Generated_Source\PSoC5/sd_timer.c **** *******************************************************************************/
+ 302:Generated_Source\PSoC5/sd_timer.c **** void sd_timer_SoftwareCapture(void) 
+ 303:Generated_Source\PSoC5/sd_timer.c **** {
+ 260              		.loc 1 303 0
+ 261              		.cfi_startproc
+ 262              		@ args = 0, pretend = 0, frame = 0
+ 263              		@ frame_needed = 1, uses_anonymous_args = 0
+ 264              		@ link register save eliminated.
+ 265 0000 80B4     		push	{r7}
+ 266              		.cfi_def_cfa_offset 4
+ 267              		.cfi_offset 7, -4
+ARM GAS  D:\Windows\AppData\Local\Temp\ccGmd2BW.s 			page 11
+
+
+ 268 0002 00AF     		add	r7, sp, #0
+ 269              		.cfi_def_cfa_register 7
+ 304:Generated_Source\PSoC5/sd_timer.c ****     /* Generate a software capture by reading the counter register */
+ 305:Generated_Source\PSoC5/sd_timer.c ****     #if(sd_timer_UsingFixedFunction)
+ 306:Generated_Source\PSoC5/sd_timer.c ****         (void)CY_GET_REG16(sd_timer_COUNTER_LSB_PTR);
+ 307:Generated_Source\PSoC5/sd_timer.c ****     #else
+ 308:Generated_Source\PSoC5/sd_timer.c ****         (void)CY_GET_REG8(sd_timer_COUNTER_LSB_PTR_8BIT);
+ 270              		.loc 1 308 0
+ 271 0004 024B     		ldr	r3, .L18
+ 272 0006 1B78     		ldrb	r3, [r3]
+ 309:Generated_Source\PSoC5/sd_timer.c ****     #endif/* (sd_timer_UsingFixedFunction) */
+ 310:Generated_Source\PSoC5/sd_timer.c ****     /* Capture Data is now in the FIFO */
+ 311:Generated_Source\PSoC5/sd_timer.c **** }
+ 273              		.loc 1 311 0
+ 274 0008 BD46     		mov	sp, r7
+ 275              		.cfi_def_cfa_register 13
+ 276              		@ sp needed
+ 277 000a 5DF8047B 		ldr	r7, [sp], #4
+ 278              		.cfi_restore 7
+ 279              		.cfi_def_cfa_offset 0
+ 280 000e 7047     		bx	lr
+ 281              	.L19:
+ 282              		.align	2
+ 283              	.L18:
+ 284 0010 0B640040 		.word	1073767435
+ 285              		.cfi_endproc
+ 286              	.LFE5:
+ 287              		.size	sd_timer_SoftwareCapture, .-sd_timer_SoftwareCapture
+ 288              		.section	.text.sd_timer_ReadStatusRegister,"ax",%progbits
+ 289              		.align	2
+ 290              		.global	sd_timer_ReadStatusRegister
+ 291              		.thumb
+ 292              		.thumb_func
+ 293              		.type	sd_timer_ReadStatusRegister, %function
+ 294              	sd_timer_ReadStatusRegister:
+ 295              	.LFB6:
+ 312:Generated_Source\PSoC5/sd_timer.c **** 
+ 313:Generated_Source\PSoC5/sd_timer.c **** 
+ 314:Generated_Source\PSoC5/sd_timer.c **** /*******************************************************************************
+ 315:Generated_Source\PSoC5/sd_timer.c **** * Function Name: sd_timer_ReadStatusRegister
+ 316:Generated_Source\PSoC5/sd_timer.c **** ********************************************************************************
+ 317:Generated_Source\PSoC5/sd_timer.c **** *
+ 318:Generated_Source\PSoC5/sd_timer.c **** * Summary:
+ 319:Generated_Source\PSoC5/sd_timer.c **** *  Reads the status register and returns it's state. This function should use
+ 320:Generated_Source\PSoC5/sd_timer.c **** *  defined types for the bit-field information as the bits in this register may
+ 321:Generated_Source\PSoC5/sd_timer.c **** *  be permuteable.
+ 322:Generated_Source\PSoC5/sd_timer.c **** *
+ 323:Generated_Source\PSoC5/sd_timer.c **** * Parameters:
+ 324:Generated_Source\PSoC5/sd_timer.c **** *  void
+ 325:Generated_Source\PSoC5/sd_timer.c **** *
+ 326:Generated_Source\PSoC5/sd_timer.c **** * Return:
+ 327:Generated_Source\PSoC5/sd_timer.c **** *  The contents of the status register
+ 328:Generated_Source\PSoC5/sd_timer.c **** *
+ 329:Generated_Source\PSoC5/sd_timer.c **** * Side Effects:
+ 330:Generated_Source\PSoC5/sd_timer.c **** *  Status register bits may be clear on read.
+ 331:Generated_Source\PSoC5/sd_timer.c **** *
+ 332:Generated_Source\PSoC5/sd_timer.c **** *******************************************************************************/
+ARM GAS  D:\Windows\AppData\Local\Temp\ccGmd2BW.s 			page 12
+
+
+ 333:Generated_Source\PSoC5/sd_timer.c **** uint8   sd_timer_ReadStatusRegister(void) 
+ 334:Generated_Source\PSoC5/sd_timer.c **** {
+ 296              		.loc 1 334 0
+ 297              		.cfi_startproc
+ 298              		@ args = 0, pretend = 0, frame = 0
+ 299              		@ frame_needed = 1, uses_anonymous_args = 0
+ 300              		@ link register save eliminated.
+ 301 0000 80B4     		push	{r7}
+ 302              		.cfi_def_cfa_offset 4
+ 303              		.cfi_offset 7, -4
+ 304 0002 00AF     		add	r7, sp, #0
+ 305              		.cfi_def_cfa_register 7
+ 335:Generated_Source\PSoC5/sd_timer.c ****     return (sd_timer_STATUS);
+ 306              		.loc 1 335 0
+ 307 0004 034B     		ldr	r3, .L22
+ 308 0006 1B78     		ldrb	r3, [r3]
+ 309 0008 DBB2     		uxtb	r3, r3
+ 336:Generated_Source\PSoC5/sd_timer.c **** }
+ 310              		.loc 1 336 0
+ 311 000a 1846     		mov	r0, r3
+ 312 000c BD46     		mov	sp, r7
+ 313              		.cfi_def_cfa_register 13
+ 314              		@ sp needed
+ 315 000e 5DF8047B 		ldr	r7, [sp], #4
+ 316              		.cfi_restore 7
+ 317              		.cfi_def_cfa_offset 0
+ 318 0012 7047     		bx	lr
+ 319              	.L23:
+ 320              		.align	2
+ 321              	.L22:
+ 322 0014 69650040 		.word	1073767785
+ 323              		.cfi_endproc
+ 324              	.LFE6:
+ 325              		.size	sd_timer_ReadStatusRegister, .-sd_timer_ReadStatusRegister
+ 326              		.section	.text.sd_timer_ReadControlRegister,"ax",%progbits
+ 327              		.align	2
+ 328              		.global	sd_timer_ReadControlRegister
+ 329              		.thumb
+ 330              		.thumb_func
+ 331              		.type	sd_timer_ReadControlRegister, %function
+ 332              	sd_timer_ReadControlRegister:
+ 333              	.LFB7:
+ 337:Generated_Source\PSoC5/sd_timer.c **** 
+ 338:Generated_Source\PSoC5/sd_timer.c **** 
+ 339:Generated_Source\PSoC5/sd_timer.c **** #if (!sd_timer_UDB_CONTROL_REG_REMOVED) /* Remove API if control register is unused */
+ 340:Generated_Source\PSoC5/sd_timer.c **** 
+ 341:Generated_Source\PSoC5/sd_timer.c **** 
+ 342:Generated_Source\PSoC5/sd_timer.c **** /*******************************************************************************
+ 343:Generated_Source\PSoC5/sd_timer.c **** * Function Name: sd_timer_ReadControlRegister
+ 344:Generated_Source\PSoC5/sd_timer.c **** ********************************************************************************
+ 345:Generated_Source\PSoC5/sd_timer.c **** *
+ 346:Generated_Source\PSoC5/sd_timer.c **** * Summary:
+ 347:Generated_Source\PSoC5/sd_timer.c **** *  Reads the control register and returns it's value.
+ 348:Generated_Source\PSoC5/sd_timer.c **** *
+ 349:Generated_Source\PSoC5/sd_timer.c **** * Parameters:
+ 350:Generated_Source\PSoC5/sd_timer.c **** *  void
+ 351:Generated_Source\PSoC5/sd_timer.c **** *
+ARM GAS  D:\Windows\AppData\Local\Temp\ccGmd2BW.s 			page 13
+
+
+ 352:Generated_Source\PSoC5/sd_timer.c **** * Return:
+ 353:Generated_Source\PSoC5/sd_timer.c **** *  The contents of the control register
+ 354:Generated_Source\PSoC5/sd_timer.c **** *
+ 355:Generated_Source\PSoC5/sd_timer.c **** *******************************************************************************/
+ 356:Generated_Source\PSoC5/sd_timer.c **** uint8 sd_timer_ReadControlRegister(void) 
+ 357:Generated_Source\PSoC5/sd_timer.c **** {
+ 334              		.loc 1 357 0
+ 335              		.cfi_startproc
+ 336              		@ args = 0, pretend = 0, frame = 0
+ 337              		@ frame_needed = 1, uses_anonymous_args = 0
+ 338              		@ link register save eliminated.
+ 339 0000 80B4     		push	{r7}
+ 340              		.cfi_def_cfa_offset 4
+ 341              		.cfi_offset 7, -4
+ 342 0002 00AF     		add	r7, sp, #0
+ 343              		.cfi_def_cfa_register 7
+ 358:Generated_Source\PSoC5/sd_timer.c ****     #if (!sd_timer_UDB_CONTROL_REG_REMOVED) 
+ 359:Generated_Source\PSoC5/sd_timer.c ****         return ((uint8)sd_timer_CONTROL);
+ 344              		.loc 1 359 0
+ 345 0004 034B     		ldr	r3, .L26
+ 346 0006 1B78     		ldrb	r3, [r3]
+ 347 0008 DBB2     		uxtb	r3, r3
+ 360:Generated_Source\PSoC5/sd_timer.c ****     #else
+ 361:Generated_Source\PSoC5/sd_timer.c ****         return (0);
+ 362:Generated_Source\PSoC5/sd_timer.c ****     #endif /* (!sd_timer_UDB_CONTROL_REG_REMOVED) */
+ 363:Generated_Source\PSoC5/sd_timer.c **** }
+ 348              		.loc 1 363 0
+ 349 000a 1846     		mov	r0, r3
+ 350 000c BD46     		mov	sp, r7
+ 351              		.cfi_def_cfa_register 13
+ 352              		@ sp needed
+ 353 000e 5DF8047B 		ldr	r7, [sp], #4
+ 354              		.cfi_restore 7
+ 355              		.cfi_def_cfa_offset 0
+ 356 0012 7047     		bx	lr
+ 357              	.L27:
+ 358              		.align	2
+ 359              	.L26:
+ 360 0014 7C640040 		.word	1073767548
+ 361              		.cfi_endproc
+ 362              	.LFE7:
+ 363              		.size	sd_timer_ReadControlRegister, .-sd_timer_ReadControlRegister
+ 364              		.section	.text.sd_timer_WriteControlRegister,"ax",%progbits
+ 365              		.align	2
+ 366              		.global	sd_timer_WriteControlRegister
+ 367              		.thumb
+ 368              		.thumb_func
+ 369              		.type	sd_timer_WriteControlRegister, %function
+ 370              	sd_timer_WriteControlRegister:
+ 371              	.LFB8:
+ 364:Generated_Source\PSoC5/sd_timer.c **** 
+ 365:Generated_Source\PSoC5/sd_timer.c **** 
+ 366:Generated_Source\PSoC5/sd_timer.c **** /*******************************************************************************
+ 367:Generated_Source\PSoC5/sd_timer.c **** * Function Name: sd_timer_WriteControlRegister
+ 368:Generated_Source\PSoC5/sd_timer.c **** ********************************************************************************
+ 369:Generated_Source\PSoC5/sd_timer.c **** *
+ 370:Generated_Source\PSoC5/sd_timer.c **** * Summary:
+ARM GAS  D:\Windows\AppData\Local\Temp\ccGmd2BW.s 			page 14
+
+
+ 371:Generated_Source\PSoC5/sd_timer.c **** *  Sets the bit-field of the control register.
+ 372:Generated_Source\PSoC5/sd_timer.c **** *
+ 373:Generated_Source\PSoC5/sd_timer.c **** * Parameters:
+ 374:Generated_Source\PSoC5/sd_timer.c **** *  control: The contents of the control register
+ 375:Generated_Source\PSoC5/sd_timer.c **** *
+ 376:Generated_Source\PSoC5/sd_timer.c **** * Return:
+ 377:Generated_Source\PSoC5/sd_timer.c **** *
+ 378:Generated_Source\PSoC5/sd_timer.c **** *******************************************************************************/
+ 379:Generated_Source\PSoC5/sd_timer.c **** void sd_timer_WriteControlRegister(uint8 control) 
+ 380:Generated_Source\PSoC5/sd_timer.c **** {
+ 372              		.loc 1 380 0
+ 373              		.cfi_startproc
+ 374              		@ args = 0, pretend = 0, frame = 8
+ 375              		@ frame_needed = 1, uses_anonymous_args = 0
+ 376              		@ link register save eliminated.
+ 377 0000 80B4     		push	{r7}
+ 378              		.cfi_def_cfa_offset 4
+ 379              		.cfi_offset 7, -4
+ 380 0002 83B0     		sub	sp, sp, #12
+ 381              		.cfi_def_cfa_offset 16
+ 382 0004 00AF     		add	r7, sp, #0
+ 383              		.cfi_def_cfa_register 7
+ 384 0006 0346     		mov	r3, r0
+ 385 0008 FB71     		strb	r3, [r7, #7]
+ 381:Generated_Source\PSoC5/sd_timer.c ****     #if (!sd_timer_UDB_CONTROL_REG_REMOVED) 
+ 382:Generated_Source\PSoC5/sd_timer.c ****         sd_timer_CONTROL = control;
+ 386              		.loc 1 382 0
+ 387 000a 044A     		ldr	r2, .L29
+ 388 000c FB79     		ldrb	r3, [r7, #7]
+ 389 000e 1370     		strb	r3, [r2]
+ 383:Generated_Source\PSoC5/sd_timer.c ****     #else
+ 384:Generated_Source\PSoC5/sd_timer.c ****         control = 0u;
+ 385:Generated_Source\PSoC5/sd_timer.c ****     #endif /* (!sd_timer_UDB_CONTROL_REG_REMOVED) */
+ 386:Generated_Source\PSoC5/sd_timer.c **** }
+ 390              		.loc 1 386 0
+ 391 0010 0C37     		adds	r7, r7, #12
+ 392              		.cfi_def_cfa_offset 4
+ 393 0012 BD46     		mov	sp, r7
+ 394              		.cfi_def_cfa_register 13
+ 395              		@ sp needed
+ 396 0014 5DF8047B 		ldr	r7, [sp], #4
+ 397              		.cfi_restore 7
+ 398              		.cfi_def_cfa_offset 0
+ 399 0018 7047     		bx	lr
+ 400              	.L30:
+ 401 001a 00BF     		.align	2
+ 402              	.L29:
+ 403 001c 7C640040 		.word	1073767548
+ 404              		.cfi_endproc
+ 405              	.LFE8:
+ 406              		.size	sd_timer_WriteControlRegister, .-sd_timer_WriteControlRegister
+ 407              		.section	.text.sd_timer_ReadPeriod,"ax",%progbits
+ 408              		.align	2
+ 409              		.global	sd_timer_ReadPeriod
+ 410              		.thumb
+ 411              		.thumb_func
+ 412              		.type	sd_timer_ReadPeriod, %function
+ARM GAS  D:\Windows\AppData\Local\Temp\ccGmd2BW.s 			page 15
+
+
+ 413              	sd_timer_ReadPeriod:
+ 414              	.LFB9:
+ 387:Generated_Source\PSoC5/sd_timer.c **** 
+ 388:Generated_Source\PSoC5/sd_timer.c **** #endif /* Remove API if control register is unused */
+ 389:Generated_Source\PSoC5/sd_timer.c **** 
+ 390:Generated_Source\PSoC5/sd_timer.c **** 
+ 391:Generated_Source\PSoC5/sd_timer.c **** /*******************************************************************************
+ 392:Generated_Source\PSoC5/sd_timer.c **** * Function Name: sd_timer_ReadPeriod
+ 393:Generated_Source\PSoC5/sd_timer.c **** ********************************************************************************
+ 394:Generated_Source\PSoC5/sd_timer.c **** *
+ 395:Generated_Source\PSoC5/sd_timer.c **** * Summary:
+ 396:Generated_Source\PSoC5/sd_timer.c **** *  This function returns the current value of the Period.
+ 397:Generated_Source\PSoC5/sd_timer.c **** *
+ 398:Generated_Source\PSoC5/sd_timer.c **** * Parameters:
+ 399:Generated_Source\PSoC5/sd_timer.c **** *  void
+ 400:Generated_Source\PSoC5/sd_timer.c **** *
+ 401:Generated_Source\PSoC5/sd_timer.c **** * Return:
+ 402:Generated_Source\PSoC5/sd_timer.c **** *  The present value of the counter.
+ 403:Generated_Source\PSoC5/sd_timer.c **** *
+ 404:Generated_Source\PSoC5/sd_timer.c **** *******************************************************************************/
+ 405:Generated_Source\PSoC5/sd_timer.c **** uint32 sd_timer_ReadPeriod(void) 
+ 406:Generated_Source\PSoC5/sd_timer.c **** {
+ 415              		.loc 1 406 0
+ 416              		.cfi_startproc
+ 417              		@ args = 0, pretend = 0, frame = 0
+ 418              		@ frame_needed = 1, uses_anonymous_args = 0
+ 419              		@ link register save eliminated.
+ 420 0000 80B4     		push	{r7}
+ 421              		.cfi_def_cfa_offset 4
+ 422              		.cfi_offset 7, -4
+ 423 0002 00AF     		add	r7, sp, #0
+ 424              		.cfi_def_cfa_register 7
+ 407:Generated_Source\PSoC5/sd_timer.c ****    #if(sd_timer_UsingFixedFunction)
+ 408:Generated_Source\PSoC5/sd_timer.c ****        return ((uint32)CY_GET_REG16(sd_timer_PERIOD_LSB_PTR));
+ 409:Generated_Source\PSoC5/sd_timer.c ****    #else
+ 410:Generated_Source\PSoC5/sd_timer.c ****        return (CY_GET_REG24(sd_timer_PERIOD_LSB_PTR));
+ 425              		.loc 1 410 0
+ 426 0004 044B     		ldr	r3, .L33
+ 427 0006 1B68     		ldr	r3, [r3]
+ 428 0008 23F07F43 		bic	r3, r3, #-16777216
+ 411:Generated_Source\PSoC5/sd_timer.c ****    #endif /* (sd_timer_UsingFixedFunction) */
+ 412:Generated_Source\PSoC5/sd_timer.c **** }
+ 429              		.loc 1 412 0
+ 430 000c 1846     		mov	r0, r3
+ 431 000e BD46     		mov	sp, r7
+ 432              		.cfi_def_cfa_register 13
+ 433              		@ sp needed
+ 434 0010 5DF8047B 		ldr	r7, [sp], #4
+ 435              		.cfi_restore 7
+ 436              		.cfi_def_cfa_offset 0
+ 437 0014 7047     		bx	lr
+ 438              	.L34:
+ 439 0016 00BF     		.align	2
+ 440              	.L33:
+ 441 0018 2B640040 		.word	1073767467
+ 442              		.cfi_endproc
+ 443              	.LFE9:
+ARM GAS  D:\Windows\AppData\Local\Temp\ccGmd2BW.s 			page 16
+
+
+ 444              		.size	sd_timer_ReadPeriod, .-sd_timer_ReadPeriod
+ 445              		.section	.text.sd_timer_WritePeriod,"ax",%progbits
+ 446              		.align	2
+ 447              		.global	sd_timer_WritePeriod
+ 448              		.thumb
+ 449              		.thumb_func
+ 450              		.type	sd_timer_WritePeriod, %function
+ 451              	sd_timer_WritePeriod:
+ 452              	.LFB10:
+ 413:Generated_Source\PSoC5/sd_timer.c **** 
+ 414:Generated_Source\PSoC5/sd_timer.c **** 
+ 415:Generated_Source\PSoC5/sd_timer.c **** /*******************************************************************************
+ 416:Generated_Source\PSoC5/sd_timer.c **** * Function Name: sd_timer_WritePeriod
+ 417:Generated_Source\PSoC5/sd_timer.c **** ********************************************************************************
+ 418:Generated_Source\PSoC5/sd_timer.c **** *
+ 419:Generated_Source\PSoC5/sd_timer.c **** * Summary:
+ 420:Generated_Source\PSoC5/sd_timer.c **** *  This function is used to change the period of the counter.  The new period
+ 421:Generated_Source\PSoC5/sd_timer.c **** *  will be loaded the next time terminal count is detected.
+ 422:Generated_Source\PSoC5/sd_timer.c **** *
+ 423:Generated_Source\PSoC5/sd_timer.c **** * Parameters:
+ 424:Generated_Source\PSoC5/sd_timer.c **** *  period: This value may be between 1 and (2^Resolution)-1.  A value of 0 will
+ 425:Generated_Source\PSoC5/sd_timer.c **** *          result in the counter remaining at zero.
+ 426:Generated_Source\PSoC5/sd_timer.c **** *
+ 427:Generated_Source\PSoC5/sd_timer.c **** * Return:
+ 428:Generated_Source\PSoC5/sd_timer.c **** *  void
+ 429:Generated_Source\PSoC5/sd_timer.c **** *
+ 430:Generated_Source\PSoC5/sd_timer.c **** *******************************************************************************/
+ 431:Generated_Source\PSoC5/sd_timer.c **** void sd_timer_WritePeriod(uint32 period) 
+ 432:Generated_Source\PSoC5/sd_timer.c **** {
+ 453              		.loc 1 432 0
+ 454              		.cfi_startproc
+ 455              		@ args = 0, pretend = 0, frame = 8
+ 456              		@ frame_needed = 1, uses_anonymous_args = 0
+ 457 0000 80B5     		push	{r7, lr}
+ 458              		.cfi_def_cfa_offset 8
+ 459              		.cfi_offset 7, -8
+ 460              		.cfi_offset 14, -4
+ 461 0002 82B0     		sub	sp, sp, #8
+ 462              		.cfi_def_cfa_offset 16
+ 463 0004 00AF     		add	r7, sp, #0
+ 464              		.cfi_def_cfa_register 7
+ 465 0006 7860     		str	r0, [r7, #4]
+ 433:Generated_Source\PSoC5/sd_timer.c ****     #if(sd_timer_UsingFixedFunction)
+ 434:Generated_Source\PSoC5/sd_timer.c ****         uint16 period_temp = (uint16)period;
+ 435:Generated_Source\PSoC5/sd_timer.c ****         CY_SET_REG16(sd_timer_PERIOD_LSB_PTR, period_temp);
+ 436:Generated_Source\PSoC5/sd_timer.c ****     #else
+ 437:Generated_Source\PSoC5/sd_timer.c ****         CY_SET_REG24(sd_timer_PERIOD_LSB_PTR, period);
+ 466              		.loc 1 437 0
+ 467 0008 0348     		ldr	r0, .L36
+ 468 000a 7968     		ldr	r1, [r7, #4]
+ 469 000c FFF7FEFF 		bl	CySetReg24
+ 438:Generated_Source\PSoC5/sd_timer.c ****     #endif /*Write Period value with appropriate resolution suffix depending on UDB or fixed functi
+ 439:Generated_Source\PSoC5/sd_timer.c **** }
+ 470              		.loc 1 439 0
+ 471 0010 0837     		adds	r7, r7, #8
+ 472              		.cfi_def_cfa_offset 8
+ 473 0012 BD46     		mov	sp, r7
+ARM GAS  D:\Windows\AppData\Local\Temp\ccGmd2BW.s 			page 17
+
+
+ 474              		.cfi_def_cfa_register 13
+ 475              		@ sp needed
+ 476 0014 80BD     		pop	{r7, pc}
+ 477              	.L37:
+ 478 0016 00BF     		.align	2
+ 479              	.L36:
+ 480 0018 2B640040 		.word	1073767467
+ 481              		.cfi_endproc
+ 482              	.LFE10:
+ 483              		.size	sd_timer_WritePeriod, .-sd_timer_WritePeriod
+ 484              		.section	.text.sd_timer_ReadCapture,"ax",%progbits
+ 485              		.align	2
+ 486              		.global	sd_timer_ReadCapture
+ 487              		.thumb
+ 488              		.thumb_func
+ 489              		.type	sd_timer_ReadCapture, %function
+ 490              	sd_timer_ReadCapture:
+ 491              	.LFB11:
+ 440:Generated_Source\PSoC5/sd_timer.c **** 
+ 441:Generated_Source\PSoC5/sd_timer.c **** 
+ 442:Generated_Source\PSoC5/sd_timer.c **** /*******************************************************************************
+ 443:Generated_Source\PSoC5/sd_timer.c **** * Function Name: sd_timer_ReadCapture
+ 444:Generated_Source\PSoC5/sd_timer.c **** ********************************************************************************
+ 445:Generated_Source\PSoC5/sd_timer.c **** *
+ 446:Generated_Source\PSoC5/sd_timer.c **** * Summary:
+ 447:Generated_Source\PSoC5/sd_timer.c **** *  This function returns the last value captured.
+ 448:Generated_Source\PSoC5/sd_timer.c **** *
+ 449:Generated_Source\PSoC5/sd_timer.c **** * Parameters:
+ 450:Generated_Source\PSoC5/sd_timer.c **** *  void
+ 451:Generated_Source\PSoC5/sd_timer.c **** *
+ 452:Generated_Source\PSoC5/sd_timer.c **** * Return:
+ 453:Generated_Source\PSoC5/sd_timer.c **** *  Present Capture value.
+ 454:Generated_Source\PSoC5/sd_timer.c **** *
+ 455:Generated_Source\PSoC5/sd_timer.c **** *******************************************************************************/
+ 456:Generated_Source\PSoC5/sd_timer.c **** uint32 sd_timer_ReadCapture(void) 
+ 457:Generated_Source\PSoC5/sd_timer.c **** {
+ 492              		.loc 1 457 0
+ 493              		.cfi_startproc
+ 494              		@ args = 0, pretend = 0, frame = 0
+ 495              		@ frame_needed = 1, uses_anonymous_args = 0
+ 496              		@ link register save eliminated.
+ 497 0000 80B4     		push	{r7}
+ 498              		.cfi_def_cfa_offset 4
+ 499              		.cfi_offset 7, -4
+ 500 0002 00AF     		add	r7, sp, #0
+ 501              		.cfi_def_cfa_register 7
+ 458:Generated_Source\PSoC5/sd_timer.c ****    #if(sd_timer_UsingFixedFunction)
+ 459:Generated_Source\PSoC5/sd_timer.c ****        return ((uint32)CY_GET_REG16(sd_timer_CAPTURE_LSB_PTR));
+ 460:Generated_Source\PSoC5/sd_timer.c ****    #else
+ 461:Generated_Source\PSoC5/sd_timer.c ****        return (CY_GET_REG24(sd_timer_CAPTURE_LSB_PTR));
+ 502              		.loc 1 461 0
+ 503 0004 044B     		ldr	r3, .L40
+ 504 0006 1B68     		ldr	r3, [r3]
+ 505 0008 23F07F43 		bic	r3, r3, #-16777216
+ 462:Generated_Source\PSoC5/sd_timer.c ****    #endif /* (sd_timer_UsingFixedFunction) */
+ 463:Generated_Source\PSoC5/sd_timer.c **** }
+ 506              		.loc 1 463 0
+ARM GAS  D:\Windows\AppData\Local\Temp\ccGmd2BW.s 			page 18
+
+
+ 507 000c 1846     		mov	r0, r3
+ 508 000e BD46     		mov	sp, r7
+ 509              		.cfi_def_cfa_register 13
+ 510              		@ sp needed
+ 511 0010 5DF8047B 		ldr	r7, [sp], #4
+ 512              		.cfi_restore 7
+ 513              		.cfi_def_cfa_offset 0
+ 514 0014 7047     		bx	lr
+ 515              	.L41:
+ 516 0016 00BF     		.align	2
+ 517              	.L40:
+ 518 0018 4B640040 		.word	1073767499
+ 519              		.cfi_endproc
+ 520              	.LFE11:
+ 521              		.size	sd_timer_ReadCapture, .-sd_timer_ReadCapture
+ 522              		.section	.text.sd_timer_WriteCounter,"ax",%progbits
+ 523              		.align	2
+ 524              		.global	sd_timer_WriteCounter
+ 525              		.thumb
+ 526              		.thumb_func
+ 527              		.type	sd_timer_WriteCounter, %function
+ 528              	sd_timer_WriteCounter:
+ 529              	.LFB12:
+ 464:Generated_Source\PSoC5/sd_timer.c **** 
+ 465:Generated_Source\PSoC5/sd_timer.c **** 
+ 466:Generated_Source\PSoC5/sd_timer.c **** /*******************************************************************************
+ 467:Generated_Source\PSoC5/sd_timer.c **** * Function Name: sd_timer_WriteCounter
+ 468:Generated_Source\PSoC5/sd_timer.c **** ********************************************************************************
+ 469:Generated_Source\PSoC5/sd_timer.c **** *
+ 470:Generated_Source\PSoC5/sd_timer.c **** * Summary:
+ 471:Generated_Source\PSoC5/sd_timer.c **** *  This funtion is used to set the counter to a specific value
+ 472:Generated_Source\PSoC5/sd_timer.c **** *
+ 473:Generated_Source\PSoC5/sd_timer.c **** * Parameters:
+ 474:Generated_Source\PSoC5/sd_timer.c **** *  counter:  New counter value.
+ 475:Generated_Source\PSoC5/sd_timer.c **** *
+ 476:Generated_Source\PSoC5/sd_timer.c **** * Return:
+ 477:Generated_Source\PSoC5/sd_timer.c **** *  void
+ 478:Generated_Source\PSoC5/sd_timer.c **** *
+ 479:Generated_Source\PSoC5/sd_timer.c **** *******************************************************************************/
+ 480:Generated_Source\PSoC5/sd_timer.c **** void sd_timer_WriteCounter(uint32 counter) 
+ 481:Generated_Source\PSoC5/sd_timer.c **** {
+ 530              		.loc 1 481 0
+ 531              		.cfi_startproc
+ 532              		@ args = 0, pretend = 0, frame = 8
+ 533              		@ frame_needed = 1, uses_anonymous_args = 0
+ 534 0000 80B5     		push	{r7, lr}
+ 535              		.cfi_def_cfa_offset 8
+ 536              		.cfi_offset 7, -8
+ 537              		.cfi_offset 14, -4
+ 538 0002 82B0     		sub	sp, sp, #8
+ 539              		.cfi_def_cfa_offset 16
+ 540 0004 00AF     		add	r7, sp, #0
+ 541              		.cfi_def_cfa_register 7
+ 542 0006 7860     		str	r0, [r7, #4]
+ 482:Generated_Source\PSoC5/sd_timer.c ****    #if(sd_timer_UsingFixedFunction)
+ 483:Generated_Source\PSoC5/sd_timer.c ****         /* This functionality is removed until a FixedFunction HW update to
+ 484:Generated_Source\PSoC5/sd_timer.c ****          * allow this register to be written
+ARM GAS  D:\Windows\AppData\Local\Temp\ccGmd2BW.s 			page 19
+
+
+ 485:Generated_Source\PSoC5/sd_timer.c ****          */
+ 486:Generated_Source\PSoC5/sd_timer.c ****         CY_SET_REG16(sd_timer_COUNTER_LSB_PTR, (uint16)counter);
+ 487:Generated_Source\PSoC5/sd_timer.c ****         
+ 488:Generated_Source\PSoC5/sd_timer.c ****     #else
+ 489:Generated_Source\PSoC5/sd_timer.c ****         CY_SET_REG24(sd_timer_COUNTER_LSB_PTR, counter);
+ 543              		.loc 1 489 0
+ 544 0008 0348     		ldr	r0, .L43
+ 545 000a 7968     		ldr	r1, [r7, #4]
+ 546 000c FFF7FEFF 		bl	CySetReg24
+ 490:Generated_Source\PSoC5/sd_timer.c ****     #endif /* Set Write Counter only for the UDB implementation (Write Counter not available in fix
+ 491:Generated_Source\PSoC5/sd_timer.c **** }
+ 547              		.loc 1 491 0
+ 548 0010 0837     		adds	r7, r7, #8
+ 549              		.cfi_def_cfa_offset 8
+ 550 0012 BD46     		mov	sp, r7
+ 551              		.cfi_def_cfa_register 13
+ 552              		@ sp needed
+ 553 0014 80BD     		pop	{r7, pc}
+ 554              	.L44:
+ 555 0016 00BF     		.align	2
+ 556              	.L43:
+ 557 0018 0B640040 		.word	1073767435
+ 558              		.cfi_endproc
+ 559              	.LFE12:
+ 560              		.size	sd_timer_WriteCounter, .-sd_timer_WriteCounter
+ 561              		.section	.text.sd_timer_ReadCounter,"ax",%progbits
+ 562              		.align	2
+ 563              		.global	sd_timer_ReadCounter
+ 564              		.thumb
+ 565              		.thumb_func
+ 566              		.type	sd_timer_ReadCounter, %function
+ 567              	sd_timer_ReadCounter:
+ 568              	.LFB13:
+ 492:Generated_Source\PSoC5/sd_timer.c **** 
+ 493:Generated_Source\PSoC5/sd_timer.c **** 
+ 494:Generated_Source\PSoC5/sd_timer.c **** /*******************************************************************************
+ 495:Generated_Source\PSoC5/sd_timer.c **** * Function Name: sd_timer_ReadCounter
+ 496:Generated_Source\PSoC5/sd_timer.c **** ********************************************************************************
+ 497:Generated_Source\PSoC5/sd_timer.c **** *
+ 498:Generated_Source\PSoC5/sd_timer.c **** * Summary:
+ 499:Generated_Source\PSoC5/sd_timer.c **** *  This function returns the current counter value.
+ 500:Generated_Source\PSoC5/sd_timer.c **** *
+ 501:Generated_Source\PSoC5/sd_timer.c **** * Parameters:
+ 502:Generated_Source\PSoC5/sd_timer.c **** *  void
+ 503:Generated_Source\PSoC5/sd_timer.c **** *
+ 504:Generated_Source\PSoC5/sd_timer.c **** * Return:
+ 505:Generated_Source\PSoC5/sd_timer.c **** *  Present compare value.
+ 506:Generated_Source\PSoC5/sd_timer.c **** *
+ 507:Generated_Source\PSoC5/sd_timer.c **** *******************************************************************************/
+ 508:Generated_Source\PSoC5/sd_timer.c **** uint32 sd_timer_ReadCounter(void) 
+ 509:Generated_Source\PSoC5/sd_timer.c **** {
+ 569              		.loc 1 509 0
+ 570              		.cfi_startproc
+ 571              		@ args = 0, pretend = 0, frame = 0
+ 572              		@ frame_needed = 1, uses_anonymous_args = 0
+ 573              		@ link register save eliminated.
+ 574 0000 80B4     		push	{r7}
+ARM GAS  D:\Windows\AppData\Local\Temp\ccGmd2BW.s 			page 20
+
+
+ 575              		.cfi_def_cfa_offset 4
+ 576              		.cfi_offset 7, -4
+ 577 0002 00AF     		add	r7, sp, #0
+ 578              		.cfi_def_cfa_register 7
+ 510:Generated_Source\PSoC5/sd_timer.c ****     /* Force capture by reading Accumulator */
+ 511:Generated_Source\PSoC5/sd_timer.c ****     /* Must first do a software capture to be able to read the counter */
+ 512:Generated_Source\PSoC5/sd_timer.c ****     /* It is up to the user code to make sure there isn't already captured data in the FIFO */
+ 513:Generated_Source\PSoC5/sd_timer.c ****     #if(sd_timer_UsingFixedFunction)
+ 514:Generated_Source\PSoC5/sd_timer.c ****         (void)CY_GET_REG16(sd_timer_COUNTER_LSB_PTR);
+ 515:Generated_Source\PSoC5/sd_timer.c ****     #else
+ 516:Generated_Source\PSoC5/sd_timer.c ****         (void)CY_GET_REG8(sd_timer_COUNTER_LSB_PTR_8BIT);
+ 579              		.loc 1 516 0
+ 580 0004 054B     		ldr	r3, .L47
+ 581 0006 1B78     		ldrb	r3, [r3]
+ 517:Generated_Source\PSoC5/sd_timer.c ****     #endif/* (sd_timer_UsingFixedFunction) */
+ 518:Generated_Source\PSoC5/sd_timer.c **** 
+ 519:Generated_Source\PSoC5/sd_timer.c ****     /* Read the data from the FIFO (or capture register for Fixed Function)*/
+ 520:Generated_Source\PSoC5/sd_timer.c ****     #if(sd_timer_UsingFixedFunction)
+ 521:Generated_Source\PSoC5/sd_timer.c ****         return ((uint32)CY_GET_REG16(sd_timer_CAPTURE_LSB_PTR));
+ 522:Generated_Source\PSoC5/sd_timer.c ****     #else
+ 523:Generated_Source\PSoC5/sd_timer.c ****         return (CY_GET_REG24(sd_timer_CAPTURE_LSB_PTR));
+ 582              		.loc 1 523 0
+ 583 0008 054B     		ldr	r3, .L47+4
+ 584 000a 1B68     		ldr	r3, [r3]
+ 585 000c 23F07F43 		bic	r3, r3, #-16777216
+ 524:Generated_Source\PSoC5/sd_timer.c ****     #endif /* (sd_timer_UsingFixedFunction) */
+ 525:Generated_Source\PSoC5/sd_timer.c **** }
+ 586              		.loc 1 525 0
+ 587 0010 1846     		mov	r0, r3
+ 588 0012 BD46     		mov	sp, r7
+ 589              		.cfi_def_cfa_register 13
+ 590              		@ sp needed
+ 591 0014 5DF8047B 		ldr	r7, [sp], #4
+ 592              		.cfi_restore 7
+ 593              		.cfi_def_cfa_offset 0
+ 594 0018 7047     		bx	lr
+ 595              	.L48:
+ 596 001a 00BF     		.align	2
+ 597              	.L47:
+ 598 001c 0B640040 		.word	1073767435
+ 599 0020 4B640040 		.word	1073767499
+ 600              		.cfi_endproc
+ 601              	.LFE13:
+ 602              		.size	sd_timer_ReadCounter, .-sd_timer_ReadCounter
+ 603              		.section	.text.sd_timer_ClearFIFO,"ax",%progbits
+ 604              		.align	2
+ 605              		.global	sd_timer_ClearFIFO
+ 606              		.thumb
+ 607              		.thumb_func
+ 608              		.type	sd_timer_ClearFIFO, %function
+ 609              	sd_timer_ClearFIFO:
+ 610              	.LFB14:
+ 526:Generated_Source\PSoC5/sd_timer.c **** 
+ 527:Generated_Source\PSoC5/sd_timer.c **** 
+ 528:Generated_Source\PSoC5/sd_timer.c **** #if(!sd_timer_UsingFixedFunction) /* UDB Specific Functions */
+ 529:Generated_Source\PSoC5/sd_timer.c **** 
+ 530:Generated_Source\PSoC5/sd_timer.c ****     
+ARM GAS  D:\Windows\AppData\Local\Temp\ccGmd2BW.s 			page 21
+
+
+ 531:Generated_Source\PSoC5/sd_timer.c **** /*******************************************************************************
+ 532:Generated_Source\PSoC5/sd_timer.c ****  * The functions below this point are only available using the UDB
+ 533:Generated_Source\PSoC5/sd_timer.c ****  * implementation.  If a feature is selected, then the API is enabled.
+ 534:Generated_Source\PSoC5/sd_timer.c ****  ******************************************************************************/
+ 535:Generated_Source\PSoC5/sd_timer.c **** 
+ 536:Generated_Source\PSoC5/sd_timer.c **** 
+ 537:Generated_Source\PSoC5/sd_timer.c **** #if (sd_timer_SoftwareCaptureMode)
+ 538:Generated_Source\PSoC5/sd_timer.c **** 
+ 539:Generated_Source\PSoC5/sd_timer.c **** 
+ 540:Generated_Source\PSoC5/sd_timer.c **** /*******************************************************************************
+ 541:Generated_Source\PSoC5/sd_timer.c **** * Function Name: sd_timer_SetCaptureMode
+ 542:Generated_Source\PSoC5/sd_timer.c **** ********************************************************************************
+ 543:Generated_Source\PSoC5/sd_timer.c **** *
+ 544:Generated_Source\PSoC5/sd_timer.c **** * Summary:
+ 545:Generated_Source\PSoC5/sd_timer.c **** *  This function sets the capture mode to either rising or falling edge.
+ 546:Generated_Source\PSoC5/sd_timer.c **** *
+ 547:Generated_Source\PSoC5/sd_timer.c **** * Parameters:
+ 548:Generated_Source\PSoC5/sd_timer.c **** *  captureMode: This parameter sets the capture mode of the UDB capture feature
+ 549:Generated_Source\PSoC5/sd_timer.c **** *  The parameter values are defined using the
+ 550:Generated_Source\PSoC5/sd_timer.c **** *  #define sd_timer__B_TIMER__CM_NONE 0
+ 551:Generated_Source\PSoC5/sd_timer.c **** #define sd_timer__B_TIMER__CM_RISINGEDGE 1
+ 552:Generated_Source\PSoC5/sd_timer.c **** #define sd_timer__B_TIMER__CM_FALLINGEDGE 2
+ 553:Generated_Source\PSoC5/sd_timer.c **** #define sd_timer__B_TIMER__CM_EITHEREDGE 3
+ 554:Generated_Source\PSoC5/sd_timer.c **** #define sd_timer__B_TIMER__CM_SOFTWARE 4
+ 555:Generated_Source\PSoC5/sd_timer.c ****  identifiers
+ 556:Generated_Source\PSoC5/sd_timer.c **** *  The following are the possible values of the parameter
+ 557:Generated_Source\PSoC5/sd_timer.c **** *  sd_timer__B_TIMER__CM_NONE        - Set Capture mode to None
+ 558:Generated_Source\PSoC5/sd_timer.c **** *  sd_timer__B_TIMER__CM_RISINGEDGE  - Rising edge of Capture input
+ 559:Generated_Source\PSoC5/sd_timer.c **** *  sd_timer__B_TIMER__CM_FALLINGEDGE - Falling edge of Capture input
+ 560:Generated_Source\PSoC5/sd_timer.c **** *  sd_timer__B_TIMER__CM_EITHEREDGE  - Either edge of Capture input
+ 561:Generated_Source\PSoC5/sd_timer.c **** *
+ 562:Generated_Source\PSoC5/sd_timer.c **** * Return:
+ 563:Generated_Source\PSoC5/sd_timer.c **** *  void
+ 564:Generated_Source\PSoC5/sd_timer.c **** *
+ 565:Generated_Source\PSoC5/sd_timer.c **** *******************************************************************************/
+ 566:Generated_Source\PSoC5/sd_timer.c **** void sd_timer_SetCaptureMode(uint8 captureMode) 
+ 567:Generated_Source\PSoC5/sd_timer.c **** {
+ 568:Generated_Source\PSoC5/sd_timer.c ****     /* This must only set to two bits of the control register associated */
+ 569:Generated_Source\PSoC5/sd_timer.c ****     captureMode = ((uint8)((uint8)captureMode << sd_timer_CTRL_CAP_MODE_SHIFT));
+ 570:Generated_Source\PSoC5/sd_timer.c ****     captureMode &= (sd_timer_CTRL_CAP_MODE_MASK);
+ 571:Generated_Source\PSoC5/sd_timer.c **** 
+ 572:Generated_Source\PSoC5/sd_timer.c ****     #if (!sd_timer_UDB_CONTROL_REG_REMOVED)
+ 573:Generated_Source\PSoC5/sd_timer.c ****         /* Clear the Current Setting */
+ 574:Generated_Source\PSoC5/sd_timer.c ****         sd_timer_CONTROL &= ((uint8)(~sd_timer_CTRL_CAP_MODE_MASK));
+ 575:Generated_Source\PSoC5/sd_timer.c **** 
+ 576:Generated_Source\PSoC5/sd_timer.c ****         /* Write The New Setting */
+ 577:Generated_Source\PSoC5/sd_timer.c ****         sd_timer_CONTROL |= captureMode;
+ 578:Generated_Source\PSoC5/sd_timer.c ****     #endif /* (!sd_timer_UDB_CONTROL_REG_REMOVED) */
+ 579:Generated_Source\PSoC5/sd_timer.c **** }
+ 580:Generated_Source\PSoC5/sd_timer.c **** #endif /* Remove API if Capture Mode is not Software Controlled */
+ 581:Generated_Source\PSoC5/sd_timer.c **** 
+ 582:Generated_Source\PSoC5/sd_timer.c **** 
+ 583:Generated_Source\PSoC5/sd_timer.c **** #if (sd_timer_SoftwareTriggerMode)
+ 584:Generated_Source\PSoC5/sd_timer.c **** 
+ 585:Generated_Source\PSoC5/sd_timer.c **** 
+ 586:Generated_Source\PSoC5/sd_timer.c **** /*******************************************************************************
+ 587:Generated_Source\PSoC5/sd_timer.c **** * Function Name: sd_timer_SetTriggerMode
+ARM GAS  D:\Windows\AppData\Local\Temp\ccGmd2BW.s 			page 22
+
+
+ 588:Generated_Source\PSoC5/sd_timer.c **** ********************************************************************************
+ 589:Generated_Source\PSoC5/sd_timer.c **** *
+ 590:Generated_Source\PSoC5/sd_timer.c **** * Summary:
+ 591:Generated_Source\PSoC5/sd_timer.c **** *  This function sets the trigger input mode
+ 592:Generated_Source\PSoC5/sd_timer.c **** *
+ 593:Generated_Source\PSoC5/sd_timer.c **** * Parameters:
+ 594:Generated_Source\PSoC5/sd_timer.c **** *  triggerMode: Pass one of the pre-defined Trigger Modes (except Software)
+ 595:Generated_Source\PSoC5/sd_timer.c ****     #define sd_timer__B_TIMER__TM_NONE 0x00u
+ 596:Generated_Source\PSoC5/sd_timer.c ****     #define sd_timer__B_TIMER__TM_RISINGEDGE 0x04u
+ 597:Generated_Source\PSoC5/sd_timer.c ****     #define sd_timer__B_TIMER__TM_FALLINGEDGE 0x08u
+ 598:Generated_Source\PSoC5/sd_timer.c ****     #define sd_timer__B_TIMER__TM_EITHEREDGE 0x0Cu
+ 599:Generated_Source\PSoC5/sd_timer.c ****     #define sd_timer__B_TIMER__TM_SOFTWARE 0x10u
+ 600:Generated_Source\PSoC5/sd_timer.c **** *
+ 601:Generated_Source\PSoC5/sd_timer.c **** * Return:
+ 602:Generated_Source\PSoC5/sd_timer.c **** *  void
+ 603:Generated_Source\PSoC5/sd_timer.c **** *
+ 604:Generated_Source\PSoC5/sd_timer.c **** *******************************************************************************/
+ 605:Generated_Source\PSoC5/sd_timer.c **** void sd_timer_SetTriggerMode(uint8 triggerMode) 
+ 606:Generated_Source\PSoC5/sd_timer.c **** {
+ 607:Generated_Source\PSoC5/sd_timer.c ****     /* This must only set to two bits of the control register associated */
+ 608:Generated_Source\PSoC5/sd_timer.c ****     triggerMode &= sd_timer_CTRL_TRIG_MODE_MASK;
+ 609:Generated_Source\PSoC5/sd_timer.c **** 
+ 610:Generated_Source\PSoC5/sd_timer.c ****     #if (!sd_timer_UDB_CONTROL_REG_REMOVED)   /* Remove assignment if control register is removed *
+ 611:Generated_Source\PSoC5/sd_timer.c ****     
+ 612:Generated_Source\PSoC5/sd_timer.c ****         /* Clear the Current Setting */
+ 613:Generated_Source\PSoC5/sd_timer.c ****         sd_timer_CONTROL &= ((uint8)(~sd_timer_CTRL_TRIG_MODE_MASK));
+ 614:Generated_Source\PSoC5/sd_timer.c **** 
+ 615:Generated_Source\PSoC5/sd_timer.c ****         /* Write The New Setting */
+ 616:Generated_Source\PSoC5/sd_timer.c ****         sd_timer_CONTROL |= (triggerMode | sd_timer__B_TIMER__TM_SOFTWARE);
+ 617:Generated_Source\PSoC5/sd_timer.c ****     #endif /* Remove code section if control register is not used */
+ 618:Generated_Source\PSoC5/sd_timer.c **** }
+ 619:Generated_Source\PSoC5/sd_timer.c **** #endif /* Remove API if Trigger Mode is not Software Controlled */
+ 620:Generated_Source\PSoC5/sd_timer.c **** 
+ 621:Generated_Source\PSoC5/sd_timer.c **** #if (sd_timer_EnableTriggerMode)
+ 622:Generated_Source\PSoC5/sd_timer.c **** 
+ 623:Generated_Source\PSoC5/sd_timer.c **** 
+ 624:Generated_Source\PSoC5/sd_timer.c **** /*******************************************************************************
+ 625:Generated_Source\PSoC5/sd_timer.c **** * Function Name: sd_timer_EnableTrigger
+ 626:Generated_Source\PSoC5/sd_timer.c **** ********************************************************************************
+ 627:Generated_Source\PSoC5/sd_timer.c **** *
+ 628:Generated_Source\PSoC5/sd_timer.c **** * Summary:
+ 629:Generated_Source\PSoC5/sd_timer.c **** *  Sets the control bit enabling Hardware Trigger mode
+ 630:Generated_Source\PSoC5/sd_timer.c **** *
+ 631:Generated_Source\PSoC5/sd_timer.c **** * Parameters:
+ 632:Generated_Source\PSoC5/sd_timer.c **** *  void
+ 633:Generated_Source\PSoC5/sd_timer.c **** *
+ 634:Generated_Source\PSoC5/sd_timer.c **** * Return:
+ 635:Generated_Source\PSoC5/sd_timer.c **** *  void
+ 636:Generated_Source\PSoC5/sd_timer.c **** *
+ 637:Generated_Source\PSoC5/sd_timer.c **** *******************************************************************************/
+ 638:Generated_Source\PSoC5/sd_timer.c **** void sd_timer_EnableTrigger(void) 
+ 639:Generated_Source\PSoC5/sd_timer.c **** {
+ 640:Generated_Source\PSoC5/sd_timer.c ****     #if (!sd_timer_UDB_CONTROL_REG_REMOVED)   /* Remove assignment if control register is removed *
+ 641:Generated_Source\PSoC5/sd_timer.c ****         sd_timer_CONTROL |= sd_timer_CTRL_TRIG_EN;
+ 642:Generated_Source\PSoC5/sd_timer.c ****     #endif /* Remove code section if control register is not used */
+ 643:Generated_Source\PSoC5/sd_timer.c **** }
+ 644:Generated_Source\PSoC5/sd_timer.c **** 
+ARM GAS  D:\Windows\AppData\Local\Temp\ccGmd2BW.s 			page 23
+
+
+ 645:Generated_Source\PSoC5/sd_timer.c **** 
+ 646:Generated_Source\PSoC5/sd_timer.c **** /*******************************************************************************
+ 647:Generated_Source\PSoC5/sd_timer.c **** * Function Name: sd_timer_DisableTrigger
+ 648:Generated_Source\PSoC5/sd_timer.c **** ********************************************************************************
+ 649:Generated_Source\PSoC5/sd_timer.c **** *
+ 650:Generated_Source\PSoC5/sd_timer.c **** * Summary:
+ 651:Generated_Source\PSoC5/sd_timer.c **** *  Clears the control bit enabling Hardware Trigger mode
+ 652:Generated_Source\PSoC5/sd_timer.c **** *
+ 653:Generated_Source\PSoC5/sd_timer.c **** * Parameters:
+ 654:Generated_Source\PSoC5/sd_timer.c **** *  void
+ 655:Generated_Source\PSoC5/sd_timer.c **** *
+ 656:Generated_Source\PSoC5/sd_timer.c **** * Return:
+ 657:Generated_Source\PSoC5/sd_timer.c **** *  void
+ 658:Generated_Source\PSoC5/sd_timer.c **** *
+ 659:Generated_Source\PSoC5/sd_timer.c **** *******************************************************************************/
+ 660:Generated_Source\PSoC5/sd_timer.c **** void sd_timer_DisableTrigger(void) 
+ 661:Generated_Source\PSoC5/sd_timer.c **** {
+ 662:Generated_Source\PSoC5/sd_timer.c ****     #if (!sd_timer_UDB_CONTROL_REG_REMOVED )   /* Remove assignment if control register is removed 
+ 663:Generated_Source\PSoC5/sd_timer.c ****         sd_timer_CONTROL &= ((uint8)(~sd_timer_CTRL_TRIG_EN));
+ 664:Generated_Source\PSoC5/sd_timer.c ****     #endif /* Remove code section if control register is not used */
+ 665:Generated_Source\PSoC5/sd_timer.c **** }
+ 666:Generated_Source\PSoC5/sd_timer.c **** #endif /* Remove API is Trigger Mode is set to None */
+ 667:Generated_Source\PSoC5/sd_timer.c **** 
+ 668:Generated_Source\PSoC5/sd_timer.c **** #if(sd_timer_InterruptOnCaptureCount)
+ 669:Generated_Source\PSoC5/sd_timer.c **** 
+ 670:Generated_Source\PSoC5/sd_timer.c **** 
+ 671:Generated_Source\PSoC5/sd_timer.c **** /*******************************************************************************
+ 672:Generated_Source\PSoC5/sd_timer.c **** * Function Name: sd_timer_SetInterruptCount
+ 673:Generated_Source\PSoC5/sd_timer.c **** ********************************************************************************
+ 674:Generated_Source\PSoC5/sd_timer.c **** *
+ 675:Generated_Source\PSoC5/sd_timer.c **** * Summary:
+ 676:Generated_Source\PSoC5/sd_timer.c **** *  This function sets the capture count before an interrupt is triggered.
+ 677:Generated_Source\PSoC5/sd_timer.c **** *
+ 678:Generated_Source\PSoC5/sd_timer.c **** * Parameters:
+ 679:Generated_Source\PSoC5/sd_timer.c **** *  interruptCount:  A value between 0 and 3 is valid.  If the value is 0, then
+ 680:Generated_Source\PSoC5/sd_timer.c **** *                   an interrupt will occur each time a capture occurs.
+ 681:Generated_Source\PSoC5/sd_timer.c **** *                   A value of 1 to 3 will cause the interrupt
+ 682:Generated_Source\PSoC5/sd_timer.c **** *                   to delay by the same number of captures.
+ 683:Generated_Source\PSoC5/sd_timer.c **** *
+ 684:Generated_Source\PSoC5/sd_timer.c **** * Return:
+ 685:Generated_Source\PSoC5/sd_timer.c **** *  void
+ 686:Generated_Source\PSoC5/sd_timer.c **** *
+ 687:Generated_Source\PSoC5/sd_timer.c **** *******************************************************************************/
+ 688:Generated_Source\PSoC5/sd_timer.c **** void sd_timer_SetInterruptCount(uint8 interruptCount) 
+ 689:Generated_Source\PSoC5/sd_timer.c **** {
+ 690:Generated_Source\PSoC5/sd_timer.c ****     /* This must only set to two bits of the control register associated */
+ 691:Generated_Source\PSoC5/sd_timer.c ****     interruptCount &= sd_timer_CTRL_INTCNT_MASK;
+ 692:Generated_Source\PSoC5/sd_timer.c **** 
+ 693:Generated_Source\PSoC5/sd_timer.c ****     #if (!sd_timer_UDB_CONTROL_REG_REMOVED)
+ 694:Generated_Source\PSoC5/sd_timer.c ****         /* Clear the Current Setting */
+ 695:Generated_Source\PSoC5/sd_timer.c ****         sd_timer_CONTROL &= ((uint8)(~sd_timer_CTRL_INTCNT_MASK));
+ 696:Generated_Source\PSoC5/sd_timer.c ****         /* Write The New Setting */
+ 697:Generated_Source\PSoC5/sd_timer.c ****         sd_timer_CONTROL |= interruptCount;
+ 698:Generated_Source\PSoC5/sd_timer.c ****     #endif /* (!sd_timer_UDB_CONTROL_REG_REMOVED) */
+ 699:Generated_Source\PSoC5/sd_timer.c **** }
+ 700:Generated_Source\PSoC5/sd_timer.c **** #endif /* sd_timer_InterruptOnCaptureCount */
+ 701:Generated_Source\PSoC5/sd_timer.c **** 
+ARM GAS  D:\Windows\AppData\Local\Temp\ccGmd2BW.s 			page 24
+
+
+ 702:Generated_Source\PSoC5/sd_timer.c **** 
+ 703:Generated_Source\PSoC5/sd_timer.c **** #if (sd_timer_UsingHWCaptureCounter)
+ 704:Generated_Source\PSoC5/sd_timer.c **** 
+ 705:Generated_Source\PSoC5/sd_timer.c **** 
+ 706:Generated_Source\PSoC5/sd_timer.c **** /*******************************************************************************
+ 707:Generated_Source\PSoC5/sd_timer.c **** * Function Name: sd_timer_SetCaptureCount
+ 708:Generated_Source\PSoC5/sd_timer.c **** ********************************************************************************
+ 709:Generated_Source\PSoC5/sd_timer.c **** *
+ 710:Generated_Source\PSoC5/sd_timer.c **** * Summary:
+ 711:Generated_Source\PSoC5/sd_timer.c **** *  This function sets the capture count
+ 712:Generated_Source\PSoC5/sd_timer.c **** *
+ 713:Generated_Source\PSoC5/sd_timer.c **** * Parameters:
+ 714:Generated_Source\PSoC5/sd_timer.c **** *  captureCount: A value between 2 and 127 inclusive is valid.  A value of 1
+ 715:Generated_Source\PSoC5/sd_timer.c **** *                to 127 will cause the interrupt to delay by the same number of
+ 716:Generated_Source\PSoC5/sd_timer.c **** *                captures.
+ 717:Generated_Source\PSoC5/sd_timer.c **** *
+ 718:Generated_Source\PSoC5/sd_timer.c **** * Return:
+ 719:Generated_Source\PSoC5/sd_timer.c **** *  void
+ 720:Generated_Source\PSoC5/sd_timer.c **** *
+ 721:Generated_Source\PSoC5/sd_timer.c **** *******************************************************************************/
+ 722:Generated_Source\PSoC5/sd_timer.c **** void sd_timer_SetCaptureCount(uint8 captureCount) 
+ 723:Generated_Source\PSoC5/sd_timer.c **** {
+ 724:Generated_Source\PSoC5/sd_timer.c ****     sd_timer_CAP_COUNT = captureCount;
+ 725:Generated_Source\PSoC5/sd_timer.c **** }
+ 726:Generated_Source\PSoC5/sd_timer.c **** 
+ 727:Generated_Source\PSoC5/sd_timer.c **** 
+ 728:Generated_Source\PSoC5/sd_timer.c **** /*******************************************************************************
+ 729:Generated_Source\PSoC5/sd_timer.c **** * Function Name: sd_timer_ReadCaptureCount
+ 730:Generated_Source\PSoC5/sd_timer.c **** ********************************************************************************
+ 731:Generated_Source\PSoC5/sd_timer.c **** *
+ 732:Generated_Source\PSoC5/sd_timer.c **** * Summary:
+ 733:Generated_Source\PSoC5/sd_timer.c **** *  This function reads the capture count setting
+ 734:Generated_Source\PSoC5/sd_timer.c **** *
+ 735:Generated_Source\PSoC5/sd_timer.c **** * Parameters:
+ 736:Generated_Source\PSoC5/sd_timer.c **** *  void
+ 737:Generated_Source\PSoC5/sd_timer.c **** *
+ 738:Generated_Source\PSoC5/sd_timer.c **** * Return:
+ 739:Generated_Source\PSoC5/sd_timer.c **** *  Returns the Capture Count Setting
+ 740:Generated_Source\PSoC5/sd_timer.c **** *
+ 741:Generated_Source\PSoC5/sd_timer.c **** *******************************************************************************/
+ 742:Generated_Source\PSoC5/sd_timer.c **** uint8 sd_timer_ReadCaptureCount(void) 
+ 743:Generated_Source\PSoC5/sd_timer.c **** {
+ 744:Generated_Source\PSoC5/sd_timer.c ****     return ((uint8)sd_timer_CAP_COUNT);
+ 745:Generated_Source\PSoC5/sd_timer.c **** }
+ 746:Generated_Source\PSoC5/sd_timer.c **** #endif /* sd_timer_UsingHWCaptureCounter */
+ 747:Generated_Source\PSoC5/sd_timer.c **** 
+ 748:Generated_Source\PSoC5/sd_timer.c **** 
+ 749:Generated_Source\PSoC5/sd_timer.c **** /*******************************************************************************
+ 750:Generated_Source\PSoC5/sd_timer.c **** * Function Name: sd_timer_ClearFIFO
+ 751:Generated_Source\PSoC5/sd_timer.c **** ********************************************************************************
+ 752:Generated_Source\PSoC5/sd_timer.c **** *
+ 753:Generated_Source\PSoC5/sd_timer.c **** * Summary:
+ 754:Generated_Source\PSoC5/sd_timer.c **** *  This function clears all capture data from the capture FIFO
+ 755:Generated_Source\PSoC5/sd_timer.c **** *
+ 756:Generated_Source\PSoC5/sd_timer.c **** * Parameters:
+ 757:Generated_Source\PSoC5/sd_timer.c **** *  void
+ 758:Generated_Source\PSoC5/sd_timer.c **** *
+ARM GAS  D:\Windows\AppData\Local\Temp\ccGmd2BW.s 			page 25
+
+
+ 759:Generated_Source\PSoC5/sd_timer.c **** * Return:
+ 760:Generated_Source\PSoC5/sd_timer.c **** *  void
+ 761:Generated_Source\PSoC5/sd_timer.c **** *
+ 762:Generated_Source\PSoC5/sd_timer.c **** *******************************************************************************/
+ 763:Generated_Source\PSoC5/sd_timer.c **** void sd_timer_ClearFIFO(void) 
+ 764:Generated_Source\PSoC5/sd_timer.c **** {
+ 611              		.loc 1 764 0
+ 612              		.cfi_startproc
+ 613              		@ args = 0, pretend = 0, frame = 0
+ 614              		@ frame_needed = 1, uses_anonymous_args = 0
+ 615 0000 80B5     		push	{r7, lr}
+ 616              		.cfi_def_cfa_offset 8
+ 617              		.cfi_offset 7, -8
+ 618              		.cfi_offset 14, -4
+ 619 0002 00AF     		add	r7, sp, #0
+ 620              		.cfi_def_cfa_register 7
+ 765:Generated_Source\PSoC5/sd_timer.c ****     while(0u != (sd_timer_ReadStatusRegister() & sd_timer_STATUS_FIFONEMP))
+ 621              		.loc 1 765 0
+ 622 0004 01E0     		b	.L50
+ 623              	.L51:
+ 766:Generated_Source\PSoC5/sd_timer.c ****     {
+ 767:Generated_Source\PSoC5/sd_timer.c ****         (void)sd_timer_ReadCapture();
+ 624              		.loc 1 767 0
+ 625 0006 FFF7FEFF 		bl	sd_timer_ReadCapture
+ 626              	.L50:
+ 765:Generated_Source\PSoC5/sd_timer.c ****     while(0u != (sd_timer_ReadStatusRegister() & sd_timer_STATUS_FIFONEMP))
+ 627              		.loc 1 765 0
+ 628 000a FFF7FEFF 		bl	sd_timer_ReadStatusRegister
+ 629 000e 0346     		mov	r3, r0
+ 630 0010 03F00803 		and	r3, r3, #8
+ 631 0014 002B     		cmp	r3, #0
+ 632 0016 F6D1     		bne	.L51
+ 768:Generated_Source\PSoC5/sd_timer.c ****     }
+ 769:Generated_Source\PSoC5/sd_timer.c **** }
+ 633              		.loc 1 769 0
+ 634 0018 80BD     		pop	{r7, pc}
+ 635              		.cfi_endproc
+ 636              	.LFE14:
+ 637              		.size	sd_timer_ClearFIFO, .-sd_timer_ClearFIFO
+ 638 001a 00BF     		.text
+ 639              	.Letext0:
+ 640              		.file 2 "Generated_Source\\PSoC5\\cytypes.h"
+ 641              		.section	.debug_info,"",%progbits
+ 642              	.Ldebug_info0:
+ 643 0000 50020000 		.4byte	0x250
+ 644 0004 0400     		.2byte	0x4
+ 645 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 646 000a 04       		.byte	0x4
+ 647 000b 01       		.uleb128 0x1
+ 648 000c FF000000 		.4byte	.LASF36
+ 649 0010 01       		.byte	0x1
+ 650 0011 8D020000 		.4byte	.LASF37
+ 651 0015 AF020000 		.4byte	.LASF38
+ 652 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 653 001d 00000000 		.4byte	0
+ 654 0021 00000000 		.4byte	.Ldebug_line0
+ 655 0025 02       		.uleb128 0x2
+ARM GAS  D:\Windows\AppData\Local\Temp\ccGmd2BW.s 			page 26
+
+
+ 656 0026 01       		.byte	0x1
+ 657 0027 06       		.byte	0x6
+ 658 0028 12030000 		.4byte	.LASF0
+ 659 002c 02       		.uleb128 0x2
+ 660 002d 01       		.byte	0x1
+ 661 002e 08       		.byte	0x8
+ 662 002f 99000000 		.4byte	.LASF1
+ 663 0033 02       		.uleb128 0x2
+ 664 0034 02       		.byte	0x2
+ 665 0035 05       		.byte	0x5
+ 666 0036 83020000 		.4byte	.LASF2
+ 667 003a 02       		.uleb128 0x2
+ 668 003b 02       		.byte	0x2
+ 669 003c 07       		.byte	0x7
+ 670 003d 2D000000 		.4byte	.LASF3
+ 671 0041 02       		.uleb128 0x2
+ 672 0042 04       		.byte	0x4
+ 673 0043 05       		.byte	0x5
+ 674 0044 F4020000 		.4byte	.LASF4
+ 675 0048 02       		.uleb128 0x2
+ 676 0049 04       		.byte	0x4
+ 677 004a 07       		.byte	0x7
+ 678 004b AC000000 		.4byte	.LASF5
+ 679 004f 02       		.uleb128 0x2
+ 680 0050 08       		.byte	0x8
+ 681 0051 05       		.byte	0x5
+ 682 0052 35020000 		.4byte	.LASF6
+ 683 0056 02       		.uleb128 0x2
+ 684 0057 08       		.byte	0x8
+ 685 0058 07       		.byte	0x7
+ 686 0059 15020000 		.4byte	.LASF7
+ 687 005d 03       		.uleb128 0x3
+ 688 005e 04       		.byte	0x4
+ 689 005f 05       		.byte	0x5
+ 690 0060 696E7400 		.ascii	"int\000"
+ 691 0064 02       		.uleb128 0x2
+ 692 0065 04       		.byte	0x4
+ 693 0066 07       		.byte	0x7
+ 694 0067 DE010000 		.4byte	.LASF8
+ 695 006b 04       		.uleb128 0x4
+ 696 006c BE000000 		.4byte	.LASF9
+ 697 0070 02       		.byte	0x2
+ 698 0071 9201     		.2byte	0x192
+ 699 0073 2C000000 		.4byte	0x2c
+ 700 0077 04       		.uleb128 0x4
+ 701 0078 C1010000 		.4byte	.LASF10
+ 702 007c 02       		.byte	0x2
+ 703 007d 9401     		.2byte	0x194
+ 704 007f 48000000 		.4byte	0x48
+ 705 0083 02       		.uleb128 0x2
+ 706 0084 04       		.byte	0x4
+ 707 0085 04       		.byte	0x4
+ 708 0086 20000000 		.4byte	.LASF11
+ 709 008a 02       		.uleb128 0x2
+ 710 008b 08       		.byte	0x8
+ 711 008c 04       		.byte	0x4
+ 712 008d 8D010000 		.4byte	.LASF12
+ARM GAS  D:\Windows\AppData\Local\Temp\ccGmd2BW.s 			page 27
+
+
+ 713 0091 02       		.uleb128 0x2
+ 714 0092 01       		.byte	0x1
+ 715 0093 08       		.byte	0x8
+ 716 0094 FD020000 		.4byte	.LASF13
+ 717 0098 04       		.uleb128 0x4
+ 718 0099 A7000000 		.4byte	.LASF14
+ 719 009d 02       		.byte	0x2
+ 720 009e 3C02     		.2byte	0x23c
+ 721 00a0 A4000000 		.4byte	0xa4
+ 722 00a4 05       		.uleb128 0x5
+ 723 00a5 6B000000 		.4byte	0x6b
+ 724 00a9 04       		.uleb128 0x4
+ 725 00aa 1A000000 		.4byte	.LASF15
+ 726 00ae 02       		.byte	0x2
+ 727 00af 3E02     		.2byte	0x23e
+ 728 00b1 B5000000 		.4byte	0xb5
+ 729 00b5 05       		.uleb128 0x5
+ 730 00b6 77000000 		.4byte	0x77
+ 731 00ba 02       		.uleb128 0x2
+ 732 00bb 04       		.byte	0x4
+ 733 00bc 07       		.byte	0x7
+ 734 00bd 2C020000 		.4byte	.LASF16
+ 735 00c1 06       		.uleb128 0x6
+ 736 00c2 07020000 		.4byte	.LASF20
+ 737 00c6 01       		.byte	0x1
+ 738 00c7 2B       		.byte	0x2b
+ 739 00c8 00000000 		.4byte	.LFB0
+ 740 00cc 4C000000 		.4byte	.LFE0-.LFB0
+ 741 00d0 01       		.uleb128 0x1
+ 742 00d1 9C       		.byte	0x9c
+ 743 00d2 E5000000 		.4byte	0xe5
+ 744 00d6 07       		.uleb128 0x7
+ 745 00d7 40000000 		.4byte	.LASF39
+ 746 00db 01       		.byte	0x1
+ 747 00dc 2F       		.byte	0x2f
+ 748 00dd 6B000000 		.4byte	0x6b
+ 749 00e1 02       		.uleb128 0x2
+ 750 00e2 91       		.byte	0x91
+ 751 00e3 77       		.sleb128 -9
+ 752 00e4 00       		.byte	0
+ 753 00e5 08       		.uleb128 0x8
+ 754 00e6 02030000 		.4byte	.LASF17
+ 755 00ea 01       		.byte	0x1
+ 756 00eb B4       		.byte	0xb4
+ 757 00ec 00000000 		.4byte	.LFB1
+ 758 00f0 20000000 		.4byte	.LFE1-.LFB1
+ 759 00f4 01       		.uleb128 0x1
+ 760 00f5 9C       		.byte	0x9c
+ 761 00f6 09       		.uleb128 0x9
+ 762 00f7 2C030000 		.4byte	.LASF18
+ 763 00fb 01       		.byte	0x1
+ 764 00fc D7       		.byte	0xd7
+ 765 00fd 00000000 		.4byte	.LFB2
+ 766 0101 20000000 		.4byte	.LFE2-.LFB2
+ 767 0105 01       		.uleb128 0x1
+ 768 0106 9C       		.byte	0x9c
+ 769 0107 08       		.uleb128 0x8
+ARM GAS  D:\Windows\AppData\Local\Temp\ccGmd2BW.s 			page 28
+
+
+ 770 0108 1E030000 		.4byte	.LASF19
+ 771 010c 01       		.byte	0x1
+ 772 010d F7       		.byte	0xf7
+ 773 010e 00000000 		.4byte	.LFB3
+ 774 0112 20000000 		.4byte	.LFE3-.LFB3
+ 775 0116 01       		.uleb128 0x1
+ 776 0117 9C       		.byte	0x9c
+ 777 0118 0A       		.uleb128 0xa
+ 778 0119 00000000 		.4byte	.LASF21
+ 779 011d 01       		.byte	0x1
+ 780 011e 1701     		.2byte	0x117
+ 781 0120 00000000 		.4byte	.LFB4
+ 782 0124 20000000 		.4byte	.LFE4-.LFB4
+ 783 0128 01       		.uleb128 0x1
+ 784 0129 9C       		.byte	0x9c
+ 785 012a 3E010000 		.4byte	0x13e
+ 786 012e 0B       		.uleb128 0xb
+ 787 012f 60020000 		.4byte	.LASF26
+ 788 0133 01       		.byte	0x1
+ 789 0134 1701     		.2byte	0x117
+ 790 0136 6B000000 		.4byte	0x6b
+ 791 013a 02       		.uleb128 0x2
+ 792 013b 91       		.byte	0x91
+ 793 013c 77       		.sleb128 -9
+ 794 013d 00       		.byte	0
+ 795 013e 0C       		.uleb128 0xc
+ 796 013f A8010000 		.4byte	.LASF22
+ 797 0143 01       		.byte	0x1
+ 798 0144 2E01     		.2byte	0x12e
+ 799 0146 00000000 		.4byte	.LFB5
+ 800 014a 14000000 		.4byte	.LFE5-.LFB5
+ 801 014e 01       		.uleb128 0x1
+ 802 014f 9C       		.byte	0x9c
+ 803 0150 0D       		.uleb128 0xd
+ 804 0151 EB010000 		.4byte	.LASF23
+ 805 0155 01       		.byte	0x1
+ 806 0156 4D01     		.2byte	0x14d
+ 807 0158 6B000000 		.4byte	0x6b
+ 808 015c 00000000 		.4byte	.LFB6
+ 809 0160 18000000 		.4byte	.LFE6-.LFB6
+ 810 0164 01       		.uleb128 0x1
+ 811 0165 9C       		.byte	0x9c
+ 812 0166 0D       		.uleb128 0xd
+ 813 0167 43020000 		.4byte	.LASF24
+ 814 016b 01       		.byte	0x1
+ 815 016c 6401     		.2byte	0x164
+ 816 016e 6B000000 		.4byte	0x6b
+ 817 0172 00000000 		.4byte	.LFB7
+ 818 0176 18000000 		.4byte	.LFE7-.LFB7
+ 819 017a 01       		.uleb128 0x1
+ 820 017b 9C       		.byte	0x9c
+ 821 017c 0A       		.uleb128 0xa
+ 822 017d CC000000 		.4byte	.LASF25
+ 823 0181 01       		.byte	0x1
+ 824 0182 7B01     		.2byte	0x17b
+ 825 0184 00000000 		.4byte	.LFB8
+ 826 0188 20000000 		.4byte	.LFE8-.LFB8
+ARM GAS  D:\Windows\AppData\Local\Temp\ccGmd2BW.s 			page 29
+
+
+ 827 018c 01       		.uleb128 0x1
+ 828 018d 9C       		.byte	0x9c
+ 829 018e A2010000 		.4byte	0x1a2
+ 830 0192 0B       		.uleb128 0xb
+ 831 0193 C4000000 		.4byte	.LASF27
+ 832 0197 01       		.byte	0x1
+ 833 0198 7B01     		.2byte	0x17b
+ 834 019a 6B000000 		.4byte	0x6b
+ 835 019e 02       		.uleb128 0x2
+ 836 019f 91       		.byte	0x91
+ 837 01a0 77       		.sleb128 -9
+ 838 01a1 00       		.byte	0
+ 839 01a2 0D       		.uleb128 0xd
+ 840 01a3 94010000 		.4byte	.LASF28
+ 841 01a7 01       		.byte	0x1
+ 842 01a8 9501     		.2byte	0x195
+ 843 01aa 77000000 		.4byte	0x77
+ 844 01ae 00000000 		.4byte	.LFB9
+ 845 01b2 1C000000 		.4byte	.LFE9-.LFB9
+ 846 01b6 01       		.uleb128 0x1
+ 847 01b7 9C       		.byte	0x9c
+ 848 01b8 0E       		.uleb128 0xe
+ 849 01b9 6E020000 		.4byte	.LASF29
+ 850 01bd 01       		.byte	0x1
+ 851 01be AF01     		.2byte	0x1af
+ 852 01c0 00000000 		.4byte	.LFB10
+ 853 01c4 1C000000 		.4byte	.LFE10-.LFB10
+ 854 01c8 01       		.uleb128 0x1
+ 855 01c9 9C       		.byte	0x9c
+ 856 01ca DE010000 		.4byte	0x1de
+ 857 01ce 0B       		.uleb128 0xb
+ 858 01cf 26000000 		.4byte	.LASF30
+ 859 01d3 01       		.byte	0x1
+ 860 01d4 AF01     		.2byte	0x1af
+ 861 01d6 77000000 		.4byte	0x77
+ 862 01da 02       		.uleb128 0x2
+ 863 01db 91       		.byte	0x91
+ 864 01dc 74       		.sleb128 -12
+ 865 01dd 00       		.byte	0
+ 866 01de 0D       		.uleb128 0xd
+ 867 01df 7C000000 		.4byte	.LASF31
+ 868 01e3 01       		.byte	0x1
+ 869 01e4 C801     		.2byte	0x1c8
+ 870 01e6 77000000 		.4byte	0x77
+ 871 01ea 00000000 		.4byte	.LFB11
+ 872 01ee 1C000000 		.4byte	.LFE11-.LFB11
+ 873 01f2 01       		.uleb128 0x1
+ 874 01f3 9C       		.byte	0x9c
+ 875 01f4 0E       		.uleb128 0xe
+ 876 01f5 C8010000 		.4byte	.LASF32
+ 877 01f9 01       		.byte	0x1
+ 878 01fa E001     		.2byte	0x1e0
+ 879 01fc 00000000 		.4byte	.LFB12
+ 880 0200 1C000000 		.4byte	.LFE12-.LFB12
+ 881 0204 01       		.uleb128 0x1
+ 882 0205 9C       		.byte	0x9c
+ 883 0206 1A020000 		.4byte	0x21a
+ARM GAS  D:\Windows\AppData\Local\Temp\ccGmd2BW.s 			page 30
+
+
+ 884 020a 0B       		.uleb128 0xb
+ 885 020b 91000000 		.4byte	.LASF33
+ 886 020f 01       		.byte	0x1
+ 887 0210 E001     		.2byte	0x1e0
+ 888 0212 77000000 		.4byte	0x77
+ 889 0216 02       		.uleb128 0x2
+ 890 0217 91       		.byte	0x91
+ 891 0218 74       		.sleb128 -12
+ 892 0219 00       		.byte	0
+ 893 021a 0D       		.uleb128 0xd
+ 894 021b EA000000 		.4byte	.LASF34
+ 895 021f 01       		.byte	0x1
+ 896 0220 FC01     		.2byte	0x1fc
+ 897 0222 77000000 		.4byte	0x77
+ 898 0226 00000000 		.4byte	.LFB13
+ 899 022a 24000000 		.4byte	.LFE13-.LFB13
+ 900 022e 01       		.uleb128 0x1
+ 901 022f 9C       		.byte	0x9c
+ 902 0230 0F       		.uleb128 0xf
+ 903 0231 69000000 		.4byte	.LASF35
+ 904 0235 01       		.byte	0x1
+ 905 0236 FB02     		.2byte	0x2fb
+ 906 0238 00000000 		.4byte	.LFB14
+ 907 023c 1A000000 		.4byte	.LFE14-.LFB14
+ 908 0240 01       		.uleb128 0x1
+ 909 0241 9C       		.byte	0x9c
+ 910 0242 10       		.uleb128 0x10
+ 911 0243 58000000 		.4byte	.LASF40
+ 912 0247 01       		.byte	0x1
+ 913 0248 1A       		.byte	0x1a
+ 914 0249 6B000000 		.4byte	0x6b
+ 915 024d 05       		.uleb128 0x5
+ 916 024e 03       		.byte	0x3
+ 917 024f 00000000 		.4byte	sd_timer_initVar
+ 918 0253 00       		.byte	0
+ 919              		.section	.debug_abbrev,"",%progbits
+ 920              	.Ldebug_abbrev0:
+ 921 0000 01       		.uleb128 0x1
+ 922 0001 11       		.uleb128 0x11
+ 923 0002 01       		.byte	0x1
+ 924 0003 25       		.uleb128 0x25
+ 925 0004 0E       		.uleb128 0xe
+ 926 0005 13       		.uleb128 0x13
+ 927 0006 0B       		.uleb128 0xb
+ 928 0007 03       		.uleb128 0x3
+ 929 0008 0E       		.uleb128 0xe
+ 930 0009 1B       		.uleb128 0x1b
+ 931 000a 0E       		.uleb128 0xe
+ 932 000b 55       		.uleb128 0x55
+ 933 000c 17       		.uleb128 0x17
+ 934 000d 11       		.uleb128 0x11
+ 935 000e 01       		.uleb128 0x1
+ 936 000f 10       		.uleb128 0x10
+ 937 0010 17       		.uleb128 0x17
+ 938 0011 00       		.byte	0
+ 939 0012 00       		.byte	0
+ 940 0013 02       		.uleb128 0x2
+ARM GAS  D:\Windows\AppData\Local\Temp\ccGmd2BW.s 			page 31
+
+
+ 941 0014 24       		.uleb128 0x24
+ 942 0015 00       		.byte	0
+ 943 0016 0B       		.uleb128 0xb
+ 944 0017 0B       		.uleb128 0xb
+ 945 0018 3E       		.uleb128 0x3e
+ 946 0019 0B       		.uleb128 0xb
+ 947 001a 03       		.uleb128 0x3
+ 948 001b 0E       		.uleb128 0xe
+ 949 001c 00       		.byte	0
+ 950 001d 00       		.byte	0
+ 951 001e 03       		.uleb128 0x3
+ 952 001f 24       		.uleb128 0x24
+ 953 0020 00       		.byte	0
+ 954 0021 0B       		.uleb128 0xb
+ 955 0022 0B       		.uleb128 0xb
+ 956 0023 3E       		.uleb128 0x3e
+ 957 0024 0B       		.uleb128 0xb
+ 958 0025 03       		.uleb128 0x3
+ 959 0026 08       		.uleb128 0x8
+ 960 0027 00       		.byte	0
+ 961 0028 00       		.byte	0
+ 962 0029 04       		.uleb128 0x4
+ 963 002a 16       		.uleb128 0x16
+ 964 002b 00       		.byte	0
+ 965 002c 03       		.uleb128 0x3
+ 966 002d 0E       		.uleb128 0xe
+ 967 002e 3A       		.uleb128 0x3a
+ 968 002f 0B       		.uleb128 0xb
+ 969 0030 3B       		.uleb128 0x3b
+ 970 0031 05       		.uleb128 0x5
+ 971 0032 49       		.uleb128 0x49
+ 972 0033 13       		.uleb128 0x13
+ 973 0034 00       		.byte	0
+ 974 0035 00       		.byte	0
+ 975 0036 05       		.uleb128 0x5
+ 976 0037 35       		.uleb128 0x35
+ 977 0038 00       		.byte	0
+ 978 0039 49       		.uleb128 0x49
+ 979 003a 13       		.uleb128 0x13
+ 980 003b 00       		.byte	0
+ 981 003c 00       		.byte	0
+ 982 003d 06       		.uleb128 0x6
+ 983 003e 2E       		.uleb128 0x2e
+ 984 003f 01       		.byte	0x1
+ 985 0040 3F       		.uleb128 0x3f
+ 986 0041 19       		.uleb128 0x19
+ 987 0042 03       		.uleb128 0x3
+ 988 0043 0E       		.uleb128 0xe
+ 989 0044 3A       		.uleb128 0x3a
+ 990 0045 0B       		.uleb128 0xb
+ 991 0046 3B       		.uleb128 0x3b
+ 992 0047 0B       		.uleb128 0xb
+ 993 0048 27       		.uleb128 0x27
+ 994 0049 19       		.uleb128 0x19
+ 995 004a 11       		.uleb128 0x11
+ 996 004b 01       		.uleb128 0x1
+ 997 004c 12       		.uleb128 0x12
+ARM GAS  D:\Windows\AppData\Local\Temp\ccGmd2BW.s 			page 32
+
+
+ 998 004d 06       		.uleb128 0x6
+ 999 004e 40       		.uleb128 0x40
+ 1000 004f 18       		.uleb128 0x18
+ 1001 0050 9642     		.uleb128 0x2116
+ 1002 0052 19       		.uleb128 0x19
+ 1003 0053 01       		.uleb128 0x1
+ 1004 0054 13       		.uleb128 0x13
+ 1005 0055 00       		.byte	0
+ 1006 0056 00       		.byte	0
+ 1007 0057 07       		.uleb128 0x7
+ 1008 0058 34       		.uleb128 0x34
+ 1009 0059 00       		.byte	0
+ 1010 005a 03       		.uleb128 0x3
+ 1011 005b 0E       		.uleb128 0xe
+ 1012 005c 3A       		.uleb128 0x3a
+ 1013 005d 0B       		.uleb128 0xb
+ 1014 005e 3B       		.uleb128 0x3b
+ 1015 005f 0B       		.uleb128 0xb
+ 1016 0060 49       		.uleb128 0x49
+ 1017 0061 13       		.uleb128 0x13
+ 1018 0062 02       		.uleb128 0x2
+ 1019 0063 18       		.uleb128 0x18
+ 1020 0064 00       		.byte	0
+ 1021 0065 00       		.byte	0
+ 1022 0066 08       		.uleb128 0x8
+ 1023 0067 2E       		.uleb128 0x2e
+ 1024 0068 00       		.byte	0
+ 1025 0069 3F       		.uleb128 0x3f
+ 1026 006a 19       		.uleb128 0x19
+ 1027 006b 03       		.uleb128 0x3
+ 1028 006c 0E       		.uleb128 0xe
+ 1029 006d 3A       		.uleb128 0x3a
+ 1030 006e 0B       		.uleb128 0xb
+ 1031 006f 3B       		.uleb128 0x3b
+ 1032 0070 0B       		.uleb128 0xb
+ 1033 0071 27       		.uleb128 0x27
+ 1034 0072 19       		.uleb128 0x19
+ 1035 0073 11       		.uleb128 0x11
+ 1036 0074 01       		.uleb128 0x1
+ 1037 0075 12       		.uleb128 0x12
+ 1038 0076 06       		.uleb128 0x6
+ 1039 0077 40       		.uleb128 0x40
+ 1040 0078 18       		.uleb128 0x18
+ 1041 0079 9742     		.uleb128 0x2117
+ 1042 007b 19       		.uleb128 0x19
+ 1043 007c 00       		.byte	0
+ 1044 007d 00       		.byte	0
+ 1045 007e 09       		.uleb128 0x9
+ 1046 007f 2E       		.uleb128 0x2e
+ 1047 0080 00       		.byte	0
+ 1048 0081 3F       		.uleb128 0x3f
+ 1049 0082 19       		.uleb128 0x19
+ 1050 0083 03       		.uleb128 0x3
+ 1051 0084 0E       		.uleb128 0xe
+ 1052 0085 3A       		.uleb128 0x3a
+ 1053 0086 0B       		.uleb128 0xb
+ 1054 0087 3B       		.uleb128 0x3b
+ARM GAS  D:\Windows\AppData\Local\Temp\ccGmd2BW.s 			page 33
+
+
+ 1055 0088 0B       		.uleb128 0xb
+ 1056 0089 27       		.uleb128 0x27
+ 1057 008a 19       		.uleb128 0x19
+ 1058 008b 11       		.uleb128 0x11
+ 1059 008c 01       		.uleb128 0x1
+ 1060 008d 12       		.uleb128 0x12
+ 1061 008e 06       		.uleb128 0x6
+ 1062 008f 40       		.uleb128 0x40
+ 1063 0090 18       		.uleb128 0x18
+ 1064 0091 9642     		.uleb128 0x2116
+ 1065 0093 19       		.uleb128 0x19
+ 1066 0094 00       		.byte	0
+ 1067 0095 00       		.byte	0
+ 1068 0096 0A       		.uleb128 0xa
+ 1069 0097 2E       		.uleb128 0x2e
+ 1070 0098 01       		.byte	0x1
+ 1071 0099 3F       		.uleb128 0x3f
+ 1072 009a 19       		.uleb128 0x19
+ 1073 009b 03       		.uleb128 0x3
+ 1074 009c 0E       		.uleb128 0xe
+ 1075 009d 3A       		.uleb128 0x3a
+ 1076 009e 0B       		.uleb128 0xb
+ 1077 009f 3B       		.uleb128 0x3b
+ 1078 00a0 05       		.uleb128 0x5
+ 1079 00a1 27       		.uleb128 0x27
+ 1080 00a2 19       		.uleb128 0x19
+ 1081 00a3 11       		.uleb128 0x11
+ 1082 00a4 01       		.uleb128 0x1
+ 1083 00a5 12       		.uleb128 0x12
+ 1084 00a6 06       		.uleb128 0x6
+ 1085 00a7 40       		.uleb128 0x40
+ 1086 00a8 18       		.uleb128 0x18
+ 1087 00a9 9742     		.uleb128 0x2117
+ 1088 00ab 19       		.uleb128 0x19
+ 1089 00ac 01       		.uleb128 0x1
+ 1090 00ad 13       		.uleb128 0x13
+ 1091 00ae 00       		.byte	0
+ 1092 00af 00       		.byte	0
+ 1093 00b0 0B       		.uleb128 0xb
+ 1094 00b1 05       		.uleb128 0x5
+ 1095 00b2 00       		.byte	0
+ 1096 00b3 03       		.uleb128 0x3
+ 1097 00b4 0E       		.uleb128 0xe
+ 1098 00b5 3A       		.uleb128 0x3a
+ 1099 00b6 0B       		.uleb128 0xb
+ 1100 00b7 3B       		.uleb128 0x3b
+ 1101 00b8 05       		.uleb128 0x5
+ 1102 00b9 49       		.uleb128 0x49
+ 1103 00ba 13       		.uleb128 0x13
+ 1104 00bb 02       		.uleb128 0x2
+ 1105 00bc 18       		.uleb128 0x18
+ 1106 00bd 00       		.byte	0
+ 1107 00be 00       		.byte	0
+ 1108 00bf 0C       		.uleb128 0xc
+ 1109 00c0 2E       		.uleb128 0x2e
+ 1110 00c1 00       		.byte	0
+ 1111 00c2 3F       		.uleb128 0x3f
+ARM GAS  D:\Windows\AppData\Local\Temp\ccGmd2BW.s 			page 34
+
+
+ 1112 00c3 19       		.uleb128 0x19
+ 1113 00c4 03       		.uleb128 0x3
+ 1114 00c5 0E       		.uleb128 0xe
+ 1115 00c6 3A       		.uleb128 0x3a
+ 1116 00c7 0B       		.uleb128 0xb
+ 1117 00c8 3B       		.uleb128 0x3b
+ 1118 00c9 05       		.uleb128 0x5
+ 1119 00ca 27       		.uleb128 0x27
+ 1120 00cb 19       		.uleb128 0x19
+ 1121 00cc 11       		.uleb128 0x11
+ 1122 00cd 01       		.uleb128 0x1
+ 1123 00ce 12       		.uleb128 0x12
+ 1124 00cf 06       		.uleb128 0x6
+ 1125 00d0 40       		.uleb128 0x40
+ 1126 00d1 18       		.uleb128 0x18
+ 1127 00d2 9742     		.uleb128 0x2117
+ 1128 00d4 19       		.uleb128 0x19
+ 1129 00d5 00       		.byte	0
+ 1130 00d6 00       		.byte	0
+ 1131 00d7 0D       		.uleb128 0xd
+ 1132 00d8 2E       		.uleb128 0x2e
+ 1133 00d9 00       		.byte	0
+ 1134 00da 3F       		.uleb128 0x3f
+ 1135 00db 19       		.uleb128 0x19
+ 1136 00dc 03       		.uleb128 0x3
+ 1137 00dd 0E       		.uleb128 0xe
+ 1138 00de 3A       		.uleb128 0x3a
+ 1139 00df 0B       		.uleb128 0xb
+ 1140 00e0 3B       		.uleb128 0x3b
+ 1141 00e1 05       		.uleb128 0x5
+ 1142 00e2 27       		.uleb128 0x27
+ 1143 00e3 19       		.uleb128 0x19
+ 1144 00e4 49       		.uleb128 0x49
+ 1145 00e5 13       		.uleb128 0x13
+ 1146 00e6 11       		.uleb128 0x11
+ 1147 00e7 01       		.uleb128 0x1
+ 1148 00e8 12       		.uleb128 0x12
+ 1149 00e9 06       		.uleb128 0x6
+ 1150 00ea 40       		.uleb128 0x40
+ 1151 00eb 18       		.uleb128 0x18
+ 1152 00ec 9742     		.uleb128 0x2117
+ 1153 00ee 19       		.uleb128 0x19
+ 1154 00ef 00       		.byte	0
+ 1155 00f0 00       		.byte	0
+ 1156 00f1 0E       		.uleb128 0xe
+ 1157 00f2 2E       		.uleb128 0x2e
+ 1158 00f3 01       		.byte	0x1
+ 1159 00f4 3F       		.uleb128 0x3f
+ 1160 00f5 19       		.uleb128 0x19
+ 1161 00f6 03       		.uleb128 0x3
+ 1162 00f7 0E       		.uleb128 0xe
+ 1163 00f8 3A       		.uleb128 0x3a
+ 1164 00f9 0B       		.uleb128 0xb
+ 1165 00fa 3B       		.uleb128 0x3b
+ 1166 00fb 05       		.uleb128 0x5
+ 1167 00fc 27       		.uleb128 0x27
+ 1168 00fd 19       		.uleb128 0x19
+ARM GAS  D:\Windows\AppData\Local\Temp\ccGmd2BW.s 			page 35
+
+
+ 1169 00fe 11       		.uleb128 0x11
+ 1170 00ff 01       		.uleb128 0x1
+ 1171 0100 12       		.uleb128 0x12
+ 1172 0101 06       		.uleb128 0x6
+ 1173 0102 40       		.uleb128 0x40
+ 1174 0103 18       		.uleb128 0x18
+ 1175 0104 9642     		.uleb128 0x2116
+ 1176 0106 19       		.uleb128 0x19
+ 1177 0107 01       		.uleb128 0x1
+ 1178 0108 13       		.uleb128 0x13
+ 1179 0109 00       		.byte	0
+ 1180 010a 00       		.byte	0
+ 1181 010b 0F       		.uleb128 0xf
+ 1182 010c 2E       		.uleb128 0x2e
+ 1183 010d 00       		.byte	0
+ 1184 010e 3F       		.uleb128 0x3f
+ 1185 010f 19       		.uleb128 0x19
+ 1186 0110 03       		.uleb128 0x3
+ 1187 0111 0E       		.uleb128 0xe
+ 1188 0112 3A       		.uleb128 0x3a
+ 1189 0113 0B       		.uleb128 0xb
+ 1190 0114 3B       		.uleb128 0x3b
+ 1191 0115 05       		.uleb128 0x5
+ 1192 0116 27       		.uleb128 0x27
+ 1193 0117 19       		.uleb128 0x19
+ 1194 0118 11       		.uleb128 0x11
+ 1195 0119 01       		.uleb128 0x1
+ 1196 011a 12       		.uleb128 0x12
+ 1197 011b 06       		.uleb128 0x6
+ 1198 011c 40       		.uleb128 0x40
+ 1199 011d 18       		.uleb128 0x18
+ 1200 011e 9642     		.uleb128 0x2116
+ 1201 0120 19       		.uleb128 0x19
+ 1202 0121 00       		.byte	0
+ 1203 0122 00       		.byte	0
+ 1204 0123 10       		.uleb128 0x10
+ 1205 0124 34       		.uleb128 0x34
+ 1206 0125 00       		.byte	0
+ 1207 0126 03       		.uleb128 0x3
+ 1208 0127 0E       		.uleb128 0xe
+ 1209 0128 3A       		.uleb128 0x3a
+ 1210 0129 0B       		.uleb128 0xb
+ 1211 012a 3B       		.uleb128 0x3b
+ 1212 012b 0B       		.uleb128 0xb
+ 1213 012c 49       		.uleb128 0x49
+ 1214 012d 13       		.uleb128 0x13
+ 1215 012e 3F       		.uleb128 0x3f
+ 1216 012f 19       		.uleb128 0x19
+ 1217 0130 02       		.uleb128 0x2
+ 1218 0131 18       		.uleb128 0x18
+ 1219 0132 00       		.byte	0
+ 1220 0133 00       		.byte	0
+ 1221 0134 00       		.byte	0
+ 1222              		.section	.debug_aranges,"",%progbits
+ 1223 0000 8C000000 		.4byte	0x8c
+ 1224 0004 0200     		.2byte	0x2
+ 1225 0006 00000000 		.4byte	.Ldebug_info0
+ARM GAS  D:\Windows\AppData\Local\Temp\ccGmd2BW.s 			page 36
+
+
+ 1226 000a 04       		.byte	0x4
+ 1227 000b 00       		.byte	0
+ 1228 000c 0000     		.2byte	0
+ 1229 000e 0000     		.2byte	0
+ 1230 0010 00000000 		.4byte	.LFB0
+ 1231 0014 4C000000 		.4byte	.LFE0-.LFB0
+ 1232 0018 00000000 		.4byte	.LFB1
+ 1233 001c 20000000 		.4byte	.LFE1-.LFB1
+ 1234 0020 00000000 		.4byte	.LFB2
+ 1235 0024 20000000 		.4byte	.LFE2-.LFB2
+ 1236 0028 00000000 		.4byte	.LFB3
+ 1237 002c 20000000 		.4byte	.LFE3-.LFB3
+ 1238 0030 00000000 		.4byte	.LFB4
+ 1239 0034 20000000 		.4byte	.LFE4-.LFB4
+ 1240 0038 00000000 		.4byte	.LFB5
+ 1241 003c 14000000 		.4byte	.LFE5-.LFB5
+ 1242 0040 00000000 		.4byte	.LFB6
+ 1243 0044 18000000 		.4byte	.LFE6-.LFB6
+ 1244 0048 00000000 		.4byte	.LFB7
+ 1245 004c 18000000 		.4byte	.LFE7-.LFB7
+ 1246 0050 00000000 		.4byte	.LFB8
+ 1247 0054 20000000 		.4byte	.LFE8-.LFB8
+ 1248 0058 00000000 		.4byte	.LFB9
+ 1249 005c 1C000000 		.4byte	.LFE9-.LFB9
+ 1250 0060 00000000 		.4byte	.LFB10
+ 1251 0064 1C000000 		.4byte	.LFE10-.LFB10
+ 1252 0068 00000000 		.4byte	.LFB11
+ 1253 006c 1C000000 		.4byte	.LFE11-.LFB11
+ 1254 0070 00000000 		.4byte	.LFB12
+ 1255 0074 1C000000 		.4byte	.LFE12-.LFB12
+ 1256 0078 00000000 		.4byte	.LFB13
+ 1257 007c 24000000 		.4byte	.LFE13-.LFB13
+ 1258 0080 00000000 		.4byte	.LFB14
+ 1259 0084 1A000000 		.4byte	.LFE14-.LFB14
+ 1260 0088 00000000 		.4byte	0
+ 1261 008c 00000000 		.4byte	0
+ 1262              		.section	.debug_ranges,"",%progbits
+ 1263              	.Ldebug_ranges0:
+ 1264 0000 00000000 		.4byte	.LFB0
+ 1265 0004 4C000000 		.4byte	.LFE0
+ 1266 0008 00000000 		.4byte	.LFB1
+ 1267 000c 20000000 		.4byte	.LFE1
+ 1268 0010 00000000 		.4byte	.LFB2
+ 1269 0014 20000000 		.4byte	.LFE2
+ 1270 0018 00000000 		.4byte	.LFB3
+ 1271 001c 20000000 		.4byte	.LFE3
+ 1272 0020 00000000 		.4byte	.LFB4
+ 1273 0024 20000000 		.4byte	.LFE4
+ 1274 0028 00000000 		.4byte	.LFB5
+ 1275 002c 14000000 		.4byte	.LFE5
+ 1276 0030 00000000 		.4byte	.LFB6
+ 1277 0034 18000000 		.4byte	.LFE6
+ 1278 0038 00000000 		.4byte	.LFB7
+ 1279 003c 18000000 		.4byte	.LFE7
+ 1280 0040 00000000 		.4byte	.LFB8
+ 1281 0044 20000000 		.4byte	.LFE8
+ 1282 0048 00000000 		.4byte	.LFB9
+ARM GAS  D:\Windows\AppData\Local\Temp\ccGmd2BW.s 			page 37
+
+
+ 1283 004c 1C000000 		.4byte	.LFE9
+ 1284 0050 00000000 		.4byte	.LFB10
+ 1285 0054 1C000000 		.4byte	.LFE10
+ 1286 0058 00000000 		.4byte	.LFB11
+ 1287 005c 1C000000 		.4byte	.LFE11
+ 1288 0060 00000000 		.4byte	.LFB12
+ 1289 0064 1C000000 		.4byte	.LFE12
+ 1290 0068 00000000 		.4byte	.LFB13
+ 1291 006c 24000000 		.4byte	.LFE13
+ 1292 0070 00000000 		.4byte	.LFB14
+ 1293 0074 1A000000 		.4byte	.LFE14
+ 1294 0078 00000000 		.4byte	0
+ 1295 007c 00000000 		.4byte	0
+ 1296              		.section	.debug_line,"",%progbits
+ 1297              	.Ldebug_line0:
+ 1298 0000 6D010000 		.section	.debug_str,"MS",%progbits,1
+ 1298      02004500 
+ 1298      00000201 
+ 1298      FB0E0D00 
+ 1298      01010101 
+ 1299              	.LASF21:
+ 1300 0000 73645F74 		.ascii	"sd_timer_SetInterruptMode\000"
+ 1300      696D6572 
+ 1300      5F536574 
+ 1300      496E7465 
+ 1300      72727570 
+ 1301              	.LASF15:
+ 1302 001a 72656733 		.ascii	"reg32\000"
+ 1302      3200
+ 1303              	.LASF11:
+ 1304 0020 666C6F61 		.ascii	"float\000"
+ 1304      7400
+ 1305              	.LASF30:
+ 1306 0026 70657269 		.ascii	"period\000"
+ 1306      6F6400
+ 1307              	.LASF3:
+ 1308 002d 73686F72 		.ascii	"short unsigned int\000"
+ 1308      7420756E 
+ 1308      7369676E 
+ 1308      65642069 
+ 1308      6E7400
+ 1309              	.LASF39:
+ 1310 0040 73645F74 		.ascii	"sd_timer_interruptState\000"
+ 1310      696D6572 
+ 1310      5F696E74 
+ 1310      65727275 
+ 1310      70745374 
+ 1311              	.LASF40:
+ 1312 0058 73645F74 		.ascii	"sd_timer_initVar\000"
+ 1312      696D6572 
+ 1312      5F696E69 
+ 1312      74566172 
+ 1312      00
+ 1313              	.LASF35:
+ 1314 0069 73645F74 		.ascii	"sd_timer_ClearFIFO\000"
+ 1314      696D6572 
+ 1314      5F436C65 
+ARM GAS  D:\Windows\AppData\Local\Temp\ccGmd2BW.s 			page 38
+
+
+ 1314      61724649 
+ 1314      464F00
+ 1315              	.LASF31:
+ 1316 007c 73645F74 		.ascii	"sd_timer_ReadCapture\000"
+ 1316      696D6572 
+ 1316      5F526561 
+ 1316      64436170 
+ 1316      74757265 
+ 1317              	.LASF33:
+ 1318 0091 636F756E 		.ascii	"counter\000"
+ 1318      74657200 
+ 1319              	.LASF1:
+ 1320 0099 756E7369 		.ascii	"unsigned char\000"
+ 1320      676E6564 
+ 1320      20636861 
+ 1320      7200
+ 1321              	.LASF14:
+ 1322 00a7 72656738 		.ascii	"reg8\000"
+ 1322      00
+ 1323              	.LASF5:
+ 1324 00ac 6C6F6E67 		.ascii	"long unsigned int\000"
+ 1324      20756E73 
+ 1324      69676E65 
+ 1324      6420696E 
+ 1324      7400
+ 1325              	.LASF9:
+ 1326 00be 75696E74 		.ascii	"uint8\000"
+ 1326      3800
+ 1327              	.LASF27:
+ 1328 00c4 636F6E74 		.ascii	"control\000"
+ 1328      726F6C00 
+ 1329              	.LASF25:
+ 1330 00cc 73645F74 		.ascii	"sd_timer_WriteControlRegister\000"
+ 1330      696D6572 
+ 1330      5F577269 
+ 1330      7465436F 
+ 1330      6E74726F 
+ 1331              	.LASF34:
+ 1332 00ea 73645F74 		.ascii	"sd_timer_ReadCounter\000"
+ 1332      696D6572 
+ 1332      5F526561 
+ 1332      64436F75 
+ 1332      6E746572 
+ 1333              	.LASF36:
+ 1334 00ff 474E5520 		.ascii	"GNU C 4.9.3 20150303 (release) [ARM/embedded-4_9-br"
+ 1334      4320342E 
+ 1334      392E3320 
+ 1334      32303135 
+ 1334      30333033 
+ 1335 0132 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m3 -mthumb -g -O"
+ 1335      20726576 
+ 1335      6973696F 
+ 1335      6E203232 
+ 1335      31323230 
+ 1336 0165 30202D66 		.ascii	"0 -ffunction-sections -ffat-lto-objects\000"
+ 1336      66756E63 
+ 1336      74696F6E 
+ARM GAS  D:\Windows\AppData\Local\Temp\ccGmd2BW.s 			page 39
+
+
+ 1336      2D736563 
+ 1336      74696F6E 
+ 1337              	.LASF12:
+ 1338 018d 646F7562 		.ascii	"double\000"
+ 1338      6C6500
+ 1339              	.LASF28:
+ 1340 0194 73645F74 		.ascii	"sd_timer_ReadPeriod\000"
+ 1340      696D6572 
+ 1340      5F526561 
+ 1340      64506572 
+ 1340      696F6400 
+ 1341              	.LASF22:
+ 1342 01a8 73645F74 		.ascii	"sd_timer_SoftwareCapture\000"
+ 1342      696D6572 
+ 1342      5F536F66 
+ 1342      74776172 
+ 1342      65436170 
+ 1343              	.LASF10:
+ 1344 01c1 75696E74 		.ascii	"uint32\000"
+ 1344      333200
+ 1345              	.LASF32:
+ 1346 01c8 73645F74 		.ascii	"sd_timer_WriteCounter\000"
+ 1346      696D6572 
+ 1346      5F577269 
+ 1346      7465436F 
+ 1346      756E7465 
+ 1347              	.LASF8:
+ 1348 01de 756E7369 		.ascii	"unsigned int\000"
+ 1348      676E6564 
+ 1348      20696E74 
+ 1348      00
+ 1349              	.LASF23:
+ 1350 01eb 73645F74 		.ascii	"sd_timer_ReadStatusRegister\000"
+ 1350      696D6572 
+ 1350      5F526561 
+ 1350      64537461 
+ 1350      74757352 
+ 1351              	.LASF20:
+ 1352 0207 73645F74 		.ascii	"sd_timer_Init\000"
+ 1352      696D6572 
+ 1352      5F496E69 
+ 1352      7400
+ 1353              	.LASF7:
+ 1354 0215 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 1354      206C6F6E 
+ 1354      6720756E 
+ 1354      7369676E 
+ 1354      65642069 
+ 1355              	.LASF16:
+ 1356 022c 73697A65 		.ascii	"sizetype\000"
+ 1356      74797065 
+ 1356      00
+ 1357              	.LASF6:
+ 1358 0235 6C6F6E67 		.ascii	"long long int\000"
+ 1358      206C6F6E 
+ 1358      6720696E 
+ 1358      7400
+ARM GAS  D:\Windows\AppData\Local\Temp\ccGmd2BW.s 			page 40
+
+
+ 1359              	.LASF24:
+ 1360 0243 73645F74 		.ascii	"sd_timer_ReadControlRegister\000"
+ 1360      696D6572 
+ 1360      5F526561 
+ 1360      64436F6E 
+ 1360      74726F6C 
+ 1361              	.LASF26:
+ 1362 0260 696E7465 		.ascii	"interruptMode\000"
+ 1362      72727570 
+ 1362      744D6F64 
+ 1362      6500
+ 1363              	.LASF29:
+ 1364 026e 73645F74 		.ascii	"sd_timer_WritePeriod\000"
+ 1364      696D6572 
+ 1364      5F577269 
+ 1364      74655065 
+ 1364      72696F64 
+ 1365              	.LASF2:
+ 1366 0283 73686F72 		.ascii	"short int\000"
+ 1366      7420696E 
+ 1366      7400
+ 1367              	.LASF37:
+ 1368 028d 47656E65 		.ascii	"Generated_Source\\PSoC5\\sd_timer.c\000"
+ 1368      72617465 
+ 1368      645F536F 
+ 1368      75726365 
+ 1368      5C50536F 
+ 1369              	.LASF38:
+ 1370 02af 443A5C44 		.ascii	"D:\\Downloads\\FRUCD\\Node-Beaver-FE3\\Node-Beaver\\"
+ 1370      6F776E6C 
+ 1370      6F616473 
+ 1370      5C465255 
+ 1370      43445C4E 
+ 1371 02de 4E6F6465 		.ascii	"Node-Beaver_FE3.cydsn\000"
+ 1371      2D426561 
+ 1371      7665725F 
+ 1371      4645332E 
+ 1371      63796473 
+ 1372              	.LASF4:
+ 1373 02f4 6C6F6E67 		.ascii	"long int\000"
+ 1373      20696E74 
+ 1373      00
+ 1374              	.LASF13:
+ 1375 02fd 63686172 		.ascii	"char\000"
+ 1375      00
+ 1376              	.LASF17:
+ 1377 0302 73645F74 		.ascii	"sd_timer_Enable\000"
+ 1377      696D6572 
+ 1377      5F456E61 
+ 1377      626C6500 
+ 1378              	.LASF0:
+ 1379 0312 7369676E 		.ascii	"signed char\000"
+ 1379      65642063 
+ 1379      68617200 
+ 1380              	.LASF19:
+ 1381 031e 73645F74 		.ascii	"sd_timer_Stop\000"
+ 1381      696D6572 
+ARM GAS  D:\Windows\AppData\Local\Temp\ccGmd2BW.s 			page 41
+
+
+ 1381      5F53746F 
+ 1381      7000
+ 1382              	.LASF18:
+ 1383 032c 73645F74 		.ascii	"sd_timer_Start\000"
+ 1383      696D6572 
+ 1383      5F537461 
+ 1383      727400
+ 1384              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.9.3 20150303 (release) [ARM/embedded-4_9-br

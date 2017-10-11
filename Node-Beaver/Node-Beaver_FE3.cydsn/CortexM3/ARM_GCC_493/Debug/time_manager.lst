@@ -1,0 +1,1930 @@
+ARM GAS  D:\Windows\AppData\Local\Temp\cc1UMzeL.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"time_manager.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.comm	current_time,16,4
+  19              		.section	.text.time_refresh_vector,"ax",%progbits
+  20              		.align	2
+  21              		.global	time_refresh_vector
+  22              		.thumb
+  23              		.thumb_func
+  24              		.type	time_refresh_vector, %function
+  25              	time_refresh_vector:
+  26              	.LFB63:
+  27              		.file 1 "time_manager.c"
+   1:time_manager.c **** #include "time_manager.h"
+   2:time_manager.c **** 
+   3:time_manager.c **** 
+   4:time_manager.c **** volatile Time current_time;
+   5:time_manager.c **** 
+   6:time_manager.c **** 
+   7:time_manager.c **** /* CY_ISR(time_refresh_vector)
+   8:time_manager.c **** 	Runs every X seconds and retreives the current time from the RTC
+   9:time_manager.c **** 	Sets the refresh_status flag, which will trigger time_announce() to inject a
+  10:time_manager.c **** 	message containing the current time to the data_queue.  */
+  11:time_manager.c **** CY_ISR(time_refresh_vector) {
+  28              		.loc 1 11 0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 16
+  31              		@ frame_needed = 1, uses_anonymous_args = 0
+  32 0000 90B5     		push	{r4, r7, lr}
+  33              		.cfi_def_cfa_offset 12
+  34              		.cfi_offset 4, -12
+  35              		.cfi_offset 7, -8
+  36              		.cfi_offset 14, -4
+  37 0002 85B0     		sub	sp, sp, #20
+  38              		.cfi_def_cfa_offset 32
+  39 0004 00AF     		add	r7, sp, #0
+  40              		.cfi_def_cfa_register 7
+  12:time_manager.c **** 	current_time = time_retreive(); // get time from rtc
+  41              		.loc 1 12 0
+  42 0006 074C     		ldr	r4, .L2
+  43 0008 3B46     		mov	r3, r7
+  44 000a 1846     		mov	r0, r3
+  45 000c FFF7FEFF 		bl	time_retreive
+ARM GAS  D:\Windows\AppData\Local\Temp\cc1UMzeL.s 			page 2
+
+
+  46 0010 3B46     		mov	r3, r7
+  47 0012 0FCB     		ldmia	r3, {r0, r1, r2, r3}
+  48 0014 84E80F00 		stmia	r4, {r0, r1, r2, r3}
+  13:time_manager.c **** 	time_announce();
+  49              		.loc 1 13 0
+  50 0018 FFF7FEFF 		bl	time_announce
+  14:time_manager.c **** } // CY_ISR(time_refresh_vector)
+  51              		.loc 1 14 0
+  52 001c 1437     		adds	r7, r7, #20
+  53              		.cfi_def_cfa_offset 12
+  54 001e BD46     		mov	sp, r7
+  55              		.cfi_def_cfa_register 13
+  56              		@ sp needed
+  57 0020 90BD     		pop	{r4, r7, pc}
+  58              	.L3:
+  59 0022 00BF     		.align	2
+  60              	.L2:
+  61 0024 00000000 		.word	current_time
+  62              		.cfi_endproc
+  63              	.LFE63:
+  64              		.size	time_refresh_vector, .-time_refresh_vector
+  65              		.section	.text.time_init,"ax",%progbits
+  66              		.align	2
+  67              		.global	time_init
+  68              		.thumb
+  69              		.thumb_func
+  70              		.type	time_init, %function
+  71              	time_init:
+  72              	.LFB64:
+  15:time_manager.c **** 
+  16:time_manager.c **** 
+  17:time_manager.c **** /* time_init()
+  18:time_manager.c **** 	Takes and Returns nothing.
+  19:time_manager.c **** 	Initializes i2c with RTC and configures the RTC. Starts the timers and
+  20:time_manager.c **** 	time_refresh_vector interrupt.
+  21:time_manager.c **** 	RTC PART: MAXIM DS3231  */
+  22:time_manager.c **** void time_init(void) {
+  73              		.loc 1 22 0
+  74              		.cfi_startproc
+  75              		@ args = 0, pretend = 0, frame = 24
+  76              		@ frame_needed = 1, uses_anonymous_args = 0
+  77 0000 90B5     		push	{r4, r7, lr}
+  78              		.cfi_def_cfa_offset 12
+  79              		.cfi_offset 4, -12
+  80              		.cfi_offset 7, -8
+  81              		.cfi_offset 14, -4
+  82 0002 87B0     		sub	sp, sp, #28
+  83              		.cfi_def_cfa_offset 40
+  84 0004 00AF     		add	r7, sp, #0
+  85              		.cfi_def_cfa_register 7
+  23:time_manager.c **** 	rtc_i2c_Start(); // start i2c to RTC
+  86              		.loc 1 23 0
+  87 0006 FFF7FEFF 		bl	rtc_i2c_Start
+  24:time_manager.c **** 
+  25:time_manager.c **** 	// configure RTC
+  26:time_manager.c **** 	rtc_i2c_MasterSendStart(RTC_ADDR, 0);   // 0, send write command
+  88              		.loc 1 26 0
+ARM GAS  D:\Windows\AppData\Local\Temp\cc1UMzeL.s 			page 3
+
+
+  89 000a 6820     		movs	r0, #104
+  90 000c 0021     		movs	r1, #0
+  91 000e FFF7FEFF 		bl	rtc_i2c_MasterSendStart
+  27:time_manager.c **** 	rtc_i2c_MasterWriteByte(RTC_CONFIG);
+  92              		.loc 1 27 0
+  93 0012 0E20     		movs	r0, #14
+  94 0014 FFF7FEFF 		bl	rtc_i2c_MasterWriteByte
+  28:time_manager.c **** 	rtc_i2c_MasterWriteByte(0x40); // 1Hz clock
+  95              		.loc 1 28 0
+  96 0018 4020     		movs	r0, #64
+  97 001a FFF7FEFF 		bl	rtc_i2c_MasterWriteByte
+  29:time_manager.c **** 	rtc_i2c_MasterSendStop();
+  98              		.loc 1 29 0
+  99 001e FFF7FEFF 		bl	rtc_i2c_MasterSendStop
+  30:time_manager.c **** 
+  31:time_manager.c **** 	// Set 24 hour
+  32:time_manager.c **** 	uint8_t byte;
+  33:time_manager.c **** 	rtc_i2c_MasterSendStart(RTC_ADDR, 0);	// Move to hours register.
+ 100              		.loc 1 33 0
+ 101 0022 6820     		movs	r0, #104
+ 102 0024 0021     		movs	r1, #0
+ 103 0026 FFF7FEFF 		bl	rtc_i2c_MasterSendStart
+  34:time_manager.c **** 	rtc_i2c_MasterWriteByte(RTC_HOURS);     //set register pointer
+ 104              		.loc 1 34 0
+ 105 002a 0220     		movs	r0, #2
+ 106 002c FFF7FEFF 		bl	rtc_i2c_MasterWriteByte
+  35:time_manager.c **** 	rtc_i2c_MasterSendStop();
+ 107              		.loc 1 35 0
+ 108 0030 FFF7FEFF 		bl	rtc_i2c_MasterSendStop
+  36:time_manager.c **** 
+  37:time_manager.c **** 	rtc_i2c_MasterSendStart(RTC_ADDR, 1); 	// save hours register
+ 109              		.loc 1 37 0
+ 110 0034 6820     		movs	r0, #104
+ 111 0036 0121     		movs	r1, #1
+ 112 0038 FFF7FEFF 		bl	rtc_i2c_MasterSendStart
+  38:time_manager.c **** 	byte = rtc_i2c_MasterReadByte(0);		// Zero, response with NACK
+ 113              		.loc 1 38 0
+ 114 003c 0020     		movs	r0, #0
+ 115 003e FFF7FEFF 		bl	rtc_i2c_MasterReadByte
+ 116 0042 0346     		mov	r3, r0
+ 117 0044 FB75     		strb	r3, [r7, #23]
+  39:time_manager.c **** 	rtc_i2c_MasterSendStop();
+ 118              		.loc 1 39 0
+ 119 0046 FFF7FEFF 		bl	rtc_i2c_MasterSendStop
+  40:time_manager.c **** 
+  41:time_manager.c **** 	rtc_i2c_MasterSendStart(RTC_ADDR, 0); 	// Set 24 hour bit
+ 120              		.loc 1 41 0
+ 121 004a 6820     		movs	r0, #104
+ 122 004c 0021     		movs	r1, #0
+ 123 004e FFF7FEFF 		bl	rtc_i2c_MasterSendStart
+  42:time_manager.c **** 	rtc_i2c_MasterWriteByte(RTC_HOURS);
+ 124              		.loc 1 42 0
+ 125 0052 0220     		movs	r0, #2
+ 126 0054 FFF7FEFF 		bl	rtc_i2c_MasterWriteByte
+  43:time_manager.c **** 	rtc_i2c_MasterWriteByte(0x40 | byte);   //bit number 6 defines 12/24 hours
+ 127              		.loc 1 43 0
+ 128 0058 FB7D     		ldrb	r3, [r7, #23]
+ARM GAS  D:\Windows\AppData\Local\Temp\cc1UMzeL.s 			page 4
+
+
+ 129 005a 43F04003 		orr	r3, r3, #64
+ 130 005e DBB2     		uxtb	r3, r3
+ 131 0060 1846     		mov	r0, r3
+ 132 0062 FFF7FEFF 		bl	rtc_i2c_MasterWriteByte
+  44:time_manager.c **** 	rtc_i2c_MasterSendStop();
+ 133              		.loc 1 44 0
+ 134 0066 FFF7FEFF 		bl	rtc_i2c_MasterSendStop
+  45:time_manager.c **** 
+  46:time_manager.c **** 	time_refresh_isr_StartEx(time_refresh_vector);  // enable 1 second isr
+ 135              		.loc 1 46 0
+ 136 006a 0A48     		ldr	r0, .L5
+ 137 006c FFF7FEFF 		bl	time_refresh_isr_StartEx
+  47:time_manager.c ****     
+  48:time_manager.c **** 	// Start timers
+  49:time_manager.c **** 	millis_timer_Start();
+ 138              		.loc 1 49 0
+ 139 0070 FFF7FEFF 		bl	millis_timer_Start
+  50:time_manager.c **** 	time_refresh_timer_Start();
+ 140              		.loc 1 50 0
+ 141 0074 FFF7FEFF 		bl	time_refresh_timer_Start
+  51:time_manager.c **** 	current_time = time_retreive(); // get time from rtc
+ 142              		.loc 1 51 0
+ 143 0078 074C     		ldr	r4, .L5+4
+ 144 007a 3B46     		mov	r3, r7
+ 145 007c 1846     		mov	r0, r3
+ 146 007e FFF7FEFF 		bl	time_retreive
+ 147 0082 3B46     		mov	r3, r7
+ 148 0084 0FCB     		ldmia	r3, {r0, r1, r2, r3}
+ 149 0086 84E80F00 		stmia	r4, {r0, r1, r2, r3}
+  52:time_manager.c **** 	time_announce();
+ 150              		.loc 1 52 0
+ 151 008a FFF7FEFF 		bl	time_announce
+  53:time_manager.c **** } // time_init()
+ 152              		.loc 1 53 0
+ 153 008e 1C37     		adds	r7, r7, #28
+ 154              		.cfi_def_cfa_offset 12
+ 155 0090 BD46     		mov	sp, r7
+ 156              		.cfi_def_cfa_register 13
+ 157              		@ sp needed
+ 158 0092 90BD     		pop	{r4, r7, pc}
+ 159              	.L6:
+ 160              		.align	2
+ 161              	.L5:
+ 162 0094 00000000 		.word	time_refresh_vector
+ 163 0098 00000000 		.word	current_time
+ 164              		.cfi_endproc
+ 165              	.LFE64:
+ 166              		.size	time_init, .-time_init
+ 167              		.section	.text.time_announce,"ax",%progbits
+ 168              		.align	2
+ 169              		.global	time_announce
+ 170              		.thumb
+ 171              		.thumb_func
+ 172              		.type	time_announce, %function
+ 173              	time_announce:
+ 174              	.LFB65:
+  54:time_manager.c **** 
+ARM GAS  D:\Windows\AppData\Local\Temp\cc1UMzeL.s 			page 5
+
+
+  55:time_manager.c **** 
+  56:time_manager.c **** 
+  57:time_manager.c **** /* time_announce()
+  58:time_manager.c **** 	Returns nothing.
+  59:time_manager.c ****     The actual time is set by the refresh_vector interrupts.
+  60:time_manager.c **** */
+  61:time_manager.c **** void time_announce() {
+ 175              		.loc 1 61 0
+ 176              		.cfi_startproc
+ 177              		@ args = 0, pretend = 0, frame = 24
+ 178              		@ frame_needed = 1, uses_anonymous_args = 0
+ 179 0000 80B5     		push	{r7, lr}
+ 180              		.cfi_def_cfa_offset 8
+ 181              		.cfi_offset 7, -8
+ 182              		.cfi_offset 14, -4
+ 183 0002 86B0     		sub	sp, sp, #24
+ 184              		.cfi_def_cfa_offset 32
+ 185 0004 00AF     		add	r7, sp, #0
+ 186              		.cfi_def_cfa_register 7
+  62:time_manager.c **** 	DataPacket msg_time;
+  63:time_manager.c **** 	/* Time Frame for serial data
+  64:time_manager.c **** 		START COUNTER zero year_upper, year_lower, month, date, hour, minutes, seconds	*/
+  65:time_manager.c ****     uint8_t atomic_state = CyEnterCriticalSection(); // BEGIN ATOMIC
+ 187              		.loc 1 65 0
+ 188 0006 FFF7FEFF 		bl	CyEnterCriticalSection
+ 189 000a 0346     		mov	r3, r0
+ 190 000c FB75     		strb	r3, [r7, #23]
+  66:time_manager.c ****     msg_time.id = ID_TIME;
+ 191              		.loc 1 66 0
+ 192 000e 4FF48073 		mov	r3, #256
+ 193 0012 3B81     		strh	r3, [r7, #8]	@ movhi
+  67:time_manager.c **** 	msg_time.length = 8;
+ 194              		.loc 1 67 0
+ 195 0014 0823     		movs	r3, #8
+ 196 0016 BB72     		strb	r3, [r7, #10]
+  68:time_manager.c **** 	msg_time.millicounter = current_time.millicounter;
+ 197              		.loc 1 68 0
+ 198 0018 174B     		ldr	r3, .L8
+ 199 001a 9B68     		ldr	r3, [r3, #8]
+ 200 001c 7B60     		str	r3, [r7, #4]
+  69:time_manager.c **** 	msg_time.data[0] = 0;
+ 201              		.loc 1 69 0
+ 202 001e 0023     		movs	r3, #0
+ 203 0020 FB72     		strb	r3, [r7, #11]
+  70:time_manager.c **** 	msg_time.data[1] = current_time.year >> 8;
+ 204              		.loc 1 70 0
+ 205 0022 154B     		ldr	r3, .L8
+ 206 0024 9B89     		ldrh	r3, [r3, #12]	@ movhi
+ 207 0026 9BB2     		uxth	r3, r3
+ 208 0028 1B0A     		lsrs	r3, r3, #8
+ 209 002a 9BB2     		uxth	r3, r3
+ 210 002c DBB2     		uxtb	r3, r3
+ 211 002e 3B73     		strb	r3, [r7, #12]
+  71:time_manager.c **** 	msg_time.data[2] = current_time.year;
+ 212              		.loc 1 71 0
+ 213 0030 114B     		ldr	r3, .L8
+ 214 0032 9B89     		ldrh	r3, [r3, #12]	@ movhi
+ARM GAS  D:\Windows\AppData\Local\Temp\cc1UMzeL.s 			page 6
+
+
+ 215 0034 9BB2     		uxth	r3, r3
+ 216 0036 DBB2     		uxtb	r3, r3
+ 217 0038 7B73     		strb	r3, [r7, #13]
+  72:time_manager.c **** 	msg_time.data[3] = current_time.month;
+ 218              		.loc 1 72 0
+ 219 003a 0F4B     		ldr	r3, .L8
+ 220 003c 1B78     		ldrb	r3, [r3]
+ 221 003e DBB2     		uxtb	r3, r3
+ 222 0040 BB73     		strb	r3, [r7, #14]
+  73:time_manager.c **** 	msg_time.data[4] = current_time.day;
+ 223              		.loc 1 73 0
+ 224 0042 0D4B     		ldr	r3, .L8
+ 225 0044 5B78     		ldrb	r3, [r3, #1]
+ 226 0046 DBB2     		uxtb	r3, r3
+ 227 0048 FB73     		strb	r3, [r7, #15]
+  74:time_manager.c **** 	msg_time.data[5] = current_time.hour;
+ 228              		.loc 1 74 0
+ 229 004a 0B4B     		ldr	r3, .L8
+ 230 004c 9B78     		ldrb	r3, [r3, #2]
+ 231 004e DBB2     		uxtb	r3, r3
+ 232 0050 3B74     		strb	r3, [r7, #16]
+  75:time_manager.c **** 	msg_time.data[6] = current_time.minute;
+ 233              		.loc 1 75 0
+ 234 0052 094B     		ldr	r3, .L8
+ 235 0054 DB78     		ldrb	r3, [r3, #3]
+ 236 0056 DBB2     		uxtb	r3, r3
+ 237 0058 7B74     		strb	r3, [r7, #17]
+  76:time_manager.c **** 	msg_time.data[7] = current_time.second;
+ 238              		.loc 1 76 0
+ 239 005a 074B     		ldr	r3, .L8
+ 240 005c 1B79     		ldrb	r3, [r3, #4]
+ 241 005e DBB2     		uxtb	r3, r3
+ 242 0060 BB74     		strb	r3, [r7, #18]
+  77:time_manager.c **** 
+  78:time_manager.c **** 	msg_recieve(&msg_time);
+ 243              		.loc 1 78 0
+ 244 0062 3B1D     		adds	r3, r7, #4
+ 245 0064 1846     		mov	r0, r3
+ 246 0066 FFF7FEFF 		bl	msg_recieve
+  79:time_manager.c ****     CyExitCriticalSection(atomic_state); // END ATOMIC
+ 247              		.loc 1 79 0
+ 248 006a FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 249 006c 1846     		mov	r0, r3
+ 250 006e FFF7FEFF 		bl	CyExitCriticalSection
+  80:time_manager.c **** } // time_announce()
+ 251              		.loc 1 80 0
+ 252 0072 1837     		adds	r7, r7, #24
+ 253              		.cfi_def_cfa_offset 8
+ 254 0074 BD46     		mov	sp, r7
+ 255              		.cfi_def_cfa_register 13
+ 256              		@ sp needed
+ 257 0076 80BD     		pop	{r7, pc}
+ 258              	.L9:
+ 259              		.align	2
+ 260              	.L8:
+ 261 0078 00000000 		.word	current_time
+ 262              		.cfi_endproc
+ARM GAS  D:\Windows\AppData\Local\Temp\cc1UMzeL.s 			page 7
+
+
+ 263              	.LFE65:
+ 264              		.size	time_announce, .-time_announce
+ 265              		.section	.text.time_get,"ax",%progbits
+ 266              		.align	2
+ 267              		.global	time_get
+ 268              		.thumb
+ 269              		.thumb_func
+ 270              		.type	time_get, %function
+ 271              	time_get:
+ 272              	.LFB66:
+  81:time_manager.c **** 
+  82:time_manager.c **** 
+  83:time_manager.c **** 
+  84:time_manager.c **** /* time_get()
+  85:time_manager.c **** 	Takes nothing. Returns the current time with millicounter. */
+  86:time_manager.c **** Time time_get(void) {
+ 273              		.loc 1 86 0
+ 274              		.cfi_startproc
+ 275              		@ args = 0, pretend = 0, frame = 24
+ 276              		@ frame_needed = 1, uses_anonymous_args = 0
+ 277 0000 90B5     		push	{r4, r7, lr}
+ 278              		.cfi_def_cfa_offset 12
+ 279              		.cfi_offset 4, -12
+ 280              		.cfi_offset 7, -8
+ 281              		.cfi_offset 14, -4
+ 282 0002 87B0     		sub	sp, sp, #28
+ 283              		.cfi_def_cfa_offset 40
+ 284 0004 00AF     		add	r7, sp, #0
+ 285              		.cfi_def_cfa_register 7
+ 286 0006 7861     		str	r0, [r7, #20]
+  87:time_manager.c **** 	current_time = time_retreive();
+ 287              		.loc 1 87 0
+ 288 0008 094C     		ldr	r4, .L12
+ 289 000a 3B46     		mov	r3, r7
+ 290 000c 1846     		mov	r0, r3
+ 291 000e FFF7FEFF 		bl	time_retreive
+ 292 0012 3B46     		mov	r3, r7
+ 293 0014 0FCB     		ldmia	r3, {r0, r1, r2, r3}
+ 294 0016 84E80F00 		stmia	r4, {r0, r1, r2, r3}
+  88:time_manager.c **** 	return current_time;
+ 295              		.loc 1 88 0
+ 296 001a 7B69     		ldr	r3, [r7, #20]
+ 297 001c 044A     		ldr	r2, .L12
+ 298 001e 1C46     		mov	r4, r3
+ 299 0020 1346     		mov	r3, r2
+ 300 0022 0FCB     		ldmia	r3, {r0, r1, r2, r3}
+ 301 0024 84E80F00 		stmia	r4, {r0, r1, r2, r3}
+  89:time_manager.c **** } // time_get()
+ 302              		.loc 1 89 0
+ 303 0028 7869     		ldr	r0, [r7, #20]
+ 304 002a 1C37     		adds	r7, r7, #28
+ 305              		.cfi_def_cfa_offset 12
+ 306 002c BD46     		mov	sp, r7
+ 307              		.cfi_def_cfa_register 13
+ 308              		@ sp needed
+ 309 002e 90BD     		pop	{r4, r7, pc}
+ 310              	.L13:
+ARM GAS  D:\Windows\AppData\Local\Temp\cc1UMzeL.s 			page 8
+
+
+ 311              		.align	2
+ 312              	.L12:
+ 313 0030 00000000 		.word	current_time
+ 314              		.cfi_endproc
+ 315              	.LFE66:
+ 316              		.size	time_get, .-time_get
+ 317              		.section	.text.time_set,"ax",%progbits
+ 318              		.align	2
+ 319              		.global	time_set
+ 320              		.thumb
+ 321              		.thumb_func
+ 322              		.type	time_set, %function
+ 323              	time_set:
+ 324              	.LFB67:
+  90:time_manager.c **** 
+  91:time_manager.c **** 
+  92:time_manager.c **** void time_set(Time now) {
+ 325              		.loc 1 92 0
+ 326              		.cfi_startproc
+ 327              		@ args = 0, pretend = 0, frame = 24
+ 328              		@ frame_needed = 1, uses_anonymous_args = 0
+ 329 0000 90B5     		push	{r4, r7, lr}
+ 330              		.cfi_def_cfa_offset 12
+ 331              		.cfi_offset 4, -12
+ 332              		.cfi_offset 7, -8
+ 333              		.cfi_offset 14, -4
+ 334 0002 87B0     		sub	sp, sp, #28
+ 335              		.cfi_def_cfa_offset 40
+ 336 0004 00AF     		add	r7, sp, #0
+ 337              		.cfi_def_cfa_register 7
+ 338 0006 3C46     		mov	r4, r7
+ 339 0008 84E80F00 		stmia	r4, {r0, r1, r2, r3}
+  93:time_manager.c **** 	// Set 24 hour
+  94:time_manager.c **** 	uint8_t byte;
+  95:time_manager.c **** 
+  96:time_manager.c **** 	rtc_i2c_MasterSendStart(RTC_ADDR, 0);
+ 340              		.loc 1 96 0
+ 341 000c 6820     		movs	r0, #104
+ 342 000e 0021     		movs	r1, #0
+ 343 0010 FFF7FEFF 		bl	rtc_i2c_MasterSendStart
+  97:time_manager.c **** 	rtc_i2c_MasterWriteByte(0x00);      // move to top of register file
+ 344              		.loc 1 97 0
+ 345 0014 0020     		movs	r0, #0
+ 346 0016 FFF7FEFF 		bl	rtc_i2c_MasterWriteByte
+  98:time_manager.c **** 
+  99:time_manager.c **** 	byte = now.second % 10;             // seconds
+ 347              		.loc 1 99 0
+ 348 001a 3A79     		ldrb	r2, [r7, #4]	@ zero_extendqisi2
+ 349 001c 574B     		ldr	r3, .L15
+ 350 001e A3FB0213 		umull	r1, r3, r3, r2
+ 351 0022 D908     		lsrs	r1, r3, #3
+ 352 0024 0B46     		mov	r3, r1
+ 353 0026 9B00     		lsls	r3, r3, #2
+ 354 0028 0B44     		add	r3, r3, r1
+ 355 002a 5B00     		lsls	r3, r3, #1
+ 356 002c D31A     		subs	r3, r2, r3
+ 357 002e FB75     		strb	r3, [r7, #23]
+ARM GAS  D:\Windows\AppData\Local\Temp\cc1UMzeL.s 			page 9
+
+
+ 100:time_manager.c **** 	byte |= (now.second / 10) << 4;     // 10 seconds   0-59
+ 358              		.loc 1 100 0
+ 359 0030 3B79     		ldrb	r3, [r7, #4]	@ zero_extendqisi2
+ 360 0032 524A     		ldr	r2, .L15
+ 361 0034 A2FB0323 		umull	r2, r3, r2, r3
+ 362 0038 DB08     		lsrs	r3, r3, #3
+ 363 003a DBB2     		uxtb	r3, r3
+ 364 003c 1B01     		lsls	r3, r3, #4
+ 365 003e DAB2     		uxtb	r2, r3
+ 366 0040 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 367 0042 1343     		orrs	r3, r3, r2
+ 368 0044 DBB2     		uxtb	r3, r3
+ 369 0046 FB75     		strb	r3, [r7, #23]
+ 101:time_manager.c **** 	rtc_i2c_MasterWriteByte(byte);
+ 370              		.loc 1 101 0
+ 371 0048 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 372 004a 1846     		mov	r0, r3
+ 373 004c FFF7FEFF 		bl	rtc_i2c_MasterWriteByte
+ 102:time_manager.c **** 
+ 103:time_manager.c **** 	byte = now.minute % 10;             // minute
+ 374              		.loc 1 103 0
+ 375 0050 FA78     		ldrb	r2, [r7, #3]	@ zero_extendqisi2
+ 376 0052 4A4B     		ldr	r3, .L15
+ 377 0054 A3FB0213 		umull	r1, r3, r3, r2
+ 378 0058 D908     		lsrs	r1, r3, #3
+ 379 005a 0B46     		mov	r3, r1
+ 380 005c 9B00     		lsls	r3, r3, #2
+ 381 005e 0B44     		add	r3, r3, r1
+ 382 0060 5B00     		lsls	r3, r3, #1
+ 383 0062 D31A     		subs	r3, r2, r3
+ 384 0064 FB75     		strb	r3, [r7, #23]
+ 104:time_manager.c **** 	byte |= (now.minute/ 10) << 4;      // 10 minute    0-59
+ 385              		.loc 1 104 0
+ 386 0066 FB78     		ldrb	r3, [r7, #3]	@ zero_extendqisi2
+ 387 0068 444A     		ldr	r2, .L15
+ 388 006a A2FB0323 		umull	r2, r3, r2, r3
+ 389 006e DB08     		lsrs	r3, r3, #3
+ 390 0070 DBB2     		uxtb	r3, r3
+ 391 0072 1B01     		lsls	r3, r3, #4
+ 392 0074 DAB2     		uxtb	r2, r3
+ 393 0076 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 394 0078 1343     		orrs	r3, r3, r2
+ 395 007a DBB2     		uxtb	r3, r3
+ 396 007c FB75     		strb	r3, [r7, #23]
+ 105:time_manager.c **** 	rtc_i2c_MasterWriteByte(byte);
+ 397              		.loc 1 105 0
+ 398 007e FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 399 0080 1846     		mov	r0, r3
+ 400 0082 FFF7FEFF 		bl	rtc_i2c_MasterWriteByte
+ 106:time_manager.c **** 
+ 107:time_manager.c **** 	byte = now.hour % 10;               // hour
+ 401              		.loc 1 107 0
+ 402 0086 BA78     		ldrb	r2, [r7, #2]	@ zero_extendqisi2
+ 403 0088 3C4B     		ldr	r3, .L15
+ 404 008a A3FB0213 		umull	r1, r3, r3, r2
+ 405 008e D908     		lsrs	r1, r3, #3
+ 406 0090 0B46     		mov	r3, r1
+ARM GAS  D:\Windows\AppData\Local\Temp\cc1UMzeL.s 			page 10
+
+
+ 407 0092 9B00     		lsls	r3, r3, #2
+ 408 0094 0B44     		add	r3, r3, r1
+ 409 0096 5B00     		lsls	r3, r3, #1
+ 410 0098 D31A     		subs	r3, r2, r3
+ 411 009a FB75     		strb	r3, [r7, #23]
+ 108:time_manager.c **** 	byte |= (now.hour / 10) << 4;       // 10 hour      0-23 
+ 412              		.loc 1 108 0
+ 413 009c BB78     		ldrb	r3, [r7, #2]	@ zero_extendqisi2
+ 414 009e 374A     		ldr	r2, .L15
+ 415 00a0 A2FB0323 		umull	r2, r3, r2, r3
+ 416 00a4 DB08     		lsrs	r3, r3, #3
+ 417 00a6 DBB2     		uxtb	r3, r3
+ 418 00a8 1B01     		lsls	r3, r3, #4
+ 419 00aa DAB2     		uxtb	r2, r3
+ 420 00ac FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 421 00ae 1343     		orrs	r3, r3, r2
+ 422 00b0 DBB2     		uxtb	r3, r3
+ 423 00b2 FB75     		strb	r3, [r7, #23]
+ 109:time_manager.c **** 	rtc_i2c_MasterWriteByte(byte);
+ 424              		.loc 1 109 0
+ 425 00b4 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 426 00b6 1846     		mov	r0, r3
+ 427 00b8 FFF7FEFF 		bl	rtc_i2c_MasterWriteByte
+ 110:time_manager.c **** 
+ 111:time_manager.c **** 	rtc_i2c_MasterSendStop(); // End Receiving
+ 428              		.loc 1 111 0
+ 429 00bc FFF7FEFF 		bl	rtc_i2c_MasterSendStop
+ 112:time_manager.c **** 
+ 113:time_manager.c **** 	// skip day
+ 114:time_manager.c **** 
+ 115:time_manager.c **** 	rtc_i2c_MasterSendStart(RTC_ADDR, 0);
+ 430              		.loc 1 115 0
+ 431 00c0 6820     		movs	r0, #104
+ 432 00c2 0021     		movs	r1, #0
+ 433 00c4 FFF7FEFF 		bl	rtc_i2c_MasterSendStart
+ 116:time_manager.c **** 	rtc_i2c_MasterWriteByte(RTC_DATE);  // move to Date
+ 434              		.loc 1 116 0
+ 435 00c8 0420     		movs	r0, #4
+ 436 00ca FFF7FEFF 		bl	rtc_i2c_MasterWriteByte
+ 117:time_manager.c **** 
+ 118:time_manager.c **** 	byte = now.day % 10;                // day
+ 437              		.loc 1 118 0
+ 438 00ce 7A78     		ldrb	r2, [r7, #1]	@ zero_extendqisi2
+ 439 00d0 2A4B     		ldr	r3, .L15
+ 440 00d2 A3FB0213 		umull	r1, r3, r3, r2
+ 441 00d6 D908     		lsrs	r1, r3, #3
+ 442 00d8 0B46     		mov	r3, r1
+ 443 00da 9B00     		lsls	r3, r3, #2
+ 444 00dc 0B44     		add	r3, r3, r1
+ 445 00de 5B00     		lsls	r3, r3, #1
+ 446 00e0 D31A     		subs	r3, r2, r3
+ 447 00e2 FB75     		strb	r3, [r7, #23]
+ 119:time_manager.c **** 	byte |= (now.day / 10) << 4;        // 10 day       0-31
+ 448              		.loc 1 119 0
+ 449 00e4 7B78     		ldrb	r3, [r7, #1]	@ zero_extendqisi2
+ 450 00e6 254A     		ldr	r2, .L15
+ 451 00e8 A2FB0323 		umull	r2, r3, r2, r3
+ARM GAS  D:\Windows\AppData\Local\Temp\cc1UMzeL.s 			page 11
+
+
+ 452 00ec DB08     		lsrs	r3, r3, #3
+ 453 00ee DBB2     		uxtb	r3, r3
+ 454 00f0 1B01     		lsls	r3, r3, #4
+ 455 00f2 DAB2     		uxtb	r2, r3
+ 456 00f4 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 457 00f6 1343     		orrs	r3, r3, r2
+ 458 00f8 DBB2     		uxtb	r3, r3
+ 459 00fa FB75     		strb	r3, [r7, #23]
+ 120:time_manager.c **** 	rtc_i2c_MasterWriteByte(byte);
+ 460              		.loc 1 120 0
+ 461 00fc FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 462 00fe 1846     		mov	r0, r3
+ 463 0100 FFF7FEFF 		bl	rtc_i2c_MasterWriteByte
+ 121:time_manager.c **** 
+ 122:time_manager.c **** 	byte = now.month % 10;              // month
+ 464              		.loc 1 122 0
+ 465 0104 3A78     		ldrb	r2, [r7]	@ zero_extendqisi2
+ 466 0106 1D4B     		ldr	r3, .L15
+ 467 0108 A3FB0213 		umull	r1, r3, r3, r2
+ 468 010c D908     		lsrs	r1, r3, #3
+ 469 010e 0B46     		mov	r3, r1
+ 470 0110 9B00     		lsls	r3, r3, #2
+ 471 0112 0B44     		add	r3, r3, r1
+ 472 0114 5B00     		lsls	r3, r3, #1
+ 473 0116 D31A     		subs	r3, r2, r3
+ 474 0118 FB75     		strb	r3, [r7, #23]
+ 123:time_manager.c **** 	byte |= (now.month / 10) << 4;      // 10 month     1-12
+ 475              		.loc 1 123 0
+ 476 011a 3B78     		ldrb	r3, [r7]	@ zero_extendqisi2
+ 477 011c 174A     		ldr	r2, .L15
+ 478 011e A2FB0323 		umull	r2, r3, r2, r3
+ 479 0122 DB08     		lsrs	r3, r3, #3
+ 480 0124 DBB2     		uxtb	r3, r3
+ 481 0126 1B01     		lsls	r3, r3, #4
+ 482 0128 DAB2     		uxtb	r2, r3
+ 483 012a FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 484 012c 1343     		orrs	r3, r3, r2
+ 485 012e DBB2     		uxtb	r3, r3
+ 486 0130 FB75     		strb	r3, [r7, #23]
+ 124:time_manager.c **** 	rtc_i2c_MasterWriteByte(byte);
+ 487              		.loc 1 124 0
+ 488 0132 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 489 0134 1846     		mov	r0, r3
+ 490 0136 FFF7FEFF 		bl	rtc_i2c_MasterWriteByte
+ 125:time_manager.c **** 
+ 126:time_manager.c **** 	byte = now.year % 10;               // year
+ 491              		.loc 1 126 0
+ 492 013a BA89     		ldrh	r2, [r7, #12]
+ 493 013c 0F4B     		ldr	r3, .L15
+ 494 013e A3FB0213 		umull	r1, r3, r3, r2
+ 495 0142 D908     		lsrs	r1, r3, #3
+ 496 0144 0B46     		mov	r3, r1
+ 497 0146 9B00     		lsls	r3, r3, #2
+ 498 0148 0B44     		add	r3, r3, r1
+ 499 014a 5B00     		lsls	r3, r3, #1
+ 500 014c D31A     		subs	r3, r2, r3
+ 501 014e 9BB2     		uxth	r3, r3
+ARM GAS  D:\Windows\AppData\Local\Temp\cc1UMzeL.s 			page 12
+
+
+ 502 0150 FB75     		strb	r3, [r7, #23]
+ 127:time_manager.c **** 	byte |= (now.year / 10) << 4;       // 10 year      0-99
+ 503              		.loc 1 127 0
+ 504 0152 BB89     		ldrh	r3, [r7, #12]
+ 505 0154 094A     		ldr	r2, .L15
+ 506 0156 A2FB0323 		umull	r2, r3, r2, r3
+ 507 015a DB08     		lsrs	r3, r3, #3
+ 508 015c 9BB2     		uxth	r3, r3
+ 509 015e 1B01     		lsls	r3, r3, #4
+ 510 0160 DAB2     		uxtb	r2, r3
+ 511 0162 FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 512 0164 1343     		orrs	r3, r3, r2
+ 513 0166 DBB2     		uxtb	r3, r3
+ 514 0168 FB75     		strb	r3, [r7, #23]
+ 128:time_manager.c **** 	rtc_i2c_MasterWriteByte(byte);
+ 515              		.loc 1 128 0
+ 516 016a FB7D     		ldrb	r3, [r7, #23]	@ zero_extendqisi2
+ 517 016c 1846     		mov	r0, r3
+ 518 016e FFF7FEFF 		bl	rtc_i2c_MasterWriteByte
+ 129:time_manager.c **** 
+ 130:time_manager.c **** 	rtc_i2c_MasterSendStop(); // End Receiving
+ 519              		.loc 1 130 0
+ 520 0172 FFF7FEFF 		bl	rtc_i2c_MasterSendStop
+ 131:time_manager.c **** } // time_set()
+ 521              		.loc 1 131 0
+ 522 0176 1C37     		adds	r7, r7, #28
+ 523              		.cfi_def_cfa_offset 12
+ 524 0178 BD46     		mov	sp, r7
+ 525              		.cfi_def_cfa_register 13
+ 526              		@ sp needed
+ 527 017a 90BD     		pop	{r4, r7, pc}
+ 528              	.L16:
+ 529              		.align	2
+ 530              	.L15:
+ 531 017c CDCCCCCC 		.word	-858993459
+ 532              		.cfi_endproc
+ 533              	.LFE67:
+ 534              		.size	time_set, .-time_set
+ 535              		.section	.text.time_retreive,"ax",%progbits
+ 536              		.align	2
+ 537              		.global	time_retreive
+ 538              		.thumb
+ 539              		.thumb_func
+ 540              		.type	time_retreive, %function
+ 541              	time_retreive:
+ 542              	.LFB68:
+ 132:time_manager.c **** 
+ 133:time_manager.c **** 
+ 134:time_manager.c **** 
+ 135:time_manager.c **** /* time_retreive()
+ 136:time_manager.c **** 	Takes nothing. Returns the current time.
+ 137:time_manager.c **** 
+ 138:time_manager.c **** 	Communicates with an external RTC with i2c to obtain the current time.
+ 139:time_manager.c **** 	Sets the register pointer in the RTC to 0 and then reads the data sequencially
+ 140:time_manager.c **** 	from the register. The RTC auto-increments after reading each byte. Converts
+ 141:time_manager.c **** 	the binary encoded decimal to simple binary representation. Reads the
+ 142:time_manager.c **** 	millisecond counter into the current time.
+ARM GAS  D:\Windows\AppData\Local\Temp\cc1UMzeL.s 			page 13
+
+
+ 143:time_manager.c **** 
+ 144:time_manager.c **** 	RTC PART: MAXIM DS3231
+ 145:time_manager.c **** */
+ 146:time_manager.c **** Time time_retreive(void) {
+ 543              		.loc 1 146 0
+ 544              		.cfi_startproc
+ 545              		@ args = 0, pretend = 0, frame = 32
+ 546              		@ frame_needed = 1, uses_anonymous_args = 0
+ 547 0000 90B5     		push	{r4, r7, lr}
+ 548              		.cfi_def_cfa_offset 12
+ 549              		.cfi_offset 4, -12
+ 550              		.cfi_offset 7, -8
+ 551              		.cfi_offset 14, -4
+ 552 0002 89B0     		sub	sp, sp, #36
+ 553              		.cfi_def_cfa_offset 48
+ 554 0004 00AF     		add	r7, sp, #0
+ 555              		.cfi_def_cfa_register 7
+ 556 0006 7860     		str	r0, [r7, #4]
+ 147:time_manager.c **** 	Time tmp_time;
+ 148:time_manager.c **** 	uint8_t byte;
+ 149:time_manager.c **** 
+ 150:time_manager.c **** 	// Set register pointer to 0
+ 151:time_manager.c **** 	rtc_i2c_MasterSendStart(RTC_ADDR, 0);
+ 557              		.loc 1 151 0
+ 558 0008 6820     		movs	r0, #104
+ 559 000a 0021     		movs	r1, #0
+ 560 000c FFF7FEFF 		bl	rtc_i2c_MasterSendStart
+ 152:time_manager.c **** 	rtc_i2c_MasterWriteByte(0x00);
+ 561              		.loc 1 152 0
+ 562 0010 0020     		movs	r0, #0
+ 563 0012 FFF7FEFF 		bl	rtc_i2c_MasterWriteByte
+ 153:time_manager.c **** 	rtc_i2c_MasterSendStop();
+ 564              		.loc 1 153 0
+ 565 0016 FFF7FEFF 		bl	rtc_i2c_MasterSendStop
+ 154:time_manager.c **** 	
+ 155:time_manager.c **** 	// Read data from registers
+ 156:time_manager.c **** 	rtc_i2c_MasterSendStart(RTC_ADDR, 1); // Begin receiving
+ 566              		.loc 1 156 0
+ 567 001a 6820     		movs	r0, #104
+ 568 001c 0121     		movs	r1, #1
+ 569 001e FFF7FEFF 		bl	rtc_i2c_MasterSendStart
+ 157:time_manager.c **** 
+ 158:time_manager.c **** 	byte = rtc_i2c_MasterReadByte(1);
+ 570              		.loc 1 158 0
+ 571 0022 0120     		movs	r0, #1
+ 572 0024 FFF7FEFF 		bl	rtc_i2c_MasterReadByte
+ 573 0028 0346     		mov	r3, r0
+ 574 002a FB77     		strb	r3, [r7, #31]
+ 159:time_manager.c **** 	tmp_time.second = byte & 0x0F; // seconds
+ 575              		.loc 1 159 0
+ 576 002c FB7F     		ldrb	r3, [r7, #31]
+ 577 002e 03F00F03 		and	r3, r3, #15
+ 578 0032 DBB2     		uxtb	r3, r3
+ 579 0034 3B74     		strb	r3, [r7, #16]
+ 160:time_manager.c **** 	tmp_time.second += 10 * (byte >> 4); // 10 seconds
+ 580              		.loc 1 160 0
+ 581 0036 3A7C     		ldrb	r2, [r7, #16]	@ zero_extendqisi2
+ARM GAS  D:\Windows\AppData\Local\Temp\cc1UMzeL.s 			page 14
+
+
+ 582 0038 FB7F     		ldrb	r3, [r7, #31]	@ zero_extendqisi2
+ 583 003a 1B09     		lsrs	r3, r3, #4
+ 584 003c DBB2     		uxtb	r3, r3
+ 585 003e 1946     		mov	r1, r3
+ 586 0040 8900     		lsls	r1, r1, #2
+ 587 0042 0B44     		add	r3, r3, r1
+ 588 0044 5B00     		lsls	r3, r3, #1
+ 589 0046 DBB2     		uxtb	r3, r3
+ 590 0048 1344     		add	r3, r3, r2
+ 591 004a DBB2     		uxtb	r3, r3
+ 592 004c 3B74     		strb	r3, [r7, #16]
+ 161:time_manager.c **** 
+ 162:time_manager.c **** 	byte = rtc_i2c_MasterReadByte(1);
+ 593              		.loc 1 162 0
+ 594 004e 0120     		movs	r0, #1
+ 595 0050 FFF7FEFF 		bl	rtc_i2c_MasterReadByte
+ 596 0054 0346     		mov	r3, r0
+ 597 0056 FB77     		strb	r3, [r7, #31]
+ 163:time_manager.c **** 	tmp_time.minute = byte & 0x0F; // minutes
+ 598              		.loc 1 163 0
+ 599 0058 FB7F     		ldrb	r3, [r7, #31]
+ 600 005a 03F00F03 		and	r3, r3, #15
+ 601 005e DBB2     		uxtb	r3, r3
+ 602 0060 FB73     		strb	r3, [r7, #15]
+ 164:time_manager.c **** 	tmp_time.minute += 10 * (byte >> 4); // 10 seconds
+ 603              		.loc 1 164 0
+ 604 0062 FA7B     		ldrb	r2, [r7, #15]	@ zero_extendqisi2
+ 605 0064 FB7F     		ldrb	r3, [r7, #31]	@ zero_extendqisi2
+ 606 0066 1B09     		lsrs	r3, r3, #4
+ 607 0068 DBB2     		uxtb	r3, r3
+ 608 006a 1946     		mov	r1, r3
+ 609 006c 8900     		lsls	r1, r1, #2
+ 610 006e 0B44     		add	r3, r3, r1
+ 611 0070 5B00     		lsls	r3, r3, #1
+ 612 0072 DBB2     		uxtb	r3, r3
+ 613 0074 1344     		add	r3, r3, r2
+ 614 0076 DBB2     		uxtb	r3, r3
+ 615 0078 FB73     		strb	r3, [r7, #15]
+ 165:time_manager.c **** 
+ 166:time_manager.c **** 	byte = rtc_i2c_MasterReadByte(1);
+ 616              		.loc 1 166 0
+ 617 007a 0120     		movs	r0, #1
+ 618 007c FFF7FEFF 		bl	rtc_i2c_MasterReadByte
+ 619 0080 0346     		mov	r3, r0
+ 620 0082 FB77     		strb	r3, [r7, #31]
+ 167:time_manager.c **** 	tmp_time.hour = byte & 0x0F; // hours 
+ 621              		.loc 1 167 0
+ 622 0084 FB7F     		ldrb	r3, [r7, #31]
+ 623 0086 03F00F03 		and	r3, r3, #15
+ 624 008a DBB2     		uxtb	r3, r3
+ 625 008c BB73     		strb	r3, [r7, #14]
+ 168:time_manager.c **** 	tmp_time.hour += 10 * ((byte&0x3F) >> 4); // 10 hours
+ 626              		.loc 1 168 0
+ 627 008e BA7B     		ldrb	r2, [r7, #14]	@ zero_extendqisi2
+ 628 0090 FB7F     		ldrb	r3, [r7, #31]	@ zero_extendqisi2
+ 629 0092 03F03F03 		and	r3, r3, #63
+ 630 0096 1B11     		asrs	r3, r3, #4
+ARM GAS  D:\Windows\AppData\Local\Temp\cc1UMzeL.s 			page 15
+
+
+ 631 0098 DBB2     		uxtb	r3, r3
+ 632 009a 1946     		mov	r1, r3
+ 633 009c 8900     		lsls	r1, r1, #2
+ 634 009e 0B44     		add	r3, r3, r1
+ 635 00a0 5B00     		lsls	r3, r3, #1
+ 636 00a2 DBB2     		uxtb	r3, r3
+ 637 00a4 1344     		add	r3, r3, r2
+ 638 00a6 DBB2     		uxtb	r3, r3
+ 639 00a8 BB73     		strb	r3, [r7, #14]
+ 169:time_manager.c **** 
+ 170:time_manager.c **** 	byte = rtc_i2c_MasterReadByte(1); // skip day
+ 640              		.loc 1 170 0
+ 641 00aa 0120     		movs	r0, #1
+ 642 00ac FFF7FEFF 		bl	rtc_i2c_MasterReadByte
+ 643 00b0 0346     		mov	r3, r0
+ 644 00b2 FB77     		strb	r3, [r7, #31]
+ 171:time_manager.c **** 
+ 172:time_manager.c **** 	byte = rtc_i2c_MasterReadByte(1);
+ 645              		.loc 1 172 0
+ 646 00b4 0120     		movs	r0, #1
+ 647 00b6 FFF7FEFF 		bl	rtc_i2c_MasterReadByte
+ 648 00ba 0346     		mov	r3, r0
+ 649 00bc FB77     		strb	r3, [r7, #31]
+ 173:time_manager.c **** 	tmp_time.day = byte & 0x0F; // date
+ 650              		.loc 1 173 0
+ 651 00be FB7F     		ldrb	r3, [r7, #31]
+ 652 00c0 03F00F03 		and	r3, r3, #15
+ 653 00c4 DBB2     		uxtb	r3, r3
+ 654 00c6 7B73     		strb	r3, [r7, #13]
+ 174:time_manager.c **** 	tmp_time.day += 10 * (byte >> 4); // 10 date
+ 655              		.loc 1 174 0
+ 656 00c8 7A7B     		ldrb	r2, [r7, #13]	@ zero_extendqisi2
+ 657 00ca FB7F     		ldrb	r3, [r7, #31]	@ zero_extendqisi2
+ 658 00cc 1B09     		lsrs	r3, r3, #4
+ 659 00ce DBB2     		uxtb	r3, r3
+ 660 00d0 1946     		mov	r1, r3
+ 661 00d2 8900     		lsls	r1, r1, #2
+ 662 00d4 0B44     		add	r3, r3, r1
+ 663 00d6 5B00     		lsls	r3, r3, #1
+ 664 00d8 DBB2     		uxtb	r3, r3
+ 665 00da 1344     		add	r3, r3, r2
+ 666 00dc DBB2     		uxtb	r3, r3
+ 667 00de 7B73     		strb	r3, [r7, #13]
+ 175:time_manager.c **** 
+ 176:time_manager.c **** 	byte = rtc_i2c_MasterReadByte(1);
+ 668              		.loc 1 176 0
+ 669 00e0 0120     		movs	r0, #1
+ 670 00e2 FFF7FEFF 		bl	rtc_i2c_MasterReadByte
+ 671 00e6 0346     		mov	r3, r0
+ 672 00e8 FB77     		strb	r3, [r7, #31]
+ 177:time_manager.c **** 	tmp_time.month = byte & 0x0F; // Month/Century 
+ 673              		.loc 1 177 0
+ 674 00ea FB7F     		ldrb	r3, [r7, #31]
+ 675 00ec 03F00F03 		and	r3, r3, #15
+ 676 00f0 DBB2     		uxtb	r3, r3
+ 677 00f2 3B73     		strb	r3, [r7, #12]
+ 178:time_manager.c **** 	tmp_time.month += 10 * ((byte & 0x01) >> 4); // 10 Month
+ARM GAS  D:\Windows\AppData\Local\Temp\cc1UMzeL.s 			page 16
+
+
+ 678              		.loc 1 178 0
+ 679 00f4 3B7B     		ldrb	r3, [r7, #12]	@ zero_extendqisi2
+ 680 00f6 3B73     		strb	r3, [r7, #12]
+ 179:time_manager.c **** 
+ 180:time_manager.c **** 	byte = rtc_i2c_MasterReadByte(0);
+ 681              		.loc 1 180 0
+ 682 00f8 0020     		movs	r0, #0
+ 683 00fa FFF7FEFF 		bl	rtc_i2c_MasterReadByte
+ 684 00fe 0346     		mov	r3, r0
+ 685 0100 FB77     		strb	r3, [r7, #31]
+ 181:time_manager.c **** 	tmp_time.year = byte & 0x0F; // Year
+ 686              		.loc 1 181 0
+ 687 0102 FB7F     		ldrb	r3, [r7, #31]	@ zero_extendqisi2
+ 688 0104 9BB2     		uxth	r3, r3
+ 689 0106 03F00F03 		and	r3, r3, #15
+ 690 010a 9BB2     		uxth	r3, r3
+ 691 010c 3B83     		strh	r3, [r7, #24]	@ movhi
+ 182:time_manager.c **** 	tmp_time.year += 10 * (byte >> 4); // 10 Years
+ 692              		.loc 1 182 0
+ 693 010e 3A8B     		ldrh	r2, [r7, #24]
+ 694 0110 FB7F     		ldrb	r3, [r7, #31]	@ zero_extendqisi2
+ 695 0112 1B09     		lsrs	r3, r3, #4
+ 696 0114 DBB2     		uxtb	r3, r3
+ 697 0116 9BB2     		uxth	r3, r3
+ 698 0118 1946     		mov	r1, r3	@ movhi
+ 699 011a 8900     		lsls	r1, r1, #2
+ 700 011c 0B44     		add	r3, r3, r1
+ 701 011e 5B00     		lsls	r3, r3, #1
+ 702 0120 9BB2     		uxth	r3, r3
+ 703 0122 1344     		add	r3, r3, r2
+ 704 0124 9BB2     		uxth	r3, r3
+ 705 0126 3B83     		strh	r3, [r7, #24]	@ movhi
+ 183:time_manager.c ****     tmp_time.year += 0x7D0;     // add year 2000;
+ 706              		.loc 1 183 0
+ 707 0128 3B8B     		ldrh	r3, [r7, #24]
+ 708 012a 03F5FA63 		add	r3, r3, #2000
+ 709 012e 9BB2     		uxth	r3, r3
+ 710 0130 3B83     		strh	r3, [r7, #24]	@ movhi
+ 184:time_manager.c **** 	rtc_i2c_MasterSendStop(); // End Receiving
+ 711              		.loc 1 184 0
+ 712 0132 FFF7FEFF 		bl	rtc_i2c_MasterSendStop
+ 185:time_manager.c **** 
+ 186:time_manager.c ****     tmp_time.millicounter = millis_timer_ReadCounter();
+ 713              		.loc 1 186 0
+ 714 0136 FFF7FEFF 		bl	millis_timer_ReadCounter
+ 715 013a 0346     		mov	r3, r0
+ 716 013c 7B61     		str	r3, [r7, #20]
+ 187:time_manager.c **** 
+ 188:time_manager.c **** 	return tmp_time; 
+ 717              		.loc 1 188 0
+ 718 013e 7B68     		ldr	r3, [r7, #4]
+ 719 0140 1C46     		mov	r4, r3
+ 720 0142 07F10C03 		add	r3, r7, #12
+ 721 0146 0FCB     		ldmia	r3, {r0, r1, r2, r3}
+ 722 0148 84E80F00 		stmia	r4, {r0, r1, r2, r3}
+ 189:time_manager.c **** } // time_retreive()
+ 723              		.loc 1 189 0
+ARM GAS  D:\Windows\AppData\Local\Temp\cc1UMzeL.s 			page 17
+
+
+ 724 014c 7868     		ldr	r0, [r7, #4]
+ 725 014e 2437     		adds	r7, r7, #36
+ 726              		.cfi_def_cfa_offset 12
+ 727 0150 BD46     		mov	sp, r7
+ 728              		.cfi_def_cfa_register 13
+ 729              		@ sp needed
+ 730 0152 90BD     		pop	{r4, r7, pc}
+ 731              		.cfi_endproc
+ 732              	.LFE68:
+ 733              		.size	time_retreive, .-time_retreive
+ 734              		.text
+ 735              	.Letext0:
+ 736              		.file 2 "d:\\programming\\cypress\\psoc creator\\4.0\\psoc creator\\import\\gnu\\arm\\4.9.3\\arm-n
+ 737              		.file 3 "d:\\programming\\cypress\\psoc creator\\4.0\\psoc creator\\import\\gnu\\arm\\4.9.3\\arm-n
+ 738              		.file 4 "data.h"
+ 739              		.file 5 "time_manager.h"
+ 740              		.file 6 "Generated_Source\\PSoC5/core_cm3.h"
+ 741              		.section	.debug_info,"",%progbits
+ 742              	.Ldebug_info0:
+ 743 0000 A2020000 		.4byte	0x2a2
+ 744 0004 0400     		.2byte	0x4
+ 745 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 746 000a 04       		.byte	0x4
+ 747 000b 01       		.uleb128 0x1
+ 748 000c 93010000 		.4byte	.LASF39
+ 749 0010 01       		.byte	0x1
+ 750 0011 52010000 		.4byte	.LASF40
+ 751 0015 2F020000 		.4byte	.LASF41
+ 752 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 753 001d 00000000 		.4byte	0
+ 754 0021 00000000 		.4byte	.Ldebug_line0
+ 755 0025 02       		.uleb128 0x2
+ 756 0026 01       		.byte	0x1
+ 757 0027 06       		.byte	0x6
+ 758 0028 86020000 		.4byte	.LASF0
+ 759 002c 03       		.uleb128 0x3
+ 760 002d 09000000 		.4byte	.LASF3
+ 761 0031 02       		.byte	0x2
+ 762 0032 1D       		.byte	0x1d
+ 763 0033 37000000 		.4byte	0x37
+ 764 0037 02       		.uleb128 0x2
+ 765 0038 01       		.byte	0x1
+ 766 0039 08       		.byte	0x8
+ 767 003a 78000000 		.4byte	.LASF1
+ 768 003e 02       		.uleb128 0x2
+ 769 003f 02       		.byte	0x2
+ 770 0040 05       		.byte	0x5
+ 771 0041 FF000000 		.4byte	.LASF2
+ 772 0045 03       		.uleb128 0x3
+ 773 0046 ED000000 		.4byte	.LASF4
+ 774 004a 02       		.byte	0x2
+ 775 004b 2B       		.byte	0x2b
+ 776 004c 50000000 		.4byte	0x50
+ 777 0050 02       		.uleb128 0x2
+ 778 0051 02       		.byte	0x2
+ 779 0052 07       		.byte	0x7
+ 780 0053 AD000000 		.4byte	.LASF5
+ARM GAS  D:\Windows\AppData\Local\Temp\cc1UMzeL.s 			page 18
+
+
+ 781 0057 03       		.uleb128 0x3
+ 782 0058 20000000 		.4byte	.LASF6
+ 783 005c 02       		.byte	0x2
+ 784 005d 3F       		.byte	0x3f
+ 785 005e 62000000 		.4byte	0x62
+ 786 0062 02       		.uleb128 0x2
+ 787 0063 04       		.byte	0x4
+ 788 0064 05       		.byte	0x5
+ 789 0065 7D020000 		.4byte	.LASF7
+ 790 0069 03       		.uleb128 0x3
+ 791 006a 86000000 		.4byte	.LASF8
+ 792 006e 02       		.byte	0x2
+ 793 006f 41       		.byte	0x41
+ 794 0070 74000000 		.4byte	0x74
+ 795 0074 02       		.uleb128 0x2
+ 796 0075 04       		.byte	0x4
+ 797 0076 07       		.byte	0x7
+ 798 0077 9B000000 		.4byte	.LASF9
+ 799 007b 02       		.uleb128 0x2
+ 800 007c 08       		.byte	0x8
+ 801 007d 05       		.byte	0x5
+ 802 007e 72010000 		.4byte	.LASF10
+ 803 0082 02       		.uleb128 0x2
+ 804 0083 08       		.byte	0x8
+ 805 0084 07       		.byte	0x7
+ 806 0085 2E010000 		.4byte	.LASF11
+ 807 0089 04       		.uleb128 0x4
+ 808 008a 04       		.byte	0x4
+ 809 008b 05       		.byte	0x5
+ 810 008c 696E7400 		.ascii	"int\000"
+ 811 0090 02       		.uleb128 0x2
+ 812 0091 04       		.byte	0x4
+ 813 0092 07       		.byte	0x7
+ 814 0093 16010000 		.4byte	.LASF12
+ 815 0097 03       		.uleb128 0x3
+ 816 0098 45010000 		.4byte	.LASF13
+ 817 009c 03       		.byte	0x3
+ 818 009d 15       		.byte	0x15
+ 819 009e 2C000000 		.4byte	0x2c
+ 820 00a2 03       		.uleb128 0x3
+ 821 00a3 26020000 		.4byte	.LASF14
+ 822 00a7 03       		.byte	0x3
+ 823 00a8 21       		.byte	0x21
+ 824 00a9 45000000 		.4byte	0x45
+ 825 00ad 03       		.uleb128 0x3
+ 826 00ae 61010000 		.4byte	.LASF15
+ 827 00b2 03       		.byte	0x3
+ 828 00b3 2C       		.byte	0x2c
+ 829 00b4 57000000 		.4byte	0x57
+ 830 00b8 03       		.uleb128 0x3
+ 831 00b9 74020000 		.4byte	.LASF16
+ 832 00bd 03       		.byte	0x3
+ 833 00be 2D       		.byte	0x2d
+ 834 00bf 69000000 		.4byte	0x69
+ 835 00c3 02       		.uleb128 0x2
+ 836 00c4 04       		.byte	0x4
+ 837 00c5 04       		.byte	0x4
+ARM GAS  D:\Windows\AppData\Local\Temp\cc1UMzeL.s 			page 19
+
+
+ 838 00c6 64000000 		.4byte	.LASF17
+ 839 00ca 02       		.uleb128 0x2
+ 840 00cb 08       		.byte	0x8
+ 841 00cc 04       		.byte	0x4
+ 842 00cd F8000000 		.4byte	.LASF18
+ 843 00d1 02       		.uleb128 0x2
+ 844 00d2 01       		.byte	0x1
+ 845 00d3 08       		.byte	0x8
+ 846 00d4 8E010000 		.4byte	.LASF19
+ 847 00d8 02       		.uleb128 0x2
+ 848 00d9 04       		.byte	0x4
+ 849 00da 07       		.byte	0x7
+ 850 00db 69010000 		.4byte	.LASF20
+ 851 00df 05       		.uleb128 0x5
+ 852 00e0 10       		.byte	0x10
+ 853 00e1 04       		.byte	0x4
+ 854 00e2 0A       		.byte	0xa
+ 855 00e3 17010000 		.4byte	0x117
+ 856 00e7 06       		.uleb128 0x6
+ 857 00e8 57000000 		.4byte	.LASF21
+ 858 00ec 04       		.byte	0x4
+ 859 00ed 0B       		.byte	0xb
+ 860 00ee B8000000 		.4byte	0xb8
+ 861 00f2 00       		.byte	0
+ 862 00f3 07       		.uleb128 0x7
+ 863 00f4 696400   		.ascii	"id\000"
+ 864 00f7 04       		.byte	0x4
+ 865 00f8 0C       		.byte	0xc
+ 866 00f9 A2000000 		.4byte	0xa2
+ 867 00fd 04       		.byte	0x4
+ 868 00fe 06       		.uleb128 0x6
+ 869 00ff 92020000 		.4byte	.LASF22
+ 870 0103 04       		.byte	0x4
+ 871 0104 0D       		.byte	0xd
+ 872 0105 97000000 		.4byte	0x97
+ 873 0109 06       		.byte	0x6
+ 874 010a 06       		.uleb128 0x6
+ 875 010b 6A000000 		.4byte	.LASF23
+ 876 010f 04       		.byte	0x4
+ 877 0110 0E       		.byte	0xe
+ 878 0111 17010000 		.4byte	0x117
+ 879 0115 07       		.byte	0x7
+ 880 0116 00       		.byte	0
+ 881 0117 08       		.uleb128 0x8
+ 882 0118 97000000 		.4byte	0x97
+ 883 011c 27010000 		.4byte	0x127
+ 884 0120 09       		.uleb128 0x9
+ 885 0121 D8000000 		.4byte	0xd8
+ 886 0125 07       		.byte	0x7
+ 887 0126 00       		.byte	0
+ 888 0127 03       		.uleb128 0x3
+ 889 0128 23010000 		.4byte	.LASF24
+ 890 012c 04       		.byte	0x4
+ 891 012d 0F       		.byte	0xf
+ 892 012e DF000000 		.4byte	0xdf
+ 893 0132 05       		.uleb128 0x5
+ 894 0133 10       		.byte	0x10
+ARM GAS  D:\Windows\AppData\Local\Temp\cc1UMzeL.s 			page 20
+
+
+ 895 0134 05       		.byte	0x5
+ 896 0135 12       		.byte	0x12
+ 897 0136 8F010000 		.4byte	0x18f
+ 898 013a 06       		.uleb128 0x6
+ 899 013b 51000000 		.4byte	.LASF25
+ 900 013f 05       		.byte	0x5
+ 901 0140 13       		.byte	0x13
+ 902 0141 97000000 		.4byte	0x97
+ 903 0145 00       		.byte	0
+ 904 0146 07       		.uleb128 0x7
+ 905 0147 64617900 		.ascii	"day\000"
+ 906 014b 05       		.byte	0x5
+ 907 014c 13       		.byte	0x13
+ 908 014d 97000000 		.4byte	0x97
+ 909 0151 01       		.byte	0x1
+ 910 0152 06       		.uleb128 0x6
+ 911 0153 4D010000 		.4byte	.LASF26
+ 912 0157 05       		.byte	0x5
+ 913 0158 13       		.byte	0x13
+ 914 0159 97000000 		.4byte	0x97
+ 915 015d 02       		.byte	0x2
+ 916 015e 06       		.uleb128 0x6
+ 917 015f 2A000000 		.4byte	.LASF27
+ 918 0163 05       		.byte	0x5
+ 919 0164 13       		.byte	0x13
+ 920 0165 97000000 		.4byte	0x97
+ 921 0169 03       		.byte	0x3
+ 922 016a 06       		.uleb128 0x6
+ 923 016b E1000000 		.4byte	.LASF28
+ 924 016f 05       		.byte	0x5
+ 925 0170 13       		.byte	0x13
+ 926 0171 97000000 		.4byte	0x97
+ 927 0175 04       		.byte	0x4
+ 928 0176 06       		.uleb128 0x6
+ 929 0177 57000000 		.4byte	.LASF21
+ 930 017b 05       		.byte	0x5
+ 931 017c 14       		.byte	0x14
+ 932 017d B8000000 		.4byte	0xb8
+ 933 0181 08       		.byte	0x8
+ 934 0182 06       		.uleb128 0x6
+ 935 0183 E8000000 		.4byte	.LASF29
+ 936 0187 05       		.byte	0x5
+ 937 0188 15       		.byte	0x15
+ 938 0189 A2000000 		.4byte	0xa2
+ 939 018d 0C       		.byte	0xc
+ 940 018e 00       		.byte	0
+ 941 018f 03       		.uleb128 0x3
+ 942 0190 99020000 		.4byte	.LASF30
+ 943 0194 05       		.byte	0x5
+ 944 0195 16       		.byte	0x16
+ 945 0196 32010000 		.4byte	0x132
+ 946 019a 0A       		.uleb128 0xa
+ 947 019b C0000000 		.4byte	.LASF42
+ 948 019f 01       		.byte	0x1
+ 949 01a0 0B       		.byte	0xb
+ 950 01a1 00000000 		.4byte	.LFB63
+ 951 01a5 28000000 		.4byte	.LFE63-.LFB63
+ARM GAS  D:\Windows\AppData\Local\Temp\cc1UMzeL.s 			page 21
+
+
+ 952 01a9 01       		.uleb128 0x1
+ 953 01aa 9C       		.byte	0x9c
+ 954 01ab 0B       		.uleb128 0xb
+ 955 01ac 91000000 		.4byte	.LASF34
+ 956 01b0 01       		.byte	0x1
+ 957 01b1 16       		.byte	0x16
+ 958 01b2 00000000 		.4byte	.LFB64
+ 959 01b6 9C000000 		.4byte	.LFE64-.LFB64
+ 960 01ba 01       		.uleb128 0x1
+ 961 01bb 9C       		.byte	0x9c
+ 962 01bc CF010000 		.4byte	0x1cf
+ 963 01c0 0C       		.uleb128 0xc
+ 964 01c1 21020000 		.4byte	.LASF31
+ 965 01c5 01       		.byte	0x1
+ 966 01c6 20       		.byte	0x20
+ 967 01c7 97000000 		.4byte	0x97
+ 968 01cb 02       		.uleb128 0x2
+ 969 01cc 91       		.byte	0x91
+ 970 01cd 6F       		.sleb128 -17
+ 971 01ce 00       		.byte	0
+ 972 01cf 0D       		.uleb128 0xd
+ 973 01d0 3A000000 		.4byte	.LASF43
+ 974 01d4 01       		.byte	0x1
+ 975 01d5 3D       		.byte	0x3d
+ 976 01d6 00000000 		.4byte	.LFB65
+ 977 01da 7C000000 		.4byte	.LFE65-.LFB65
+ 978 01de 01       		.uleb128 0x1
+ 979 01df 9C       		.byte	0x9c
+ 980 01e0 01020000 		.4byte	0x201
+ 981 01e4 0C       		.uleb128 0xc
+ 982 01e5 6F000000 		.4byte	.LASF32
+ 983 01e9 01       		.byte	0x1
+ 984 01ea 3E       		.byte	0x3e
+ 985 01eb 27010000 		.4byte	0x127
+ 986 01ef 02       		.uleb128 0x2
+ 987 01f0 91       		.byte	0x91
+ 988 01f1 64       		.sleb128 -28
+ 989 01f2 0C       		.uleb128 0xc
+ 990 01f3 09010000 		.4byte	.LASF33
+ 991 01f7 01       		.byte	0x1
+ 992 01f8 41       		.byte	0x41
+ 993 01f9 97000000 		.4byte	0x97
+ 994 01fd 02       		.uleb128 0x2
+ 995 01fe 91       		.byte	0x91
+ 996 01ff 77       		.sleb128 -9
+ 997 0200 00       		.byte	0
+ 998 0201 0E       		.uleb128 0xe
+ 999 0202 00000000 		.4byte	.LASF44
+ 1000 0206 01       		.byte	0x1
+ 1001 0207 56       		.byte	0x56
+ 1002 0208 8F010000 		.4byte	0x18f
+ 1003 020c 00000000 		.4byte	.LFB66
+ 1004 0210 34000000 		.4byte	.LFE66-.LFB66
+ 1005 0214 01       		.uleb128 0x1
+ 1006 0215 9C       		.byte	0x9c
+ 1007 0216 0B       		.uleb128 0xb
+ 1008 0217 48000000 		.4byte	.LASF35
+ARM GAS  D:\Windows\AppData\Local\Temp\cc1UMzeL.s 			page 22
+
+
+ 1009 021b 01       		.byte	0x1
+ 1010 021c 5C       		.byte	0x5c
+ 1011 021d 00000000 		.4byte	.LFB67
+ 1012 0221 80010000 		.4byte	.LFE67-.LFB67
+ 1013 0225 01       		.uleb128 0x1
+ 1014 0226 9C       		.byte	0x9c
+ 1015 0227 48020000 		.4byte	0x248
+ 1016 022b 0F       		.uleb128 0xf
+ 1017 022c 6E6F7700 		.ascii	"now\000"
+ 1018 0230 01       		.byte	0x1
+ 1019 0231 5C       		.byte	0x5c
+ 1020 0232 8F010000 		.4byte	0x18f
+ 1021 0236 02       		.uleb128 0x2
+ 1022 0237 91       		.byte	0x91
+ 1023 0238 58       		.sleb128 -40
+ 1024 0239 0C       		.uleb128 0xc
+ 1025 023a 21020000 		.4byte	.LASF31
+ 1026 023e 01       		.byte	0x1
+ 1027 023f 5E       		.byte	0x5e
+ 1028 0240 97000000 		.4byte	0x97
+ 1029 0244 02       		.uleb128 0x2
+ 1030 0245 91       		.byte	0x91
+ 1031 0246 6F       		.sleb128 -17
+ 1032 0247 00       		.byte	0
+ 1033 0248 10       		.uleb128 0x10
+ 1034 0249 80010000 		.4byte	.LASF45
+ 1035 024d 01       		.byte	0x1
+ 1036 024e 92       		.byte	0x92
+ 1037 024f 8F010000 		.4byte	0x18f
+ 1038 0253 00000000 		.4byte	.LFB68
+ 1039 0257 54010000 		.4byte	.LFE68-.LFB68
+ 1040 025b 01       		.uleb128 0x1
+ 1041 025c 9C       		.byte	0x9c
+ 1042 025d 7E020000 		.4byte	0x27e
+ 1043 0261 0C       		.uleb128 0xc
+ 1044 0262 31000000 		.4byte	.LASF36
+ 1045 0266 01       		.byte	0x1
+ 1046 0267 93       		.byte	0x93
+ 1047 0268 8F010000 		.4byte	0x18f
+ 1048 026c 02       		.uleb128 0x2
+ 1049 026d 91       		.byte	0x91
+ 1050 026e 5C       		.sleb128 -36
+ 1051 026f 0C       		.uleb128 0xc
+ 1052 0270 21020000 		.4byte	.LASF31
+ 1053 0274 01       		.byte	0x1
+ 1054 0275 94       		.byte	0x94
+ 1055 0276 97000000 		.4byte	0x97
+ 1056 027a 02       		.uleb128 0x2
+ 1057 027b 91       		.byte	0x91
+ 1058 027c 6F       		.sleb128 -17
+ 1059 027d 00       		.byte	0
+ 1060 027e 11       		.uleb128 0x11
+ 1061 027f D4000000 		.4byte	.LASF37
+ 1062 0283 06       		.byte	0x6
+ 1063 0284 9606     		.2byte	0x696
+ 1064 0286 8A020000 		.4byte	0x28a
+ 1065 028a 12       		.uleb128 0x12
+ARM GAS  D:\Windows\AppData\Local\Temp\cc1UMzeL.s 			page 23
+
+
+ 1066 028b AD000000 		.4byte	0xad
+ 1067 028f 13       		.uleb128 0x13
+ 1068 0290 13000000 		.4byte	.LASF38
+ 1069 0294 01       		.byte	0x1
+ 1070 0295 04       		.byte	0x4
+ 1071 0296 A0020000 		.4byte	0x2a0
+ 1072 029a 05       		.uleb128 0x5
+ 1073 029b 03       		.byte	0x3
+ 1074 029c 00000000 		.4byte	current_time
+ 1075 02a0 12       		.uleb128 0x12
+ 1076 02a1 8F010000 		.4byte	0x18f
+ 1077 02a5 00       		.byte	0
+ 1078              		.section	.debug_abbrev,"",%progbits
+ 1079              	.Ldebug_abbrev0:
+ 1080 0000 01       		.uleb128 0x1
+ 1081 0001 11       		.uleb128 0x11
+ 1082 0002 01       		.byte	0x1
+ 1083 0003 25       		.uleb128 0x25
+ 1084 0004 0E       		.uleb128 0xe
+ 1085 0005 13       		.uleb128 0x13
+ 1086 0006 0B       		.uleb128 0xb
+ 1087 0007 03       		.uleb128 0x3
+ 1088 0008 0E       		.uleb128 0xe
+ 1089 0009 1B       		.uleb128 0x1b
+ 1090 000a 0E       		.uleb128 0xe
+ 1091 000b 55       		.uleb128 0x55
+ 1092 000c 17       		.uleb128 0x17
+ 1093 000d 11       		.uleb128 0x11
+ 1094 000e 01       		.uleb128 0x1
+ 1095 000f 10       		.uleb128 0x10
+ 1096 0010 17       		.uleb128 0x17
+ 1097 0011 00       		.byte	0
+ 1098 0012 00       		.byte	0
+ 1099 0013 02       		.uleb128 0x2
+ 1100 0014 24       		.uleb128 0x24
+ 1101 0015 00       		.byte	0
+ 1102 0016 0B       		.uleb128 0xb
+ 1103 0017 0B       		.uleb128 0xb
+ 1104 0018 3E       		.uleb128 0x3e
+ 1105 0019 0B       		.uleb128 0xb
+ 1106 001a 03       		.uleb128 0x3
+ 1107 001b 0E       		.uleb128 0xe
+ 1108 001c 00       		.byte	0
+ 1109 001d 00       		.byte	0
+ 1110 001e 03       		.uleb128 0x3
+ 1111 001f 16       		.uleb128 0x16
+ 1112 0020 00       		.byte	0
+ 1113 0021 03       		.uleb128 0x3
+ 1114 0022 0E       		.uleb128 0xe
+ 1115 0023 3A       		.uleb128 0x3a
+ 1116 0024 0B       		.uleb128 0xb
+ 1117 0025 3B       		.uleb128 0x3b
+ 1118 0026 0B       		.uleb128 0xb
+ 1119 0027 49       		.uleb128 0x49
+ 1120 0028 13       		.uleb128 0x13
+ 1121 0029 00       		.byte	0
+ 1122 002a 00       		.byte	0
+ARM GAS  D:\Windows\AppData\Local\Temp\cc1UMzeL.s 			page 24
+
+
+ 1123 002b 04       		.uleb128 0x4
+ 1124 002c 24       		.uleb128 0x24
+ 1125 002d 00       		.byte	0
+ 1126 002e 0B       		.uleb128 0xb
+ 1127 002f 0B       		.uleb128 0xb
+ 1128 0030 3E       		.uleb128 0x3e
+ 1129 0031 0B       		.uleb128 0xb
+ 1130 0032 03       		.uleb128 0x3
+ 1131 0033 08       		.uleb128 0x8
+ 1132 0034 00       		.byte	0
+ 1133 0035 00       		.byte	0
+ 1134 0036 05       		.uleb128 0x5
+ 1135 0037 13       		.uleb128 0x13
+ 1136 0038 01       		.byte	0x1
+ 1137 0039 0B       		.uleb128 0xb
+ 1138 003a 0B       		.uleb128 0xb
+ 1139 003b 3A       		.uleb128 0x3a
+ 1140 003c 0B       		.uleb128 0xb
+ 1141 003d 3B       		.uleb128 0x3b
+ 1142 003e 0B       		.uleb128 0xb
+ 1143 003f 01       		.uleb128 0x1
+ 1144 0040 13       		.uleb128 0x13
+ 1145 0041 00       		.byte	0
+ 1146 0042 00       		.byte	0
+ 1147 0043 06       		.uleb128 0x6
+ 1148 0044 0D       		.uleb128 0xd
+ 1149 0045 00       		.byte	0
+ 1150 0046 03       		.uleb128 0x3
+ 1151 0047 0E       		.uleb128 0xe
+ 1152 0048 3A       		.uleb128 0x3a
+ 1153 0049 0B       		.uleb128 0xb
+ 1154 004a 3B       		.uleb128 0x3b
+ 1155 004b 0B       		.uleb128 0xb
+ 1156 004c 49       		.uleb128 0x49
+ 1157 004d 13       		.uleb128 0x13
+ 1158 004e 38       		.uleb128 0x38
+ 1159 004f 0B       		.uleb128 0xb
+ 1160 0050 00       		.byte	0
+ 1161 0051 00       		.byte	0
+ 1162 0052 07       		.uleb128 0x7
+ 1163 0053 0D       		.uleb128 0xd
+ 1164 0054 00       		.byte	0
+ 1165 0055 03       		.uleb128 0x3
+ 1166 0056 08       		.uleb128 0x8
+ 1167 0057 3A       		.uleb128 0x3a
+ 1168 0058 0B       		.uleb128 0xb
+ 1169 0059 3B       		.uleb128 0x3b
+ 1170 005a 0B       		.uleb128 0xb
+ 1171 005b 49       		.uleb128 0x49
+ 1172 005c 13       		.uleb128 0x13
+ 1173 005d 38       		.uleb128 0x38
+ 1174 005e 0B       		.uleb128 0xb
+ 1175 005f 00       		.byte	0
+ 1176 0060 00       		.byte	0
+ 1177 0061 08       		.uleb128 0x8
+ 1178 0062 01       		.uleb128 0x1
+ 1179 0063 01       		.byte	0x1
+ARM GAS  D:\Windows\AppData\Local\Temp\cc1UMzeL.s 			page 25
+
+
+ 1180 0064 49       		.uleb128 0x49
+ 1181 0065 13       		.uleb128 0x13
+ 1182 0066 01       		.uleb128 0x1
+ 1183 0067 13       		.uleb128 0x13
+ 1184 0068 00       		.byte	0
+ 1185 0069 00       		.byte	0
+ 1186 006a 09       		.uleb128 0x9
+ 1187 006b 21       		.uleb128 0x21
+ 1188 006c 00       		.byte	0
+ 1189 006d 49       		.uleb128 0x49
+ 1190 006e 13       		.uleb128 0x13
+ 1191 006f 2F       		.uleb128 0x2f
+ 1192 0070 0B       		.uleb128 0xb
+ 1193 0071 00       		.byte	0
+ 1194 0072 00       		.byte	0
+ 1195 0073 0A       		.uleb128 0xa
+ 1196 0074 2E       		.uleb128 0x2e
+ 1197 0075 00       		.byte	0
+ 1198 0076 3F       		.uleb128 0x3f
+ 1199 0077 19       		.uleb128 0x19
+ 1200 0078 03       		.uleb128 0x3
+ 1201 0079 0E       		.uleb128 0xe
+ 1202 007a 3A       		.uleb128 0x3a
+ 1203 007b 0B       		.uleb128 0xb
+ 1204 007c 3B       		.uleb128 0x3b
+ 1205 007d 0B       		.uleb128 0xb
+ 1206 007e 27       		.uleb128 0x27
+ 1207 007f 19       		.uleb128 0x19
+ 1208 0080 11       		.uleb128 0x11
+ 1209 0081 01       		.uleb128 0x1
+ 1210 0082 12       		.uleb128 0x12
+ 1211 0083 06       		.uleb128 0x6
+ 1212 0084 40       		.uleb128 0x40
+ 1213 0085 18       		.uleb128 0x18
+ 1214 0086 9642     		.uleb128 0x2116
+ 1215 0088 19       		.uleb128 0x19
+ 1216 0089 00       		.byte	0
+ 1217 008a 00       		.byte	0
+ 1218 008b 0B       		.uleb128 0xb
+ 1219 008c 2E       		.uleb128 0x2e
+ 1220 008d 01       		.byte	0x1
+ 1221 008e 3F       		.uleb128 0x3f
+ 1222 008f 19       		.uleb128 0x19
+ 1223 0090 03       		.uleb128 0x3
+ 1224 0091 0E       		.uleb128 0xe
+ 1225 0092 3A       		.uleb128 0x3a
+ 1226 0093 0B       		.uleb128 0xb
+ 1227 0094 3B       		.uleb128 0x3b
+ 1228 0095 0B       		.uleb128 0xb
+ 1229 0096 27       		.uleb128 0x27
+ 1230 0097 19       		.uleb128 0x19
+ 1231 0098 11       		.uleb128 0x11
+ 1232 0099 01       		.uleb128 0x1
+ 1233 009a 12       		.uleb128 0x12
+ 1234 009b 06       		.uleb128 0x6
+ 1235 009c 40       		.uleb128 0x40
+ 1236 009d 18       		.uleb128 0x18
+ARM GAS  D:\Windows\AppData\Local\Temp\cc1UMzeL.s 			page 26
+
+
+ 1237 009e 9642     		.uleb128 0x2116
+ 1238 00a0 19       		.uleb128 0x19
+ 1239 00a1 01       		.uleb128 0x1
+ 1240 00a2 13       		.uleb128 0x13
+ 1241 00a3 00       		.byte	0
+ 1242 00a4 00       		.byte	0
+ 1243 00a5 0C       		.uleb128 0xc
+ 1244 00a6 34       		.uleb128 0x34
+ 1245 00a7 00       		.byte	0
+ 1246 00a8 03       		.uleb128 0x3
+ 1247 00a9 0E       		.uleb128 0xe
+ 1248 00aa 3A       		.uleb128 0x3a
+ 1249 00ab 0B       		.uleb128 0xb
+ 1250 00ac 3B       		.uleb128 0x3b
+ 1251 00ad 0B       		.uleb128 0xb
+ 1252 00ae 49       		.uleb128 0x49
+ 1253 00af 13       		.uleb128 0x13
+ 1254 00b0 02       		.uleb128 0x2
+ 1255 00b1 18       		.uleb128 0x18
+ 1256 00b2 00       		.byte	0
+ 1257 00b3 00       		.byte	0
+ 1258 00b4 0D       		.uleb128 0xd
+ 1259 00b5 2E       		.uleb128 0x2e
+ 1260 00b6 01       		.byte	0x1
+ 1261 00b7 3F       		.uleb128 0x3f
+ 1262 00b8 19       		.uleb128 0x19
+ 1263 00b9 03       		.uleb128 0x3
+ 1264 00ba 0E       		.uleb128 0xe
+ 1265 00bb 3A       		.uleb128 0x3a
+ 1266 00bc 0B       		.uleb128 0xb
+ 1267 00bd 3B       		.uleb128 0x3b
+ 1268 00be 0B       		.uleb128 0xb
+ 1269 00bf 11       		.uleb128 0x11
+ 1270 00c0 01       		.uleb128 0x1
+ 1271 00c1 12       		.uleb128 0x12
+ 1272 00c2 06       		.uleb128 0x6
+ 1273 00c3 40       		.uleb128 0x40
+ 1274 00c4 18       		.uleb128 0x18
+ 1275 00c5 9642     		.uleb128 0x2116
+ 1276 00c7 19       		.uleb128 0x19
+ 1277 00c8 01       		.uleb128 0x1
+ 1278 00c9 13       		.uleb128 0x13
+ 1279 00ca 00       		.byte	0
+ 1280 00cb 00       		.byte	0
+ 1281 00cc 0E       		.uleb128 0xe
+ 1282 00cd 2E       		.uleb128 0x2e
+ 1283 00ce 00       		.byte	0
+ 1284 00cf 3F       		.uleb128 0x3f
+ 1285 00d0 19       		.uleb128 0x19
+ 1286 00d1 03       		.uleb128 0x3
+ 1287 00d2 0E       		.uleb128 0xe
+ 1288 00d3 3A       		.uleb128 0x3a
+ 1289 00d4 0B       		.uleb128 0xb
+ 1290 00d5 3B       		.uleb128 0x3b
+ 1291 00d6 0B       		.uleb128 0xb
+ 1292 00d7 27       		.uleb128 0x27
+ 1293 00d8 19       		.uleb128 0x19
+ARM GAS  D:\Windows\AppData\Local\Temp\cc1UMzeL.s 			page 27
+
+
+ 1294 00d9 49       		.uleb128 0x49
+ 1295 00da 13       		.uleb128 0x13
+ 1296 00db 11       		.uleb128 0x11
+ 1297 00dc 01       		.uleb128 0x1
+ 1298 00dd 12       		.uleb128 0x12
+ 1299 00de 06       		.uleb128 0x6
+ 1300 00df 40       		.uleb128 0x40
+ 1301 00e0 18       		.uleb128 0x18
+ 1302 00e1 9642     		.uleb128 0x2116
+ 1303 00e3 19       		.uleb128 0x19
+ 1304 00e4 00       		.byte	0
+ 1305 00e5 00       		.byte	0
+ 1306 00e6 0F       		.uleb128 0xf
+ 1307 00e7 05       		.uleb128 0x5
+ 1308 00e8 00       		.byte	0
+ 1309 00e9 03       		.uleb128 0x3
+ 1310 00ea 08       		.uleb128 0x8
+ 1311 00eb 3A       		.uleb128 0x3a
+ 1312 00ec 0B       		.uleb128 0xb
+ 1313 00ed 3B       		.uleb128 0x3b
+ 1314 00ee 0B       		.uleb128 0xb
+ 1315 00ef 49       		.uleb128 0x49
+ 1316 00f0 13       		.uleb128 0x13
+ 1317 00f1 02       		.uleb128 0x2
+ 1318 00f2 18       		.uleb128 0x18
+ 1319 00f3 00       		.byte	0
+ 1320 00f4 00       		.byte	0
+ 1321 00f5 10       		.uleb128 0x10
+ 1322 00f6 2E       		.uleb128 0x2e
+ 1323 00f7 01       		.byte	0x1
+ 1324 00f8 3F       		.uleb128 0x3f
+ 1325 00f9 19       		.uleb128 0x19
+ 1326 00fa 03       		.uleb128 0x3
+ 1327 00fb 0E       		.uleb128 0xe
+ 1328 00fc 3A       		.uleb128 0x3a
+ 1329 00fd 0B       		.uleb128 0xb
+ 1330 00fe 3B       		.uleb128 0x3b
+ 1331 00ff 0B       		.uleb128 0xb
+ 1332 0100 27       		.uleb128 0x27
+ 1333 0101 19       		.uleb128 0x19
+ 1334 0102 49       		.uleb128 0x49
+ 1335 0103 13       		.uleb128 0x13
+ 1336 0104 11       		.uleb128 0x11
+ 1337 0105 01       		.uleb128 0x1
+ 1338 0106 12       		.uleb128 0x12
+ 1339 0107 06       		.uleb128 0x6
+ 1340 0108 40       		.uleb128 0x40
+ 1341 0109 18       		.uleb128 0x18
+ 1342 010a 9642     		.uleb128 0x2116
+ 1343 010c 19       		.uleb128 0x19
+ 1344 010d 01       		.uleb128 0x1
+ 1345 010e 13       		.uleb128 0x13
+ 1346 010f 00       		.byte	0
+ 1347 0110 00       		.byte	0
+ 1348 0111 11       		.uleb128 0x11
+ 1349 0112 34       		.uleb128 0x34
+ 1350 0113 00       		.byte	0
+ARM GAS  D:\Windows\AppData\Local\Temp\cc1UMzeL.s 			page 28
+
+
+ 1351 0114 03       		.uleb128 0x3
+ 1352 0115 0E       		.uleb128 0xe
+ 1353 0116 3A       		.uleb128 0x3a
+ 1354 0117 0B       		.uleb128 0xb
+ 1355 0118 3B       		.uleb128 0x3b
+ 1356 0119 05       		.uleb128 0x5
+ 1357 011a 49       		.uleb128 0x49
+ 1358 011b 13       		.uleb128 0x13
+ 1359 011c 3F       		.uleb128 0x3f
+ 1360 011d 19       		.uleb128 0x19
+ 1361 011e 3C       		.uleb128 0x3c
+ 1362 011f 19       		.uleb128 0x19
+ 1363 0120 00       		.byte	0
+ 1364 0121 00       		.byte	0
+ 1365 0122 12       		.uleb128 0x12
+ 1366 0123 35       		.uleb128 0x35
+ 1367 0124 00       		.byte	0
+ 1368 0125 49       		.uleb128 0x49
+ 1369 0126 13       		.uleb128 0x13
+ 1370 0127 00       		.byte	0
+ 1371 0128 00       		.byte	0
+ 1372 0129 13       		.uleb128 0x13
+ 1373 012a 34       		.uleb128 0x34
+ 1374 012b 00       		.byte	0
+ 1375 012c 03       		.uleb128 0x3
+ 1376 012d 0E       		.uleb128 0xe
+ 1377 012e 3A       		.uleb128 0x3a
+ 1378 012f 0B       		.uleb128 0xb
+ 1379 0130 3B       		.uleb128 0x3b
+ 1380 0131 0B       		.uleb128 0xb
+ 1381 0132 49       		.uleb128 0x49
+ 1382 0133 13       		.uleb128 0x13
+ 1383 0134 3F       		.uleb128 0x3f
+ 1384 0135 19       		.uleb128 0x19
+ 1385 0136 02       		.uleb128 0x2
+ 1386 0137 18       		.uleb128 0x18
+ 1387 0138 00       		.byte	0
+ 1388 0139 00       		.byte	0
+ 1389 013a 00       		.byte	0
+ 1390              		.section	.debug_aranges,"",%progbits
+ 1391 0000 44000000 		.4byte	0x44
+ 1392 0004 0200     		.2byte	0x2
+ 1393 0006 00000000 		.4byte	.Ldebug_info0
+ 1394 000a 04       		.byte	0x4
+ 1395 000b 00       		.byte	0
+ 1396 000c 0000     		.2byte	0
+ 1397 000e 0000     		.2byte	0
+ 1398 0010 00000000 		.4byte	.LFB63
+ 1399 0014 28000000 		.4byte	.LFE63-.LFB63
+ 1400 0018 00000000 		.4byte	.LFB64
+ 1401 001c 9C000000 		.4byte	.LFE64-.LFB64
+ 1402 0020 00000000 		.4byte	.LFB65
+ 1403 0024 7C000000 		.4byte	.LFE65-.LFB65
+ 1404 0028 00000000 		.4byte	.LFB66
+ 1405 002c 34000000 		.4byte	.LFE66-.LFB66
+ 1406 0030 00000000 		.4byte	.LFB67
+ 1407 0034 80010000 		.4byte	.LFE67-.LFB67
+ARM GAS  D:\Windows\AppData\Local\Temp\cc1UMzeL.s 			page 29
+
+
+ 1408 0038 00000000 		.4byte	.LFB68
+ 1409 003c 54010000 		.4byte	.LFE68-.LFB68
+ 1410 0040 00000000 		.4byte	0
+ 1411 0044 00000000 		.4byte	0
+ 1412              		.section	.debug_ranges,"",%progbits
+ 1413              	.Ldebug_ranges0:
+ 1414 0000 00000000 		.4byte	.LFB63
+ 1415 0004 28000000 		.4byte	.LFE63
+ 1416 0008 00000000 		.4byte	.LFB64
+ 1417 000c 9C000000 		.4byte	.LFE64
+ 1418 0010 00000000 		.4byte	.LFB65
+ 1419 0014 7C000000 		.4byte	.LFE65
+ 1420 0018 00000000 		.4byte	.LFB66
+ 1421 001c 34000000 		.4byte	.LFE66
+ 1422 0020 00000000 		.4byte	.LFB67
+ 1423 0024 80010000 		.4byte	.LFE67
+ 1424 0028 00000000 		.4byte	.LFB68
+ 1425 002c 54010000 		.4byte	.LFE68
+ 1426 0030 00000000 		.4byte	0
+ 1427 0034 00000000 		.4byte	0
+ 1428              		.section	.debug_line,"",%progbits
+ 1429              	.Ldebug_line0:
+ 1430 0000 10020000 		.section	.debug_str,"MS",%progbits,1
+ 1430      02004E01 
+ 1430      00000201 
+ 1430      FB0E0D00 
+ 1430      01010101 
+ 1431              	.LASF44:
+ 1432 0000 74696D65 		.ascii	"time_get\000"
+ 1432      5F676574 
+ 1432      00
+ 1433              	.LASF3:
+ 1434 0009 5F5F7569 		.ascii	"__uint8_t\000"
+ 1434      6E74385F 
+ 1434      7400
+ 1435              	.LASF38:
+ 1436 0013 63757272 		.ascii	"current_time\000"
+ 1436      656E745F 
+ 1436      74696D65 
+ 1436      00
+ 1437              	.LASF6:
+ 1438 0020 5F5F696E 		.ascii	"__int32_t\000"
+ 1438      7433325F 
+ 1438      7400
+ 1439              	.LASF27:
+ 1440 002a 6D696E75 		.ascii	"minute\000"
+ 1440      746500
+ 1441              	.LASF36:
+ 1442 0031 746D705F 		.ascii	"tmp_time\000"
+ 1442      74696D65 
+ 1442      00
+ 1443              	.LASF43:
+ 1444 003a 74696D65 		.ascii	"time_announce\000"
+ 1444      5F616E6E 
+ 1444      6F756E63 
+ 1444      6500
+ 1445              	.LASF35:
+ARM GAS  D:\Windows\AppData\Local\Temp\cc1UMzeL.s 			page 30
+
+
+ 1446 0048 74696D65 		.ascii	"time_set\000"
+ 1446      5F736574 
+ 1446      00
+ 1447              	.LASF25:
+ 1448 0051 6D6F6E74 		.ascii	"month\000"
+ 1448      6800
+ 1449              	.LASF21:
+ 1450 0057 6D696C6C 		.ascii	"millicounter\000"
+ 1450      69636F75 
+ 1450      6E746572 
+ 1450      00
+ 1451              	.LASF17:
+ 1452 0064 666C6F61 		.ascii	"float\000"
+ 1452      7400
+ 1453              	.LASF23:
+ 1454 006a 64617461 		.ascii	"data\000"
+ 1454      00
+ 1455              	.LASF32:
+ 1456 006f 6D73675F 		.ascii	"msg_time\000"
+ 1456      74696D65 
+ 1456      00
+ 1457              	.LASF1:
+ 1458 0078 756E7369 		.ascii	"unsigned char\000"
+ 1458      676E6564 
+ 1458      20636861 
+ 1458      7200
+ 1459              	.LASF8:
+ 1460 0086 5F5F7569 		.ascii	"__uint32_t\000"
+ 1460      6E743332 
+ 1460      5F7400
+ 1461              	.LASF34:
+ 1462 0091 74696D65 		.ascii	"time_init\000"
+ 1462      5F696E69 
+ 1462      7400
+ 1463              	.LASF9:
+ 1464 009b 6C6F6E67 		.ascii	"long unsigned int\000"
+ 1464      20756E73 
+ 1464      69676E65 
+ 1464      6420696E 
+ 1464      7400
+ 1465              	.LASF5:
+ 1466 00ad 73686F72 		.ascii	"short unsigned int\000"
+ 1466      7420756E 
+ 1466      7369676E 
+ 1466      65642069 
+ 1466      6E7400
+ 1467              	.LASF42:
+ 1468 00c0 74696D65 		.ascii	"time_refresh_vector\000"
+ 1468      5F726566 
+ 1468      72657368 
+ 1468      5F766563 
+ 1468      746F7200 
+ 1469              	.LASF37:
+ 1470 00d4 49544D5F 		.ascii	"ITM_RxBuffer\000"
+ 1470      52784275 
+ 1470      66666572 
+ 1470      00
+ARM GAS  D:\Windows\AppData\Local\Temp\cc1UMzeL.s 			page 31
+
+
+ 1471              	.LASF28:
+ 1472 00e1 7365636F 		.ascii	"second\000"
+ 1472      6E6400
+ 1473              	.LASF29:
+ 1474 00e8 79656172 		.ascii	"year\000"
+ 1474      00
+ 1475              	.LASF4:
+ 1476 00ed 5F5F7569 		.ascii	"__uint16_t\000"
+ 1476      6E743136 
+ 1476      5F7400
+ 1477              	.LASF18:
+ 1478 00f8 646F7562 		.ascii	"double\000"
+ 1478      6C6500
+ 1479              	.LASF2:
+ 1480 00ff 73686F72 		.ascii	"short int\000"
+ 1480      7420696E 
+ 1480      7400
+ 1481              	.LASF33:
+ 1482 0109 61746F6D 		.ascii	"atomic_state\000"
+ 1482      69635F73 
+ 1482      74617465 
+ 1482      00
+ 1483              	.LASF12:
+ 1484 0116 756E7369 		.ascii	"unsigned int\000"
+ 1484      676E6564 
+ 1484      20696E74 
+ 1484      00
+ 1485              	.LASF24:
+ 1486 0123 44617461 		.ascii	"DataPacket\000"
+ 1486      5061636B 
+ 1486      657400
+ 1487              	.LASF11:
+ 1488 012e 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 1488      206C6F6E 
+ 1488      6720756E 
+ 1488      7369676E 
+ 1488      65642069 
+ 1489              	.LASF13:
+ 1490 0145 75696E74 		.ascii	"uint8_t\000"
+ 1490      385F7400 
+ 1491              	.LASF26:
+ 1492 014d 686F7572 		.ascii	"hour\000"
+ 1492      00
+ 1493              	.LASF40:
+ 1494 0152 74696D65 		.ascii	"time_manager.c\000"
+ 1494      5F6D616E 
+ 1494      61676572 
+ 1494      2E6300
+ 1495              	.LASF15:
+ 1496 0161 696E7433 		.ascii	"int32_t\000"
+ 1496      325F7400 
+ 1497              	.LASF20:
+ 1498 0169 73697A65 		.ascii	"sizetype\000"
+ 1498      74797065 
+ 1498      00
+ 1499              	.LASF10:
+ 1500 0172 6C6F6E67 		.ascii	"long long int\000"
+ARM GAS  D:\Windows\AppData\Local\Temp\cc1UMzeL.s 			page 32
+
+
+ 1500      206C6F6E 
+ 1500      6720696E 
+ 1500      7400
+ 1501              	.LASF45:
+ 1502 0180 74696D65 		.ascii	"time_retreive\000"
+ 1502      5F726574 
+ 1502      72656976 
+ 1502      6500
+ 1503              	.LASF19:
+ 1504 018e 63686172 		.ascii	"char\000"
+ 1504      00
+ 1505              	.LASF39:
+ 1506 0193 474E5520 		.ascii	"GNU C 4.9.3 20150303 (release) [ARM/embedded-4_9-br"
+ 1506      4320342E 
+ 1506      392E3320 
+ 1506      32303135 
+ 1506      30333033 
+ 1507 01c6 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m3 -mthumb -g -O"
+ 1507      20726576 
+ 1507      6973696F 
+ 1507      6E203232 
+ 1507      31323230 
+ 1508 01f9 30202D66 		.ascii	"0 -ffunction-sections -ffat-lto-objects\000"
+ 1508      66756E63 
+ 1508      74696F6E 
+ 1508      2D736563 
+ 1508      74696F6E 
+ 1509              	.LASF31:
+ 1510 0221 62797465 		.ascii	"byte\000"
+ 1510      00
+ 1511              	.LASF14:
+ 1512 0226 75696E74 		.ascii	"uint16_t\000"
+ 1512      31365F74 
+ 1512      00
+ 1513              	.LASF41:
+ 1514 022f 443A5C44 		.ascii	"D:\\Downloads\\FRUCD\\Node-Beaver-FE3\\Node-Beaver\\"
+ 1514      6F776E6C 
+ 1514      6F616473 
+ 1514      5C465255 
+ 1514      43445C4E 
+ 1515 025e 4E6F6465 		.ascii	"Node-Beaver_FE3.cydsn\000"
+ 1515      2D426561 
+ 1515      7665725F 
+ 1515      4645332E 
+ 1515      63796473 
+ 1516              	.LASF16:
+ 1517 0274 75696E74 		.ascii	"uint32_t\000"
+ 1517      33325F74 
+ 1517      00
+ 1518              	.LASF7:
+ 1519 027d 6C6F6E67 		.ascii	"long int\000"
+ 1519      20696E74 
+ 1519      00
+ 1520              	.LASF0:
+ 1521 0286 7369676E 		.ascii	"signed char\000"
+ 1521      65642063 
+ 1521      68617200 
+ARM GAS  D:\Windows\AppData\Local\Temp\cc1UMzeL.s 			page 33
+
+
+ 1522              	.LASF22:
+ 1523 0292 6C656E67 		.ascii	"length\000"
+ 1523      746800
+ 1524              	.LASF30:
+ 1525 0299 54696D65 		.ascii	"Time\000"
+ 1525      00
+ 1526              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.9.3 20150303 (release) [ARM/embedded-4_9-br

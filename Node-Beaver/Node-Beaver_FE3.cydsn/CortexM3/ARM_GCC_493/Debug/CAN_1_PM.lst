@@ -1,0 +1,1062 @@
+ARM GAS  D:\Windows\AppData\Local\Temp\cc2j45Lb.s 			page 1
+
+
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 6
+  11              		.eabi_attribute 34, 1
+  12              		.eabi_attribute 18, 4
+  13              		.thumb
+  14              		.file	"CAN_1_PM.c"
+  15              		.text
+  16              	.Ltext0:
+  17              		.cfi_sections	.debug_frame
+  18              		.data
+  19              		.align	2
+  20              		.type	CAN_1_backup, %object
+  21              		.size	CAN_1_backup, 20
+  22              	CAN_1_backup:
+  23 0000 00       		.byte	0
+  24 0001 000000   		.space	3
+  25 0004 00000000 		.word	0
+  26 0008 01100000 		.word	4097
+  27 000c 01000000 		.word	1
+  28 0010 701A0200 		.word	137840
+  29              		.section	.text.CAN_1_SaveConfig,"ax",%progbits
+  30              		.align	2
+  31              		.global	CAN_1_SaveConfig
+  32              		.thumb
+  33              		.thumb_func
+  34              		.type	CAN_1_SaveConfig, %function
+  35              	CAN_1_SaveConfig:
+  36              	.LFB0:
+  37              		.file 1 "Generated_Source\\PSoC5\\CAN_1_PM.c"
+   1:Generated_Source\PSoC5/CAN_1_PM.c **** /*******************************************************************************
+   2:Generated_Source\PSoC5/CAN_1_PM.c **** * File Name: CAN_1_PM.c
+   3:Generated_Source\PSoC5/CAN_1_PM.c **** * Version 3.0
+   4:Generated_Source\PSoC5/CAN_1_PM.c **** *
+   5:Generated_Source\PSoC5/CAN_1_PM.c **** * Description:
+   6:Generated_Source\PSoC5/CAN_1_PM.c **** *  This file contains the setup, control and status commands to support
+   7:Generated_Source\PSoC5/CAN_1_PM.c **** *  component operations in the low power mode.
+   8:Generated_Source\PSoC5/CAN_1_PM.c **** *
+   9:Generated_Source\PSoC5/CAN_1_PM.c **** * Note:
+  10:Generated_Source\PSoC5/CAN_1_PM.c **** *
+  11:Generated_Source\PSoC5/CAN_1_PM.c **** ********************************************************************************
+  12:Generated_Source\PSoC5/CAN_1_PM.c **** * Copyright 2008-2015, Cypress Semiconductor Corporation.  All rights reserved.
+  13:Generated_Source\PSoC5/CAN_1_PM.c **** * You may use this file only in accordance with the license, terms, conditions,
+  14:Generated_Source\PSoC5/CAN_1_PM.c **** * disclaimers, and limitations in the end user license agreement accompanying
+  15:Generated_Source\PSoC5/CAN_1_PM.c **** * the software package with which this file was provided.
+  16:Generated_Source\PSoC5/CAN_1_PM.c **** *******************************************************************************/
+  17:Generated_Source\PSoC5/CAN_1_PM.c **** 
+  18:Generated_Source\PSoC5/CAN_1_PM.c **** #include "CAN_1.h"
+  19:Generated_Source\PSoC5/CAN_1_PM.c **** 
+  20:Generated_Source\PSoC5/CAN_1_PM.c **** static CAN_1_BACKUP_STRUCT CAN_1_backup =
+ARM GAS  D:\Windows\AppData\Local\Temp\cc2j45Lb.s 			page 2
+
+
+  21:Generated_Source\PSoC5/CAN_1_PM.c **** {
+  22:Generated_Source\PSoC5/CAN_1_PM.c ****     0u,
+  23:Generated_Source\PSoC5/CAN_1_PM.c ****     #if (CY_PSOC3 || CY_PSOC5)
+  24:Generated_Source\PSoC5/CAN_1_PM.c ****         0u,
+  25:Generated_Source\PSoC5/CAN_1_PM.c ****         CAN_1_INIT_INTERRUPT_MASK,
+  26:Generated_Source\PSoC5/CAN_1_PM.c ****         CAN_1_MODE_MASK,
+  27:Generated_Source\PSoC5/CAN_1_PM.c ****         (((uint32) ((uint32) CAN_1_SYNC_EDGE    << CAN_1_EDGE_MODE_SHIFT))     |
+  28:Generated_Source\PSoC5/CAN_1_PM.c ****         ((uint32) ((uint32) CAN_1_SAMPLING_MODE << CAN_1_SAMPLE_MODE_SHIFT))   |
+  29:Generated_Source\PSoC5/CAN_1_PM.c ****         ((uint32) ((uint32) CAN_1_CFG_REG_SJW   << CAN_1_CFG_REG_SJW_SHIFT))   |
+  30:Generated_Source\PSoC5/CAN_1_PM.c ****         ((uint32) ((uint32) CAN_1_RESET_TYPE    << CAN_1_RESET_SHIFT))         |
+  31:Generated_Source\PSoC5/CAN_1_PM.c ****         ((uint32) ((uint32) CAN_1_CFG_REG_TSEG2 << CAN_1_CFG_REG_TSEG2_SHIFT)) |
+  32:Generated_Source\PSoC5/CAN_1_PM.c ****         ((uint32) ((uint32) CAN_1_CFG_REG_TSEG1 << CAN_1_CFG_REG_TSEG1_SHIFT)) |
+  33:Generated_Source\PSoC5/CAN_1_PM.c ****         ((uint32) ((uint32) CAN_1_ARBITER       << CAN_1_ARBITER_SHIFT))       |
+  34:Generated_Source\PSoC5/CAN_1_PM.c ****         ((uint32) ((uint32) CAN_1_BITRATE       << CAN_1_BITRATE_SHIFT)))
+  35:Generated_Source\PSoC5/CAN_1_PM.c ****     #endif /* CY_PSOC3 || CY_PSOC5 */
+  36:Generated_Source\PSoC5/CAN_1_PM.c **** };
+  37:Generated_Source\PSoC5/CAN_1_PM.c **** 
+  38:Generated_Source\PSoC5/CAN_1_PM.c **** 
+  39:Generated_Source\PSoC5/CAN_1_PM.c **** /*******************************************************************************
+  40:Generated_Source\PSoC5/CAN_1_PM.c **** * Function Name: CAN_1_SaveConfig
+  41:Generated_Source\PSoC5/CAN_1_PM.c **** ********************************************************************************
+  42:Generated_Source\PSoC5/CAN_1_PM.c **** *
+  43:Generated_Source\PSoC5/CAN_1_PM.c **** * Summary:
+  44:Generated_Source\PSoC5/CAN_1_PM.c **** *  Save the CAN configuration.
+  45:Generated_Source\PSoC5/CAN_1_PM.c **** *
+  46:Generated_Source\PSoC5/CAN_1_PM.c **** * Parameters:
+  47:Generated_Source\PSoC5/CAN_1_PM.c **** *  None.
+  48:Generated_Source\PSoC5/CAN_1_PM.c **** *
+  49:Generated_Source\PSoC5/CAN_1_PM.c **** * Return:
+  50:Generated_Source\PSoC5/CAN_1_PM.c **** *  None.
+  51:Generated_Source\PSoC5/CAN_1_PM.c **** *
+  52:Generated_Source\PSoC5/CAN_1_PM.c **** * Global Variables:
+  53:Generated_Source\PSoC5/CAN_1_PM.c **** *  CAN_1_backup - Modified when non-retention registers are saved.
+  54:Generated_Source\PSoC5/CAN_1_PM.c **** *
+  55:Generated_Source\PSoC5/CAN_1_PM.c **** * Reentrant:
+  56:Generated_Source\PSoC5/CAN_1_PM.c **** *  No.
+  57:Generated_Source\PSoC5/CAN_1_PM.c **** *
+  58:Generated_Source\PSoC5/CAN_1_PM.c **** *******************************************************************************/
+  59:Generated_Source\PSoC5/CAN_1_PM.c **** void CAN_1_SaveConfig(void) 
+  60:Generated_Source\PSoC5/CAN_1_PM.c **** {
+  38              		.loc 1 60 0
+  39              		.cfi_startproc
+  40              		@ args = 0, pretend = 0, frame = 0
+  41              		@ frame_needed = 1, uses_anonymous_args = 0
+  42              		@ link register save eliminated.
+  43 0000 80B4     		push	{r7}
+  44              		.cfi_def_cfa_offset 4
+  45              		.cfi_offset 7, -4
+  46 0002 00AF     		add	r7, sp, #0
+  47              		.cfi_def_cfa_register 7
+  61:Generated_Source\PSoC5/CAN_1_PM.c ****     #if (CY_PSOC3 || CY_PSOC5)
+  62:Generated_Source\PSoC5/CAN_1_PM.c ****         CAN_1_backup.intSr = (CY_GET_REG32(CAN_1_INT_SR_PTR));
+  48              		.loc 1 62 0
+  49 0004 094B     		ldr	r3, .L2
+  50 0006 1B68     		ldr	r3, [r3]
+  51 0008 094A     		ldr	r2, .L2+4
+  52 000a 5360     		str	r3, [r2, #4]
+ARM GAS  D:\Windows\AppData\Local\Temp\cc2j45Lb.s 			page 3
+
+
+  63:Generated_Source\PSoC5/CAN_1_PM.c ****         CAN_1_backup.intEn = (CY_GET_REG32(CAN_1_INT_EN_PTR));
+  53              		.loc 1 63 0
+  54 000c 094B     		ldr	r3, .L2+8
+  55 000e 1B68     		ldr	r3, [r3]
+  56 0010 074A     		ldr	r2, .L2+4
+  57 0012 9360     		str	r3, [r2, #8]
+  64:Generated_Source\PSoC5/CAN_1_PM.c ****         CAN_1_backup.cmd = (CY_GET_REG32(CAN_1_CMD_PTR));
+  58              		.loc 1 64 0
+  59 0014 084B     		ldr	r3, .L2+12
+  60 0016 1B68     		ldr	r3, [r3]
+  61 0018 054A     		ldr	r2, .L2+4
+  62 001a D360     		str	r3, [r2, #12]
+  65:Generated_Source\PSoC5/CAN_1_PM.c ****         CAN_1_backup.cfg = (CY_GET_REG32(CAN_1_CFG_PTR));
+  63              		.loc 1 65 0
+  64 001c 074B     		ldr	r3, .L2+16
+  65 001e 1B68     		ldr	r3, [r3]
+  66 0020 034A     		ldr	r2, .L2+4
+  67 0022 1361     		str	r3, [r2, #16]
+  66:Generated_Source\PSoC5/CAN_1_PM.c ****     #endif /* CY_PSOC3 || CY_PSOC5 */
+  67:Generated_Source\PSoC5/CAN_1_PM.c **** }
+  68              		.loc 1 67 0
+  69 0024 BD46     		mov	sp, r7
+  70              		.cfi_def_cfa_register 13
+  71              		@ sp needed
+  72 0026 5DF8047B 		ldr	r7, [sp], #4
+  73              		.cfi_restore 7
+  74              		.cfi_def_cfa_offset 0
+  75 002a 7047     		bx	lr
+  76              	.L3:
+  77              		.align	2
+  78              	.L2:
+  79 002c 00A00040 		.word	1073782784
+  80 0030 00000000 		.word	CAN_1_backup
+  81 0034 04A00040 		.word	1073782788
+  82 0038 10A00040 		.word	1073782800
+  83 003c 14A00040 		.word	1073782804
+  84              		.cfi_endproc
+  85              	.LFE0:
+  86              		.size	CAN_1_SaveConfig, .-CAN_1_SaveConfig
+  87              		.section	.text.CAN_1_RestoreConfig,"ax",%progbits
+  88              		.align	2
+  89              		.global	CAN_1_RestoreConfig
+  90              		.thumb
+  91              		.thumb_func
+  92              		.type	CAN_1_RestoreConfig, %function
+  93              	CAN_1_RestoreConfig:
+  94              	.LFB1:
+  68:Generated_Source\PSoC5/CAN_1_PM.c **** 
+  69:Generated_Source\PSoC5/CAN_1_PM.c **** 
+  70:Generated_Source\PSoC5/CAN_1_PM.c **** /*******************************************************************************
+  71:Generated_Source\PSoC5/CAN_1_PM.c **** * Function Name: CAN_1_RestoreConfig
+  72:Generated_Source\PSoC5/CAN_1_PM.c **** ********************************************************************************
+  73:Generated_Source\PSoC5/CAN_1_PM.c **** *
+  74:Generated_Source\PSoC5/CAN_1_PM.c **** * Summary:
+  75:Generated_Source\PSoC5/CAN_1_PM.c **** *  Restore the CAN configuration.
+  76:Generated_Source\PSoC5/CAN_1_PM.c **** *
+  77:Generated_Source\PSoC5/CAN_1_PM.c **** * Parameters:
+ARM GAS  D:\Windows\AppData\Local\Temp\cc2j45Lb.s 			page 4
+
+
+  78:Generated_Source\PSoC5/CAN_1_PM.c **** *  None.
+  79:Generated_Source\PSoC5/CAN_1_PM.c **** *
+  80:Generated_Source\PSoC5/CAN_1_PM.c **** * Return:
+  81:Generated_Source\PSoC5/CAN_1_PM.c **** *  None.
+  82:Generated_Source\PSoC5/CAN_1_PM.c **** *
+  83:Generated_Source\PSoC5/CAN_1_PM.c **** * Global Variables:
+  84:Generated_Source\PSoC5/CAN_1_PM.c **** *  CAN_1_backup - Used when non-retention registers are restored.
+  85:Generated_Source\PSoC5/CAN_1_PM.c **** *
+  86:Generated_Source\PSoC5/CAN_1_PM.c **** * Side Effects:
+  87:Generated_Source\PSoC5/CAN_1_PM.c **** *  If this API is called without first calling SaveConfig then default values
+  88:Generated_Source\PSoC5/CAN_1_PM.c **** *  from Customizer will be in the following registers: CAN_1_INT_SR,
+  89:Generated_Source\PSoC5/CAN_1_PM.c **** *  CAN_1_INT_EN, CAN_1_CMD, CAN_1_CFG.
+  90:Generated_Source\PSoC5/CAN_1_PM.c **** *
+  91:Generated_Source\PSoC5/CAN_1_PM.c **** *******************************************************************************/
+  92:Generated_Source\PSoC5/CAN_1_PM.c **** void CAN_1_RestoreConfig(void) 
+  93:Generated_Source\PSoC5/CAN_1_PM.c **** {
+  95              		.loc 1 93 0
+  96              		.cfi_startproc
+  97              		@ args = 0, pretend = 0, frame = 0
+  98              		@ frame_needed = 1, uses_anonymous_args = 0
+  99              		@ link register save eliminated.
+ 100 0000 80B4     		push	{r7}
+ 101              		.cfi_def_cfa_offset 4
+ 102              		.cfi_offset 7, -4
+ 103 0002 00AF     		add	r7, sp, #0
+ 104              		.cfi_def_cfa_register 7
+  94:Generated_Source\PSoC5/CAN_1_PM.c ****     #if (CY_PSOC3 || CY_PSOC5)
+  95:Generated_Source\PSoC5/CAN_1_PM.c ****         CY_SET_REG32(CAN_1_INT_SR_PTR, CAN_1_backup.intSr);
+ 105              		.loc 1 95 0
+ 106 0004 094A     		ldr	r2, .L5
+ 107 0006 0A4B     		ldr	r3, .L5+4
+ 108 0008 5B68     		ldr	r3, [r3, #4]
+ 109 000a 1360     		str	r3, [r2]
+  96:Generated_Source\PSoC5/CAN_1_PM.c ****         CY_SET_REG32(CAN_1_INT_EN_PTR, CAN_1_backup.intEn);
+ 110              		.loc 1 96 0
+ 111 000c 094A     		ldr	r2, .L5+8
+ 112 000e 084B     		ldr	r3, .L5+4
+ 113 0010 9B68     		ldr	r3, [r3, #8]
+ 114 0012 1360     		str	r3, [r2]
+  97:Generated_Source\PSoC5/CAN_1_PM.c ****         CY_SET_REG32(CAN_1_CMD_PTR, CAN_1_backup.cmd);
+ 115              		.loc 1 97 0
+ 116 0014 084A     		ldr	r2, .L5+12
+ 117 0016 064B     		ldr	r3, .L5+4
+ 118 0018 DB68     		ldr	r3, [r3, #12]
+ 119 001a 1360     		str	r3, [r2]
+  98:Generated_Source\PSoC5/CAN_1_PM.c ****         CY_SET_REG32(CAN_1_CFG_PTR, CAN_1_backup.cfg);
+ 120              		.loc 1 98 0
+ 121 001c 074A     		ldr	r2, .L5+16
+ 122 001e 044B     		ldr	r3, .L5+4
+ 123 0020 1B69     		ldr	r3, [r3, #16]
+ 124 0022 1360     		str	r3, [r2]
+  99:Generated_Source\PSoC5/CAN_1_PM.c ****     #endif /* CY_PSOC3 || CY_PSOC5 */
+ 100:Generated_Source\PSoC5/CAN_1_PM.c **** }
+ 125              		.loc 1 100 0
+ 126 0024 BD46     		mov	sp, r7
+ 127              		.cfi_def_cfa_register 13
+ 128              		@ sp needed
+ARM GAS  D:\Windows\AppData\Local\Temp\cc2j45Lb.s 			page 5
+
+
+ 129 0026 5DF8047B 		ldr	r7, [sp], #4
+ 130              		.cfi_restore 7
+ 131              		.cfi_def_cfa_offset 0
+ 132 002a 7047     		bx	lr
+ 133              	.L6:
+ 134              		.align	2
+ 135              	.L5:
+ 136 002c 00A00040 		.word	1073782784
+ 137 0030 00000000 		.word	CAN_1_backup
+ 138 0034 04A00040 		.word	1073782788
+ 139 0038 10A00040 		.word	1073782800
+ 140 003c 14A00040 		.word	1073782804
+ 141              		.cfi_endproc
+ 142              	.LFE1:
+ 143              		.size	CAN_1_RestoreConfig, .-CAN_1_RestoreConfig
+ 144              		.section	.text.CAN_1_Sleep,"ax",%progbits
+ 145              		.align	2
+ 146              		.global	CAN_1_Sleep
+ 147              		.thumb
+ 148              		.thumb_func
+ 149              		.type	CAN_1_Sleep, %function
+ 150              	CAN_1_Sleep:
+ 151              	.LFB2:
+ 101:Generated_Source\PSoC5/CAN_1_PM.c **** 
+ 102:Generated_Source\PSoC5/CAN_1_PM.c **** 
+ 103:Generated_Source\PSoC5/CAN_1_PM.c **** /*******************************************************************************
+ 104:Generated_Source\PSoC5/CAN_1_PM.c **** * Function Name: CAN_1_Sleep
+ 105:Generated_Source\PSoC5/CAN_1_PM.c **** ********************************************************************************
+ 106:Generated_Source\PSoC5/CAN_1_PM.c **** *
+ 107:Generated_Source\PSoC5/CAN_1_PM.c **** * Summary:
+ 108:Generated_Source\PSoC5/CAN_1_PM.c **** *  Prepares CAN Component to go to sleep.
+ 109:Generated_Source\PSoC5/CAN_1_PM.c **** *
+ 110:Generated_Source\PSoC5/CAN_1_PM.c **** * Parameters:
+ 111:Generated_Source\PSoC5/CAN_1_PM.c **** *  None.
+ 112:Generated_Source\PSoC5/CAN_1_PM.c **** *
+ 113:Generated_Source\PSoC5/CAN_1_PM.c **** * Return:
+ 114:Generated_Source\PSoC5/CAN_1_PM.c **** *  None.
+ 115:Generated_Source\PSoC5/CAN_1_PM.c **** *
+ 116:Generated_Source\PSoC5/CAN_1_PM.c **** * Global Variables:
+ 117:Generated_Source\PSoC5/CAN_1_PM.c **** *  CAN_1_backup - Modified when non-retention registers are saved.
+ 118:Generated_Source\PSoC5/CAN_1_PM.c **** *
+ 119:Generated_Source\PSoC5/CAN_1_PM.c **** * Reentrant:
+ 120:Generated_Source\PSoC5/CAN_1_PM.c **** *  No.
+ 121:Generated_Source\PSoC5/CAN_1_PM.c **** *
+ 122:Generated_Source\PSoC5/CAN_1_PM.c **** *******************************************************************************/
+ 123:Generated_Source\PSoC5/CAN_1_PM.c **** void CAN_1_Sleep(void) 
+ 124:Generated_Source\PSoC5/CAN_1_PM.c **** {
+ 152              		.loc 1 124 0
+ 153              		.cfi_startproc
+ 154              		@ args = 0, pretend = 0, frame = 0
+ 155              		@ frame_needed = 1, uses_anonymous_args = 0
+ 156 0000 80B5     		push	{r7, lr}
+ 157              		.cfi_def_cfa_offset 8
+ 158              		.cfi_offset 7, -8
+ 159              		.cfi_offset 14, -4
+ 160 0002 00AF     		add	r7, sp, #0
+ 161              		.cfi_def_cfa_register 7
+ARM GAS  D:\Windows\AppData\Local\Temp\cc2j45Lb.s 			page 6
+
+
+ 125:Generated_Source\PSoC5/CAN_1_PM.c ****     #if (!(CY_PSOC3 || CY_PSOC5))
+ 126:Generated_Source\PSoC5/CAN_1_PM.c ****         uint8 i;
+ 127:Generated_Source\PSoC5/CAN_1_PM.c ****     #endif /* (!(CY_PSOC3 || CY_PSOC5)) */
+ 128:Generated_Source\PSoC5/CAN_1_PM.c **** 
+ 129:Generated_Source\PSoC5/CAN_1_PM.c ****     if (0u != (CY_GET_REG32(CAN_1_CMD_PTR) & CAN_1_MODE_MASK))
+ 162              		.loc 1 129 0
+ 163 0004 084B     		ldr	r3, .L10
+ 164 0006 1B68     		ldr	r3, [r3]
+ 165 0008 03F00103 		and	r3, r3, #1
+ 166 000c 002B     		cmp	r3, #0
+ 167 000e 03D0     		beq	.L8
+ 130:Generated_Source\PSoC5/CAN_1_PM.c ****     {
+ 131:Generated_Source\PSoC5/CAN_1_PM.c ****         CAN_1_backup.enableState = 1u;
+ 168              		.loc 1 131 0
+ 169 0010 064B     		ldr	r3, .L10+4
+ 170 0012 0122     		movs	r2, #1
+ 171 0014 1A70     		strb	r2, [r3]
+ 172 0016 02E0     		b	.L9
+ 173              	.L8:
+ 132:Generated_Source\PSoC5/CAN_1_PM.c ****     }
+ 133:Generated_Source\PSoC5/CAN_1_PM.c ****     else /* CAN block is disabled */
+ 134:Generated_Source\PSoC5/CAN_1_PM.c ****     {
+ 135:Generated_Source\PSoC5/CAN_1_PM.c ****         CAN_1_backup.enableState = 0u;
+ 174              		.loc 1 135 0
+ 175 0018 044B     		ldr	r3, .L10+4
+ 176 001a 0022     		movs	r2, #0
+ 177 001c 1A70     		strb	r2, [r3]
+ 178              	.L9:
+ 136:Generated_Source\PSoC5/CAN_1_PM.c ****     }
+ 137:Generated_Source\PSoC5/CAN_1_PM.c **** 
+ 138:Generated_Source\PSoC5/CAN_1_PM.c ****     #if (CY_PSOC3 || CY_PSOC5)
+ 139:Generated_Source\PSoC5/CAN_1_PM.c ****         CAN_1_SaveConfig();
+ 179              		.loc 1 139 0
+ 180 001e FFF7FEFF 		bl	CAN_1_SaveConfig
+ 140:Generated_Source\PSoC5/CAN_1_PM.c ****         (void) CAN_1_Stop();
+ 181              		.loc 1 140 0
+ 182 0022 FFF7FEFF 		bl	CAN_1_Stop
+ 141:Generated_Source\PSoC5/CAN_1_PM.c ****     #else /* CY_PSOC4 */
+ 142:Generated_Source\PSoC5/CAN_1_PM.c ****         /* Abort respective pending TX message requests */
+ 143:Generated_Source\PSoC5/CAN_1_PM.c ****         for (i = 0u; i < CAN_1_NUMBER_OF_TX_MAILBOXES; i++)
+ 144:Generated_Source\PSoC5/CAN_1_PM.c ****         {
+ 145:Generated_Source\PSoC5/CAN_1_PM.c ****             CAN_1_TX_ABORT_MESSAGE(i);
+ 146:Generated_Source\PSoC5/CAN_1_PM.c ****         }
+ 147:Generated_Source\PSoC5/CAN_1_PM.c **** 
+ 148:Generated_Source\PSoC5/CAN_1_PM.c ****         /* Sets CAN controller to Stop mode */
+ 149:Generated_Source\PSoC5/CAN_1_PM.c ****         (void) CAN_1_Stop();
+ 150:Generated_Source\PSoC5/CAN_1_PM.c **** 
+ 151:Generated_Source\PSoC5/CAN_1_PM.c ****         /* Clear Global Interrupt enable Flag */
+ 152:Generated_Source\PSoC5/CAN_1_PM.c ****         (void) CAN_1_GlobalIntDisable();
+ 153:Generated_Source\PSoC5/CAN_1_PM.c ****     #endif /* CY_PSOC3 || CY_PSOC5 */
+ 154:Generated_Source\PSoC5/CAN_1_PM.c **** }
+ 183              		.loc 1 154 0
+ 184 0026 80BD     		pop	{r7, pc}
+ 185              	.L11:
+ 186              		.align	2
+ 187              	.L10:
+ 188 0028 10A00040 		.word	1073782800
+ARM GAS  D:\Windows\AppData\Local\Temp\cc2j45Lb.s 			page 7
+
+
+ 189 002c 00000000 		.word	CAN_1_backup
+ 190              		.cfi_endproc
+ 191              	.LFE2:
+ 192              		.size	CAN_1_Sleep, .-CAN_1_Sleep
+ 193              		.section	.text.CAN_1_Wakeup,"ax",%progbits
+ 194              		.align	2
+ 195              		.global	CAN_1_Wakeup
+ 196              		.thumb
+ 197              		.thumb_func
+ 198              		.type	CAN_1_Wakeup, %function
+ 199              	CAN_1_Wakeup:
+ 200              	.LFB3:
+ 155:Generated_Source\PSoC5/CAN_1_PM.c **** 
+ 156:Generated_Source\PSoC5/CAN_1_PM.c **** 
+ 157:Generated_Source\PSoC5/CAN_1_PM.c **** /*******************************************************************************
+ 158:Generated_Source\PSoC5/CAN_1_PM.c **** * Function Name: CAN_1_Wakeup
+ 159:Generated_Source\PSoC5/CAN_1_PM.c **** ********************************************************************************
+ 160:Generated_Source\PSoC5/CAN_1_PM.c **** *
+ 161:Generated_Source\PSoC5/CAN_1_PM.c **** * Summary:
+ 162:Generated_Source\PSoC5/CAN_1_PM.c **** *  Prepares CAN Component to wake up.
+ 163:Generated_Source\PSoC5/CAN_1_PM.c **** *
+ 164:Generated_Source\PSoC5/CAN_1_PM.c **** * Parameters:
+ 165:Generated_Source\PSoC5/CAN_1_PM.c **** *  None.
+ 166:Generated_Source\PSoC5/CAN_1_PM.c **** *
+ 167:Generated_Source\PSoC5/CAN_1_PM.c **** * Return:
+ 168:Generated_Source\PSoC5/CAN_1_PM.c **** *  None.
+ 169:Generated_Source\PSoC5/CAN_1_PM.c **** *
+ 170:Generated_Source\PSoC5/CAN_1_PM.c **** * Global Variables:
+ 171:Generated_Source\PSoC5/CAN_1_PM.c **** *  CAN_1_backup - Used when non-retention registers are restored.
+ 172:Generated_Source\PSoC5/CAN_1_PM.c **** *
+ 173:Generated_Source\PSoC5/CAN_1_PM.c **** * Reentrant:
+ 174:Generated_Source\PSoC5/CAN_1_PM.c **** *  No.
+ 175:Generated_Source\PSoC5/CAN_1_PM.c **** *
+ 176:Generated_Source\PSoC5/CAN_1_PM.c **** *******************************************************************************/
+ 177:Generated_Source\PSoC5/CAN_1_PM.c **** void CAN_1_Wakeup(void) 
+ 178:Generated_Source\PSoC5/CAN_1_PM.c **** {
+ 201              		.loc 1 178 0
+ 202              		.cfi_startproc
+ 203              		@ args = 0, pretend = 0, frame = 0
+ 204              		@ frame_needed = 1, uses_anonymous_args = 0
+ 205 0000 80B5     		push	{r7, lr}
+ 206              		.cfi_def_cfa_offset 8
+ 207              		.cfi_offset 7, -8
+ 208              		.cfi_offset 14, -4
+ 209 0002 00AF     		add	r7, sp, #0
+ 210              		.cfi_def_cfa_register 7
+ 179:Generated_Source\PSoC5/CAN_1_PM.c ****     #if (CY_PSOC3 || CY_PSOC5)
+ 180:Generated_Source\PSoC5/CAN_1_PM.c ****         /* Enable CAN block in Active mode */
+ 181:Generated_Source\PSoC5/CAN_1_PM.c ****         CAN_1_PM_ACT_CFG_REG |= CAN_1_ACT_PWR_EN;
+ 211              		.loc 1 181 0
+ 212 0004 0D4A     		ldr	r2, .L14
+ 213 0006 0D4B     		ldr	r3, .L14
+ 214 0008 1B78     		ldrb	r3, [r3]
+ 215 000a DBB2     		uxtb	r3, r3
+ 216 000c 43F00103 		orr	r3, r3, #1
+ 217 0010 DBB2     		uxtb	r3, r3
+ 218 0012 1370     		strb	r3, [r2]
+ARM GAS  D:\Windows\AppData\Local\Temp\cc2j45Lb.s 			page 8
+
+
+ 182:Generated_Source\PSoC5/CAN_1_PM.c ****         /* Enable CAN block in Alternate Active (Standby) mode */
+ 183:Generated_Source\PSoC5/CAN_1_PM.c ****         CAN_1_PM_STBY_CFG_REG |= CAN_1_STBY_PWR_EN;
+ 219              		.loc 1 183 0
+ 220 0014 0A4A     		ldr	r2, .L14+4
+ 221 0016 0A4B     		ldr	r3, .L14+4
+ 222 0018 1B78     		ldrb	r3, [r3]
+ 223 001a DBB2     		uxtb	r3, r3
+ 224 001c 43F00103 		orr	r3, r3, #1
+ 225 0020 DBB2     		uxtb	r3, r3
+ 226 0022 1370     		strb	r3, [r2]
+ 184:Generated_Source\PSoC5/CAN_1_PM.c **** 
+ 185:Generated_Source\PSoC5/CAN_1_PM.c ****         CAN_1_RestoreConfig();
+ 227              		.loc 1 185 0
+ 228 0024 FFF7FEFF 		bl	CAN_1_RestoreConfig
+ 186:Generated_Source\PSoC5/CAN_1_PM.c **** 
+ 187:Generated_Source\PSoC5/CAN_1_PM.c ****         /* Reconfigure Rx and Tx Buffers control registers */
+ 188:Generated_Source\PSoC5/CAN_1_PM.c ****         (void) CAN_1_RxTxBuffersConfig();
+ 229              		.loc 1 188 0
+ 230 0028 FFF7FEFF 		bl	CAN_1_RxTxBuffersConfig
+ 189:Generated_Source\PSoC5/CAN_1_PM.c **** 
+ 190:Generated_Source\PSoC5/CAN_1_PM.c ****         if (CAN_1_backup.enableState != 0u)
+ 231              		.loc 1 190 0
+ 232 002c 054B     		ldr	r3, .L14+8
+ 233 002e 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 234 0030 002B     		cmp	r3, #0
+ 235 0032 01D0     		beq	.L12
+ 191:Generated_Source\PSoC5/CAN_1_PM.c ****         {
+ 192:Generated_Source\PSoC5/CAN_1_PM.c ****             /* Enable component's operation */
+ 193:Generated_Source\PSoC5/CAN_1_PM.c ****             (void) CAN_1_Enable();
+ 236              		.loc 1 193 0
+ 237 0034 FFF7FEFF 		bl	CAN_1_Enable
+ 238              	.L12:
+ 194:Generated_Source\PSoC5/CAN_1_PM.c ****         } /* Do nothing if component's block was disabled before */
+ 195:Generated_Source\PSoC5/CAN_1_PM.c ****     #else /* CY_PSOC4 */
+ 196:Generated_Source\PSoC5/CAN_1_PM.c ****         /* Clear all INT_STATUS bits */
+ 197:Generated_Source\PSoC5/CAN_1_PM.c ****         CAN_1_INT_SR_REG = CAN_1_INT_STATUS_MASK;
+ 198:Generated_Source\PSoC5/CAN_1_PM.c **** 
+ 199:Generated_Source\PSoC5/CAN_1_PM.c ****         /* Set Global Interrupt enable Flag */
+ 200:Generated_Source\PSoC5/CAN_1_PM.c ****         (void) CAN_1_GlobalIntEnable();
+ 201:Generated_Source\PSoC5/CAN_1_PM.c **** 
+ 202:Generated_Source\PSoC5/CAN_1_PM.c ****         if (CAN_1_backup.enableState != 0u)
+ 203:Generated_Source\PSoC5/CAN_1_PM.c ****         {
+ 204:Generated_Source\PSoC5/CAN_1_PM.c ****             (void) CAN_1_Enable();
+ 205:Generated_Source\PSoC5/CAN_1_PM.c ****         } /* Do nothing if component's block was disabled before */
+ 206:Generated_Source\PSoC5/CAN_1_PM.c ****     #endif /* CY_PSOC3 || CY_PSOC5 */
+ 207:Generated_Source\PSoC5/CAN_1_PM.c **** }
+ 239              		.loc 1 207 0
+ 240 0038 80BD     		pop	{r7, pc}
+ 241              	.L15:
+ 242 003a 00BF     		.align	2
+ 243              	.L14:
+ 244 003c A6430040 		.word	1073759142
+ 245 0040 B6430040 		.word	1073759158
+ 246 0044 00000000 		.word	CAN_1_backup
+ 247              		.cfi_endproc
+ 248              	.LFE3:
+ 249              		.size	CAN_1_Wakeup, .-CAN_1_Wakeup
+ARM GAS  D:\Windows\AppData\Local\Temp\cc2j45Lb.s 			page 9
+
+
+ 250              		.text
+ 251              	.Letext0:
+ 252              		.file 2 "Generated_Source\\PSoC5\\cytypes.h"
+ 253              		.file 3 "Generated_Source\\PSoC5\\CAN_1.h"
+ 254              		.section	.debug_info,"",%progbits
+ 255              	.Ldebug_info0:
+ 256 0000 6F010000 		.4byte	0x16f
+ 257 0004 0400     		.2byte	0x4
+ 258 0006 00000000 		.4byte	.Ldebug_abbrev0
+ 259 000a 04       		.byte	0x4
+ 260 000b 01       		.uleb128 0x1
+ 261 000c B4000000 		.4byte	.LASF26
+ 262 0010 01       		.byte	0x1
+ 263 0011 06000000 		.4byte	.LASF27
+ 264 0015 C4010000 		.4byte	.LASF28
+ 265 0019 00000000 		.4byte	.Ldebug_ranges0+0
+ 266 001d 00000000 		.4byte	0
+ 267 0021 00000000 		.4byte	.Ldebug_line0
+ 268 0025 02       		.uleb128 0x2
+ 269 0026 01       		.byte	0x1
+ 270 0027 06       		.byte	0x6
+ 271 0028 1E020000 		.4byte	.LASF0
+ 272 002c 02       		.uleb128 0x2
+ 273 002d 01       		.byte	0x1
+ 274 002e 08       		.byte	0x8
+ 275 002f 62000000 		.4byte	.LASF1
+ 276 0033 02       		.uleb128 0x2
+ 277 0034 02       		.byte	0x2
+ 278 0035 05       		.byte	0x5
+ 279 0036 BA010000 		.4byte	.LASF2
+ 280 003a 02       		.uleb128 0x2
+ 281 003b 02       		.byte	0x2
+ 282 003c 07       		.byte	0x7
+ 283 003d 28000000 		.4byte	.LASF3
+ 284 0041 02       		.uleb128 0x2
+ 285 0042 04       		.byte	0x4
+ 286 0043 05       		.byte	0x5
+ 287 0044 09020000 		.4byte	.LASF4
+ 288 0048 02       		.uleb128 0x2
+ 289 0049 04       		.byte	0x4
+ 290 004a 07       		.byte	0x7
+ 291 004b 7B000000 		.4byte	.LASF5
+ 292 004f 02       		.uleb128 0x2
+ 293 0050 08       		.byte	0x8
+ 294 0051 05       		.byte	0x5
+ 295 0052 A1010000 		.4byte	.LASF6
+ 296 0056 02       		.uleb128 0x2
+ 297 0057 08       		.byte	0x8
+ 298 0058 07       		.byte	0x7
+ 299 0059 75010000 		.4byte	.LASF7
+ 300 005d 03       		.uleb128 0x3
+ 301 005e 04       		.byte	0x4
+ 302 005f 05       		.byte	0x5
+ 303 0060 696E7400 		.ascii	"int\000"
+ 304 0064 02       		.uleb128 0x2
+ 305 0065 04       		.byte	0x4
+ 306 0066 07       		.byte	0x7
+ARM GAS  D:\Windows\AppData\Local\Temp\cc2j45Lb.s 			page 10
+
+
+ 307 0067 68010000 		.4byte	.LASF8
+ 308 006b 04       		.uleb128 0x4
+ 309 006c A1000000 		.4byte	.LASF9
+ 310 0070 02       		.byte	0x2
+ 311 0071 9201     		.2byte	0x192
+ 312 0073 2C000000 		.4byte	0x2c
+ 313 0077 04       		.uleb128 0x4
+ 314 0078 49010000 		.4byte	.LASF10
+ 315 007c 02       		.byte	0x2
+ 316 007d 9301     		.2byte	0x193
+ 317 007f 3A000000 		.4byte	0x3a
+ 318 0083 04       		.uleb128 0x4
+ 319 0084 50010000 		.4byte	.LASF11
+ 320 0088 02       		.byte	0x2
+ 321 0089 9401     		.2byte	0x194
+ 322 008b 48000000 		.4byte	0x48
+ 323 008f 02       		.uleb128 0x2
+ 324 0090 04       		.byte	0x4
+ 325 0091 04       		.byte	0x4
+ 326 0092 4F000000 		.4byte	.LASF12
+ 327 0096 02       		.uleb128 0x2
+ 328 0097 08       		.byte	0x8
+ 329 0098 04       		.byte	0x4
+ 330 0099 42010000 		.4byte	.LASF13
+ 331 009d 02       		.uleb128 0x2
+ 332 009e 01       		.byte	0x1
+ 333 009f 08       		.byte	0x8
+ 334 00a0 AF010000 		.4byte	.LASF14
+ 335 00a4 04       		.uleb128 0x4
+ 336 00a5 70000000 		.4byte	.LASF15
+ 337 00a9 02       		.byte	0x2
+ 338 00aa 3C02     		.2byte	0x23c
+ 339 00ac B0000000 		.4byte	0xb0
+ 340 00b0 05       		.uleb128 0x5
+ 341 00b1 6B000000 		.4byte	0x6b
+ 342 00b5 04       		.uleb128 0x4
+ 343 00b6 00000000 		.4byte	.LASF16
+ 344 00ba 02       		.byte	0x2
+ 345 00bb 3E02     		.2byte	0x23e
+ 346 00bd C1000000 		.4byte	0xc1
+ 347 00c1 05       		.uleb128 0x5
+ 348 00c2 83000000 		.4byte	0x83
+ 349 00c6 02       		.uleb128 0x2
+ 350 00c7 04       		.byte	0x4
+ 351 00c8 07       		.byte	0x7
+ 352 00c9 8C010000 		.4byte	.LASF17
+ 353 00cd 06       		.uleb128 0x6
+ 354 00ce 14       		.byte	0x14
+ 355 00cf 03       		.byte	0x3
+ 356 00d0 B4       		.byte	0xb4
+ 357 00d1 12010000 		.4byte	0x112
+ 358 00d5 07       		.uleb128 0x7
+ 359 00d6 12020000 		.4byte	.LASF18
+ 360 00da 03       		.byte	0x3
+ 361 00db B6       		.byte	0xb6
+ 362 00dc 6B000000 		.4byte	0x6b
+ 363 00e0 00       		.byte	0
+ARM GAS  D:\Windows\AppData\Local\Temp\cc2j45Lb.s 			page 11
+
+
+ 364 00e1 07       		.uleb128 0x7
+ 365 00e2 B4010000 		.4byte	.LASF19
+ 366 00e6 03       		.byte	0x3
+ 367 00e7 B8       		.byte	0xb8
+ 368 00e8 83000000 		.4byte	0x83
+ 369 00ec 04       		.byte	0x4
+ 370 00ed 07       		.uleb128 0x7
+ 371 00ee 75000000 		.4byte	.LASF20
+ 372 00f2 03       		.byte	0x3
+ 373 00f3 B9       		.byte	0xb9
+ 374 00f4 83000000 		.4byte	0x83
+ 375 00f8 08       		.byte	0x8
+ 376 00f9 08       		.uleb128 0x8
+ 377 00fa 636D6400 		.ascii	"cmd\000"
+ 378 00fe 03       		.byte	0x3
+ 379 00ff BA       		.byte	0xba
+ 380 0100 83000000 		.4byte	0x83
+ 381 0104 0C       		.byte	0xc
+ 382 0105 08       		.uleb128 0x8
+ 383 0106 63666700 		.ascii	"cfg\000"
+ 384 010a 03       		.byte	0x3
+ 385 010b BB       		.byte	0xbb
+ 386 010c 83000000 		.4byte	0x83
+ 387 0110 10       		.byte	0x10
+ 388 0111 00       		.byte	0
+ 389 0112 09       		.uleb128 0x9
+ 390 0113 3B000000 		.4byte	.LASF21
+ 391 0117 03       		.byte	0x3
+ 392 0118 BD       		.byte	0xbd
+ 393 0119 CD000000 		.4byte	0xcd
+ 394 011d 0A       		.uleb128 0xa
+ 395 011e 57010000 		.4byte	.LASF22
+ 396 0122 01       		.byte	0x1
+ 397 0123 3B       		.byte	0x3b
+ 398 0124 00000000 		.4byte	.LFB0
+ 399 0128 40000000 		.4byte	.LFE0-.LFB0
+ 400 012c 01       		.uleb128 0x1
+ 401 012d 9C       		.byte	0x9c
+ 402 012e 0A       		.uleb128 0xa
+ 403 012f 8D000000 		.4byte	.LASF23
+ 404 0133 01       		.byte	0x1
+ 405 0134 5C       		.byte	0x5c
+ 406 0135 00000000 		.4byte	.LFB1
+ 407 0139 40000000 		.4byte	.LFE1-.LFB1
+ 408 013d 01       		.uleb128 0x1
+ 409 013e 9C       		.byte	0x9c
+ 410 013f 0B       		.uleb128 0xb
+ 411 0140 95010000 		.4byte	.LASF24
+ 412 0144 01       		.byte	0x1
+ 413 0145 7B       		.byte	0x7b
+ 414 0146 00000000 		.4byte	.LFB2
+ 415 014a 30000000 		.4byte	.LFE2-.LFB2
+ 416 014e 01       		.uleb128 0x1
+ 417 014f 9C       		.byte	0x9c
+ 418 0150 0B       		.uleb128 0xb
+ 419 0151 A7000000 		.4byte	.LASF25
+ 420 0155 01       		.byte	0x1
+ARM GAS  D:\Windows\AppData\Local\Temp\cc2j45Lb.s 			page 12
+
+
+ 421 0156 B1       		.byte	0xb1
+ 422 0157 00000000 		.4byte	.LFB3
+ 423 015b 48000000 		.4byte	.LFE3-.LFB3
+ 424 015f 01       		.uleb128 0x1
+ 425 0160 9C       		.byte	0x9c
+ 426 0161 0C       		.uleb128 0xc
+ 427 0162 55000000 		.4byte	.LASF29
+ 428 0166 01       		.byte	0x1
+ 429 0167 14       		.byte	0x14
+ 430 0168 12010000 		.4byte	0x112
+ 431 016c 05       		.uleb128 0x5
+ 432 016d 03       		.byte	0x3
+ 433 016e 00000000 		.4byte	CAN_1_backup
+ 434 0172 00       		.byte	0
+ 435              		.section	.debug_abbrev,"",%progbits
+ 436              	.Ldebug_abbrev0:
+ 437 0000 01       		.uleb128 0x1
+ 438 0001 11       		.uleb128 0x11
+ 439 0002 01       		.byte	0x1
+ 440 0003 25       		.uleb128 0x25
+ 441 0004 0E       		.uleb128 0xe
+ 442 0005 13       		.uleb128 0x13
+ 443 0006 0B       		.uleb128 0xb
+ 444 0007 03       		.uleb128 0x3
+ 445 0008 0E       		.uleb128 0xe
+ 446 0009 1B       		.uleb128 0x1b
+ 447 000a 0E       		.uleb128 0xe
+ 448 000b 55       		.uleb128 0x55
+ 449 000c 17       		.uleb128 0x17
+ 450 000d 11       		.uleb128 0x11
+ 451 000e 01       		.uleb128 0x1
+ 452 000f 10       		.uleb128 0x10
+ 453 0010 17       		.uleb128 0x17
+ 454 0011 00       		.byte	0
+ 455 0012 00       		.byte	0
+ 456 0013 02       		.uleb128 0x2
+ 457 0014 24       		.uleb128 0x24
+ 458 0015 00       		.byte	0
+ 459 0016 0B       		.uleb128 0xb
+ 460 0017 0B       		.uleb128 0xb
+ 461 0018 3E       		.uleb128 0x3e
+ 462 0019 0B       		.uleb128 0xb
+ 463 001a 03       		.uleb128 0x3
+ 464 001b 0E       		.uleb128 0xe
+ 465 001c 00       		.byte	0
+ 466 001d 00       		.byte	0
+ 467 001e 03       		.uleb128 0x3
+ 468 001f 24       		.uleb128 0x24
+ 469 0020 00       		.byte	0
+ 470 0021 0B       		.uleb128 0xb
+ 471 0022 0B       		.uleb128 0xb
+ 472 0023 3E       		.uleb128 0x3e
+ 473 0024 0B       		.uleb128 0xb
+ 474 0025 03       		.uleb128 0x3
+ 475 0026 08       		.uleb128 0x8
+ 476 0027 00       		.byte	0
+ 477 0028 00       		.byte	0
+ARM GAS  D:\Windows\AppData\Local\Temp\cc2j45Lb.s 			page 13
+
+
+ 478 0029 04       		.uleb128 0x4
+ 479 002a 16       		.uleb128 0x16
+ 480 002b 00       		.byte	0
+ 481 002c 03       		.uleb128 0x3
+ 482 002d 0E       		.uleb128 0xe
+ 483 002e 3A       		.uleb128 0x3a
+ 484 002f 0B       		.uleb128 0xb
+ 485 0030 3B       		.uleb128 0x3b
+ 486 0031 05       		.uleb128 0x5
+ 487 0032 49       		.uleb128 0x49
+ 488 0033 13       		.uleb128 0x13
+ 489 0034 00       		.byte	0
+ 490 0035 00       		.byte	0
+ 491 0036 05       		.uleb128 0x5
+ 492 0037 35       		.uleb128 0x35
+ 493 0038 00       		.byte	0
+ 494 0039 49       		.uleb128 0x49
+ 495 003a 13       		.uleb128 0x13
+ 496 003b 00       		.byte	0
+ 497 003c 00       		.byte	0
+ 498 003d 06       		.uleb128 0x6
+ 499 003e 13       		.uleb128 0x13
+ 500 003f 01       		.byte	0x1
+ 501 0040 0B       		.uleb128 0xb
+ 502 0041 0B       		.uleb128 0xb
+ 503 0042 3A       		.uleb128 0x3a
+ 504 0043 0B       		.uleb128 0xb
+ 505 0044 3B       		.uleb128 0x3b
+ 506 0045 0B       		.uleb128 0xb
+ 507 0046 01       		.uleb128 0x1
+ 508 0047 13       		.uleb128 0x13
+ 509 0048 00       		.byte	0
+ 510 0049 00       		.byte	0
+ 511 004a 07       		.uleb128 0x7
+ 512 004b 0D       		.uleb128 0xd
+ 513 004c 00       		.byte	0
+ 514 004d 03       		.uleb128 0x3
+ 515 004e 0E       		.uleb128 0xe
+ 516 004f 3A       		.uleb128 0x3a
+ 517 0050 0B       		.uleb128 0xb
+ 518 0051 3B       		.uleb128 0x3b
+ 519 0052 0B       		.uleb128 0xb
+ 520 0053 49       		.uleb128 0x49
+ 521 0054 13       		.uleb128 0x13
+ 522 0055 38       		.uleb128 0x38
+ 523 0056 0B       		.uleb128 0xb
+ 524 0057 00       		.byte	0
+ 525 0058 00       		.byte	0
+ 526 0059 08       		.uleb128 0x8
+ 527 005a 0D       		.uleb128 0xd
+ 528 005b 00       		.byte	0
+ 529 005c 03       		.uleb128 0x3
+ 530 005d 08       		.uleb128 0x8
+ 531 005e 3A       		.uleb128 0x3a
+ 532 005f 0B       		.uleb128 0xb
+ 533 0060 3B       		.uleb128 0x3b
+ 534 0061 0B       		.uleb128 0xb
+ARM GAS  D:\Windows\AppData\Local\Temp\cc2j45Lb.s 			page 14
+
+
+ 535 0062 49       		.uleb128 0x49
+ 536 0063 13       		.uleb128 0x13
+ 537 0064 38       		.uleb128 0x38
+ 538 0065 0B       		.uleb128 0xb
+ 539 0066 00       		.byte	0
+ 540 0067 00       		.byte	0
+ 541 0068 09       		.uleb128 0x9
+ 542 0069 16       		.uleb128 0x16
+ 543 006a 00       		.byte	0
+ 544 006b 03       		.uleb128 0x3
+ 545 006c 0E       		.uleb128 0xe
+ 546 006d 3A       		.uleb128 0x3a
+ 547 006e 0B       		.uleb128 0xb
+ 548 006f 3B       		.uleb128 0x3b
+ 549 0070 0B       		.uleb128 0xb
+ 550 0071 49       		.uleb128 0x49
+ 551 0072 13       		.uleb128 0x13
+ 552 0073 00       		.byte	0
+ 553 0074 00       		.byte	0
+ 554 0075 0A       		.uleb128 0xa
+ 555 0076 2E       		.uleb128 0x2e
+ 556 0077 00       		.byte	0
+ 557 0078 3F       		.uleb128 0x3f
+ 558 0079 19       		.uleb128 0x19
+ 559 007a 03       		.uleb128 0x3
+ 560 007b 0E       		.uleb128 0xe
+ 561 007c 3A       		.uleb128 0x3a
+ 562 007d 0B       		.uleb128 0xb
+ 563 007e 3B       		.uleb128 0x3b
+ 564 007f 0B       		.uleb128 0xb
+ 565 0080 27       		.uleb128 0x27
+ 566 0081 19       		.uleb128 0x19
+ 567 0082 11       		.uleb128 0x11
+ 568 0083 01       		.uleb128 0x1
+ 569 0084 12       		.uleb128 0x12
+ 570 0085 06       		.uleb128 0x6
+ 571 0086 40       		.uleb128 0x40
+ 572 0087 18       		.uleb128 0x18
+ 573 0088 9742     		.uleb128 0x2117
+ 574 008a 19       		.uleb128 0x19
+ 575 008b 00       		.byte	0
+ 576 008c 00       		.byte	0
+ 577 008d 0B       		.uleb128 0xb
+ 578 008e 2E       		.uleb128 0x2e
+ 579 008f 00       		.byte	0
+ 580 0090 3F       		.uleb128 0x3f
+ 581 0091 19       		.uleb128 0x19
+ 582 0092 03       		.uleb128 0x3
+ 583 0093 0E       		.uleb128 0xe
+ 584 0094 3A       		.uleb128 0x3a
+ 585 0095 0B       		.uleb128 0xb
+ 586 0096 3B       		.uleb128 0x3b
+ 587 0097 0B       		.uleb128 0xb
+ 588 0098 27       		.uleb128 0x27
+ 589 0099 19       		.uleb128 0x19
+ 590 009a 11       		.uleb128 0x11
+ 591 009b 01       		.uleb128 0x1
+ARM GAS  D:\Windows\AppData\Local\Temp\cc2j45Lb.s 			page 15
+
+
+ 592 009c 12       		.uleb128 0x12
+ 593 009d 06       		.uleb128 0x6
+ 594 009e 40       		.uleb128 0x40
+ 595 009f 18       		.uleb128 0x18
+ 596 00a0 9642     		.uleb128 0x2116
+ 597 00a2 19       		.uleb128 0x19
+ 598 00a3 00       		.byte	0
+ 599 00a4 00       		.byte	0
+ 600 00a5 0C       		.uleb128 0xc
+ 601 00a6 34       		.uleb128 0x34
+ 602 00a7 00       		.byte	0
+ 603 00a8 03       		.uleb128 0x3
+ 604 00a9 0E       		.uleb128 0xe
+ 605 00aa 3A       		.uleb128 0x3a
+ 606 00ab 0B       		.uleb128 0xb
+ 607 00ac 3B       		.uleb128 0x3b
+ 608 00ad 0B       		.uleb128 0xb
+ 609 00ae 49       		.uleb128 0x49
+ 610 00af 13       		.uleb128 0x13
+ 611 00b0 02       		.uleb128 0x2
+ 612 00b1 18       		.uleb128 0x18
+ 613 00b2 00       		.byte	0
+ 614 00b3 00       		.byte	0
+ 615 00b4 00       		.byte	0
+ 616              		.section	.debug_aranges,"",%progbits
+ 617 0000 34000000 		.4byte	0x34
+ 618 0004 0200     		.2byte	0x2
+ 619 0006 00000000 		.4byte	.Ldebug_info0
+ 620 000a 04       		.byte	0x4
+ 621 000b 00       		.byte	0
+ 622 000c 0000     		.2byte	0
+ 623 000e 0000     		.2byte	0
+ 624 0010 00000000 		.4byte	.LFB0
+ 625 0014 40000000 		.4byte	.LFE0-.LFB0
+ 626 0018 00000000 		.4byte	.LFB1
+ 627 001c 40000000 		.4byte	.LFE1-.LFB1
+ 628 0020 00000000 		.4byte	.LFB2
+ 629 0024 30000000 		.4byte	.LFE2-.LFB2
+ 630 0028 00000000 		.4byte	.LFB3
+ 631 002c 48000000 		.4byte	.LFE3-.LFB3
+ 632 0030 00000000 		.4byte	0
+ 633 0034 00000000 		.4byte	0
+ 634              		.section	.debug_ranges,"",%progbits
+ 635              	.Ldebug_ranges0:
+ 636 0000 00000000 		.4byte	.LFB0
+ 637 0004 40000000 		.4byte	.LFE0
+ 638 0008 00000000 		.4byte	.LFB1
+ 639 000c 40000000 		.4byte	.LFE1
+ 640 0010 00000000 		.4byte	.LFB2
+ 641 0014 30000000 		.4byte	.LFE2
+ 642 0018 00000000 		.4byte	.LFB3
+ 643 001c 48000000 		.4byte	.LFE3
+ 644 0020 00000000 		.4byte	0
+ 645 0024 00000000 		.4byte	0
+ 646              		.section	.debug_line,"",%progbits
+ 647              	.Ldebug_line0:
+ 648 0000 B0000000 		.section	.debug_str,"MS",%progbits,1
+ARM GAS  D:\Windows\AppData\Local\Temp\cc2j45Lb.s 			page 16
+
+
+ 648      02005000 
+ 648      00000201 
+ 648      FB0E0D00 
+ 648      01010101 
+ 649              	.LASF16:
+ 650 0000 72656733 		.ascii	"reg32\000"
+ 650      3200
+ 651              	.LASF27:
+ 652 0006 47656E65 		.ascii	"Generated_Source\\PSoC5\\CAN_1_PM.c\000"
+ 652      72617465 
+ 652      645F536F 
+ 652      75726365 
+ 652      5C50536F 
+ 653              	.LASF3:
+ 654 0028 73686F72 		.ascii	"short unsigned int\000"
+ 654      7420756E 
+ 654      7369676E 
+ 654      65642069 
+ 654      6E7400
+ 655              	.LASF21:
+ 656 003b 43414E5F 		.ascii	"CAN_1_BACKUP_STRUCT\000"
+ 656      315F4241 
+ 656      434B5550 
+ 656      5F535452 
+ 656      55435400 
+ 657              	.LASF12:
+ 658 004f 666C6F61 		.ascii	"float\000"
+ 658      7400
+ 659              	.LASF29:
+ 660 0055 43414E5F 		.ascii	"CAN_1_backup\000"
+ 660      315F6261 
+ 660      636B7570 
+ 660      00
+ 661              	.LASF1:
+ 662 0062 756E7369 		.ascii	"unsigned char\000"
+ 662      676E6564 
+ 662      20636861 
+ 662      7200
+ 663              	.LASF15:
+ 664 0070 72656738 		.ascii	"reg8\000"
+ 664      00
+ 665              	.LASF20:
+ 666 0075 696E7445 		.ascii	"intEn\000"
+ 666      6E00
+ 667              	.LASF5:
+ 668 007b 6C6F6E67 		.ascii	"long unsigned int\000"
+ 668      20756E73 
+ 668      69676E65 
+ 668      6420696E 
+ 668      7400
+ 669              	.LASF23:
+ 670 008d 43414E5F 		.ascii	"CAN_1_RestoreConfig\000"
+ 670      315F5265 
+ 670      73746F72 
+ 670      65436F6E 
+ 670      66696700 
+ 671              	.LASF9:
+ARM GAS  D:\Windows\AppData\Local\Temp\cc2j45Lb.s 			page 17
+
+
+ 672 00a1 75696E74 		.ascii	"uint8\000"
+ 672      3800
+ 673              	.LASF25:
+ 674 00a7 43414E5F 		.ascii	"CAN_1_Wakeup\000"
+ 674      315F5761 
+ 674      6B657570 
+ 674      00
+ 675              	.LASF26:
+ 676 00b4 474E5520 		.ascii	"GNU C 4.9.3 20150303 (release) [ARM/embedded-4_9-br"
+ 676      4320342E 
+ 676      392E3320 
+ 676      32303135 
+ 676      30333033 
+ 677 00e7 616E6368 		.ascii	"anch revision 221220] -mcpu=cortex-m3 -mthumb -g -O"
+ 677      20726576 
+ 677      6973696F 
+ 677      6E203232 
+ 677      31323230 
+ 678 011a 30202D66 		.ascii	"0 -ffunction-sections -ffat-lto-objects\000"
+ 678      66756E63 
+ 678      74696F6E 
+ 678      2D736563 
+ 678      74696F6E 
+ 679              	.LASF13:
+ 680 0142 646F7562 		.ascii	"double\000"
+ 680      6C6500
+ 681              	.LASF10:
+ 682 0149 75696E74 		.ascii	"uint16\000"
+ 682      313600
+ 683              	.LASF11:
+ 684 0150 75696E74 		.ascii	"uint32\000"
+ 684      333200
+ 685              	.LASF22:
+ 686 0157 43414E5F 		.ascii	"CAN_1_SaveConfig\000"
+ 686      315F5361 
+ 686      7665436F 
+ 686      6E666967 
+ 686      00
+ 687              	.LASF8:
+ 688 0168 756E7369 		.ascii	"unsigned int\000"
+ 688      676E6564 
+ 688      20696E74 
+ 688      00
+ 689              	.LASF7:
+ 690 0175 6C6F6E67 		.ascii	"long long unsigned int\000"
+ 690      206C6F6E 
+ 690      6720756E 
+ 690      7369676E 
+ 690      65642069 
+ 691              	.LASF17:
+ 692 018c 73697A65 		.ascii	"sizetype\000"
+ 692      74797065 
+ 692      00
+ 693              	.LASF24:
+ 694 0195 43414E5F 		.ascii	"CAN_1_Sleep\000"
+ 694      315F536C 
+ 694      65657000 
+ARM GAS  D:\Windows\AppData\Local\Temp\cc2j45Lb.s 			page 18
+
+
+ 695              	.LASF6:
+ 696 01a1 6C6F6E67 		.ascii	"long long int\000"
+ 696      206C6F6E 
+ 696      6720696E 
+ 696      7400
+ 697              	.LASF14:
+ 698 01af 63686172 		.ascii	"char\000"
+ 698      00
+ 699              	.LASF19:
+ 700 01b4 696E7453 		.ascii	"intSr\000"
+ 700      7200
+ 701              	.LASF2:
+ 702 01ba 73686F72 		.ascii	"short int\000"
+ 702      7420696E 
+ 702      7400
+ 703              	.LASF28:
+ 704 01c4 443A5C44 		.ascii	"D:\\Downloads\\FRUCD\\Node-Beaver-FE3\\Node-Beaver\\"
+ 704      6F776E6C 
+ 704      6F616473 
+ 704      5C465255 
+ 704      43445C4E 
+ 705 01f3 4E6F6465 		.ascii	"Node-Beaver_FE3.cydsn\000"
+ 705      2D426561 
+ 705      7665725F 
+ 705      4645332E 
+ 705      63796473 
+ 706              	.LASF4:
+ 707 0209 6C6F6E67 		.ascii	"long int\000"
+ 707      20696E74 
+ 707      00
+ 708              	.LASF18:
+ 709 0212 656E6162 		.ascii	"enableState\000"
+ 709      6C655374 
+ 709      61746500 
+ 710              	.LASF0:
+ 711 021e 7369676E 		.ascii	"signed char\000"
+ 711      65642063 
+ 711      68617200 
+ 712              		.ident	"GCC: (GNU Tools for ARM Embedded Processors) 4.9.3 20150303 (release) [ARM/embedded-4_9-br

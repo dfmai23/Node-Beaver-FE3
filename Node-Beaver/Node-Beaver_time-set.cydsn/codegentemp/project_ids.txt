@@ -1,0 +1,6 @@
+D:\Downloads\FRUCD\Node-Beaver\Node-Beaver\Node-Beaver.cydsn\Node-Beaver.cyprj|9dcba2c8-d328-4ec1-8a37-79f880386005
+D:\Programming\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\default\CyAnnotationLibrary\CyAnnotationLibrary.cylib\CyAnnotationLibrary.cyprj|d347a34f-770f-4b51-a8ee-1306d022a711
+D:\Programming\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cycomponentlibraryupdates\CyComponentLibraryUpdates.cylib\CyComponentLibraryUpdates.cyprj|31266742-0c1b-423e-bf27-3459f7a8b860
+D:\Programming\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cycomponentlibrary\CyComponentLibrary.cylib\CyComponentLibrary.cyprj|3ceb2d83-92c4-417b-82e0-99eb16ef2895
+D:\Programming\Cypress\PSoC Creator\4.0\PSoC Creator\psoc\content\cyprimitives\CyPrimitives.cylib\CyPrimitives.cyprj|49509d3b-0724-4023-b691-965cfb7ba980
+D:\Downloads\FRUCD\Node-Beaver\Node-Beaver\Node-Beaver_time-set.cydsn\Node-Beaver_time-set.cyprj|07996d38-eb84-458a-a5b0-7c33cf3b56b8
